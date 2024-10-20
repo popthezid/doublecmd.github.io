@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>DC - Syntax of Regular Expressions</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer"><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="cmds.html" title="Previous page">上一页</a> | <a href="lua.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.14. 正则表达式的语法</h1>
+      </div>
+
+      <div>
+        <h2>内容</h2>
+        <dl>
+          <dt>1. <a href="#preface">介绍</a></dt>
+          <dt>2. <a href="#compare">简单匹配</a></dt>
+          <dt>3. <a href="#esc">转义序列</a></dt>
+          <dt>4. <a href="#symbols">字符类</a></dt>
+          <dt>5. <a href="#meta">元字符</a></dt>
+          <dd>
+            <dl>
+              <dt>5.1. <a href="#meta-line">元字符 - 行分隔符</a></dt>
+              <dt>5.2. <a href="#meta-std">元字符 - 预定义类</a></dt>
+              <dt>5.3. <a href="#meta-words">元字符 - 单词边界</a></dt>
+              <dt>5.4. <a href="#meta-dup">元字符 - 迭代器</a></dt>
+              <dt>5.5. <a href="#meta-vars">元字符 - 选择</a></dt>
+              <dt>5.6. <a href="#meta-sub">元字符 - 子表达式</a></dt>
+              <dt>5.7. <a href="#meta-back">元字符 - 反向引用</a></dt>
+            </dl>
+          </dd>
+          <dt>6. <a href="#look">断言（前瞻和后顾断言）</a></dt>
+          <dt>7. <a href="#noncapt">非捕获组</a></dt>
+          <dt>8. <a href="#agroups">原子分组</a></dt>
+          <dt>9. <a href="#unicode">Unicode 类别</a></dt>
+          <dt>10. <a href="#modifiers">修饰符</a></dt>
+        </dl>
+      </div>
+
+      <p>Double Commander使用安德烈·索罗金（Andrey Sorokin）的免费库 <a href="https://regex.sorokin.engineer/en/latest/">TRegExpr</a>。</p>
+      <p>大多数解释来自该库的帮助文件。</p>
+
+      <div>
+        <h2><a name="preface">1. 引言</a></h2>
+        <p>正则表达式是一种广泛使用的文本模式指定方法。特殊字符（<span class="bold">元字符</span>）允许我们指定，例如，我们要查找的特定字符串出现在行的开头或结尾，或者包含<span class="bold">n</span>次某个字符或字符组的出现。</p>
+        <p>Double Commander在以下功能中支持正则表达式：</p>
+        <ul>
+          <li><a href="findfiles.html">查找文件</a>（文件名或内容搜索）</li>
+          <li>在<a href="multirename.html">批量重命名工具</a>中</li>
+          <li>在内部编辑器中</li>
+          <li>在内部查看器中</li>
+        </ul>
+        <p>TRegExp 库支持两种操作模式：ANSI 和 Unicode。在文本文件中搜索时，Double Commander 根据文件编码使用这两种模式。当按名称搜索时，使用 Unicode。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="compare">简单匹配</a></h2>
+        <p>任何单个字符都与其自身匹配，除非它是下面描述的具有特殊含义的元字符。</p>
+        <p>一系列字符与目标字符串中的那一系列字符匹配，因此模式 <code>bluh</code> 将匹配目标字符串中的 <code>bluh</code>。</p>
+        <p>我们可以通过在它们前面加上反斜杠 <code>\</code> 来“转义”通常作为元字符或 <span class="bold">转义序列</span> 的字符，使其被字面解释。例如：元字符 <code>^</code> 匹配字符串的开头，但 <code>\^</code> 匹配字符 <code>^</code>，<code>\\</code> 匹配 <code>\</code>，等等。</p>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">简单匹配示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foobar</div></td>
+            <td class="hintcell">匹配字符串 <code>foobar</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\^FooBarPtr</div></td>
+            <td class="hintcell">匹配 <code>^FooBarPtr</code></td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="esc">3. 转义序列</a></h2>
+        <p>字符可以使用类似于 C 和 Perl 的转义序列语法来指定：<code>\n</code> 匹配换行符，<code>\t</code> 匹配制表符，等等。</p>
+        <p>更一般地说，<code>\xnn</code>，其中 <code>nn</code> 是一串十六进制数字，匹配其 ASCII 值为 <code>nn</code> 的字符。</p>
+        <p>如果您需要宽（Unicode）字符代码，可以使用 <code>\x{nnnn}</code>，其中 <code>nnnn</code> 是一个或多个十六进制数字。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">转义序列</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\xnn</div></td>
+            <td class="hintcell">带有十六进制代码的字符 <code>nn</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\x{nnnn}</div></td>
+            <td class="hintcell">带有十六进制代码的字符 <code>nnnn</code>（普通文本一个字节，Unicode 两个字节）</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\t</div></td>
+            <td class="hintcell">制表符 (HT/TAB)，与 <code>\x09</code> 相同</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\n</div></td>
+            <td class="hintcell">换行 (NL/LF)，与 <code>\x0a</code> 相同</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\r</div></td>
+            <td class="hintcell">回车 (CR)，与 <code>\x0d</code> 相同</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\f</div></td>
+            <td class="hintcell">换页符 (FF)，与 <code>\x0c</code> 相同</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\a</div></td>
+            <td class="hintcell">警报（铃声）（BEL），与 <code>\x07</code> 相同</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\e</div></td>
+            <td class="hintcell">转义 (ESC)，与 <code>\x1b</code> 相同</td>
+          </tr>
+        </table>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>转义序列示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foo\x20bar</div></td>
+            <td class="hintcell">匹配 <code>foo bar</code> （注意中间的空格）</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foobar</div></td>
+            <td class="hintcell">匹配 <code>foobar</code> 由标签预定义</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="symbols">4. 字符类</a></h2>
+        <p>您可以通过将字符列表放在<code>[]</code>中来指定字符类，这将匹配列表中的任何<span class="bold">一个</span>字符。</p>
+        <p>如果<code>[</code>后面的第一个字符是<code>^</code>，则该类匹配列表中<span class="bold">不</span>包含的任何字符。</p>
+        <p>在列表中，<code>-</code> 字符用于指定 <span class="bold">范围</span>，因此 <code>a-z</code> 表示所有介于 <code>a</code> 和 <code>z</code> 之间的字符，包括这两个字符。</p>
+        <p>如果你想让 <code>-</code> 本身成为一个类的成员，请将其放在列表的开头或结尾，或者用反斜杠进行转义。</p>
+        <p>如果您想要 <code>]</code>，您可以将其放在列表的开头或用反斜杠转义。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">角色类别</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[-az]</div></td>
+            <td class="hintcell">匹配 <code>a</code>、<code>z</code> 和 <code>-</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[az-]</div></td>
+            <td class="hintcell">匹配 <code>a</code>、<code>z</code> 和 <code>-</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[a\-z]</div></td>
+            <td class="hintcell">匹配 <code>a</code>、<code>z</code> 和 <code>-</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[a-z]</div></td>
+            <td class="hintcell">匹配所有二十六个小写字母，从 <code>a</code> 到 <code>z</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[\n-\x0D]</div></td>
+            <td class="hintcell">匹配任何 <code>\x10</code>、<code>\x11</code>、<code>\x12</code>、<code>\x13</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[\d-t]</div></td>
+            <td class="hintcell">匹配任何数字，<code>-</code> 或 <code>t</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">[]-a]</div></td>
+            <td class="hintcell">匹配来自 <code>]</code>.. <code>a</code> 的任何字符</td>
+          </tr>
+        </table>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>字符类示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob[aeiou]r</div></td>
+            <td class="hintcell">找到字符串 <code>foobar</code>、<code>foober</code> 等，但不包括 <code>foobbr</code>、<code>foobcr</code> 等。</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob[^aeiou]r</div></td>
+            <td class="hintcell">查找字符串 <code>foobbr</code>、<code>foobcr</code> 等，但不包括 <code>foobar</code>、<code>foober</code> 等。</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta">5. 元字符</a></h2>
+        <p>元字符是正则表达式的本质特殊字符。</p>
+        <p>有不同类型的元字符，下面将进行描述。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-line"><br>5.1. 元字符 - 行分隔符</a></h2>
+        <p>一些表达有助于检测行分隔。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">行分隔符</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">^</div></td>
+            <td class="hintcell">行的开始</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">$</div></td>
+            <td class="hintcell">行末</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\A</div></td>
+            <td class="hintcell">文本开始</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\Z</div></td>
+            <td class="hintcell">文本结束</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">.</div></td>
+            <td class="hintcell">任何行中的字符</td>
+          </tr>
+        </table>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>示例带行分隔符</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">^foobar</div></td>
+            <td class="hintcell">仅当字符串 <code>foobar</code> 位于行首时，才匹配</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foobar$</div></td>
+            <td class="hintcell">仅当字符串 <code>foobar</code> 位于行末时，才匹配</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">^foobar$</div></td>
+            <td class="hintcell">仅当它是行中唯一的字符串时，才匹配字符串 <code>foobar</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob.r</div></td>
+            <td class="hintcell">匹配类似 <code>foobar</code>、<code>foobbr</code>、<code>foob1r</code> 等字符串</td>
+          </tr>
+        </table>
+
+        <p>默认情况下，<code>^</code> 元字符仅保证匹配输入字符串/文本的开头，<code>$</code> 元字符仅在结尾匹配。嵌入的行分隔符将不会被 <code>^</code> 或 <code>$</code> 匹配。</p>
+        <p>然而，您可能希望将字符串视为多行缓冲区，这样 <code>^</code> 将在字符串中的任何行分隔符之后匹配，而 <code>$</code> 将在任何行分隔符之前匹配。您可以通过打开 <a href="#modifiers">修饰符 m</a> 来实现这一点。</p>
+        <p><code>\A</code> 和 <code>\Z</code> 就像 <code>^</code> 和 <code>$</code>，只是当使用 <a href="#modifiers">修饰符 m</a> 时，它们不会匹配多次，而 <code>^</code> 和 <code>$</code> 会在每个内部行分隔符处匹配。</p>
+        <p>默认情况下，<code>.</code> 元字符匹配任何字符，但如果您关闭 <a href="#modifiers">修饰符 s</a>，那么 <code>.</code> 将不匹配嵌入的行分隔符。</p>
+        <p>TRegExpr 按照 Unicode 技术标准（<a href="https://www.unicode.org/reports/tr18/">技术标准 #18</a>）推荐的行分隔符进行工作：</p>
+        <ul>
+          <li><p><code>^</code> 位于输入字符串的开头，并且如果 <a href="#modifiers">修饰符 m</a> 被开启，则也紧接在任何出现的 <code>\x0D\x0A</code> 或 <code>\x0A</code> 或 <code>\x0D</code> 之后（支持 Unicode：还包括 <code>\x2028</code> 或 <code>\x2029</code> 或 <code>\x0B</code> 或 <code>\x0C</code> 或 <code>\x85</code>）。请注意，在序列 <code>\x0D\x0A</code> 中没有空行。</p></li>
+          <li><p><code>$</code> 位于输入字符串的末尾，并且如果 <a href="#modifiers">修饰符 m</a> 被启用，还会紧接着任何出现的 <code>\x0D\x0A</code> 或 <code>\x0A</code> 或 <code>\x0D</code>（支持 Unicode：还包括 <code>\x2028</code> 或 <code>\x2029</code> 或 <code>\x0B</code> 或 <code>\x0C</code> 或 <code>\x85</code>）。请注意，在序列 <code>\x0D\x0A</code> 中没有空行。</p></li>
+          <li><p><code>.</code> 匹配任何字符，但如果您关闭 <a href="#modifiers">修饰符 s</a>，那么 <code>.</code> 不会匹配 <code>\x0D\x0A</code> 和 <code>\x0A</code> 以及 <code>\x0D</code> （支持 Unicode：还包括 <code>\x2028</code> 和 <code>\x2029</code> 以及 <code>\x0B</code> 和 <code>\x0C</code> 和 <code>\x85</code>）。</p></li>
+        </ul>
+        <p>请注意，<code>^.*$</code>（一个空行模式）在序列<code>\x0D\x0A</code>中不匹配空字符串，但在序列<code>\x0A\x0D</code>中匹配空字符串。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-std">5.2. 元字符 - 预定义类</a></h2>
+        <p>一些表达式有助于检测字符组。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">预定义类</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\w</div></td>
+            <td class="hintcell">一个字母数字字符（包括 <code>_</code>），即 <code>[0-9A-Za-z_]</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\W</div></td>
+            <td class="hintcell">一个非字母数字字符</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\d</div></td>
+            <td class="hintcell">数字字符</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\D</div></td>
+            <td class="hintcell">非数字的</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\s</div></td>
+            <td class="hintcell">任何空格（与<code>[ \t\n\r\f]</code>相同）</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\S</div></td>
+            <td class="hintcell">一个非空间</td>
+          </tr>
+        </table>
+        <p>您可以在自定义 <span class="bold">字符类</span> 中使用 <code>\w</code>、<code>\d</code> 和 <code>\s</code>。</p>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>预定义类的示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob\dr</div></td>
+            <td class="hintcell">匹配类似 <code>foob1r</code>、<code>foob6r</code> 的字符串，但不匹配 <code>foobar</code>、<code>foobbr</code> 等</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob[\w\s]r</div></td>
+            <td class="hintcell">匹配类似 <code>foobar</code>、<code>foob r</code>、<code>foobbr</code> 等字符串，但不匹配 <code>foob=r</code> 等字符串</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-words">5.3. 元字符 - 单词边界</a></h2>
+        <p>一个词边界 (<code>\b</code>) 是两个字符之间的一个点，一侧有 <code>\w</code>，另一侧有 <code>\W</code>（顺序可以任意），并且将字符串开头和结尾的虚拟字符视为匹配 <code>\W</code>。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">词边界</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\b</div></td>
+            <td class="hintcell">匹配单词边界</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">\B</div></td>
+            <td class="hintcell">匹配非（单词边界）</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-dup">5.4. 元字符 - 迭代器</a></h2>
+        <p>正则表达式的任何项后面都可以跟随另一种类型的元字符——迭代器。</p>
+        <p>使用这些元字符，您可以指定前一个字符、元字符或子表达式的出现次数。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">迭代器</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">*</div></td>
+            <td class="hintcell">零个或多个（“贪婪”），类似于 <code>{0,}</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">+</div></td>
+            <td class="hintcell">一个或多个（“贪婪”），类似于 <code>{1,}</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">?</div></td>
+            <td class="hintcell">零或一（“贪婪”），类似于 <code>{0,1}</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n}</div></td>
+            <td class="hintcell">正好 <code>n</code> 次 ("贪婪")</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n,}</div></td>
+            <td class="hintcell">至少 <code>n</code> 次 ("贪婪")</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n,m}</div></td>
+            <td class="hintcell">至少 <code>n</code> 次，但不超过 <code>m</code> 次（“贪婪”）</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">*?</div></td>
+            <td class="hintcell">零个或多个（“非贪婪”），类似于 <code>{0,}?</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">+?</div></td>
+            <td class="hintcell">一个或多个（“非贪婪”），类似于 <code>{1,}?</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">??</div></td>
+            <td class="hintcell">零或一（“非贪婪”），类似于 <code>{0,1}?</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n}？</div></td>
+            <td class="hintcell">正好 <code>n</code> 次 ("非贪婪")</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n,}?</div></td>
+            <td class="hintcell">至少 <code>n</code> 次（“非贪婪”）</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">{n,m}?</div></td>
+            <td class="hintcell">至少 <code>n</code> 次，但不超过 <code>m</code> 次（“非贪婪”）</td>
+          </tr>
+        </table>
+        <p>所以，形如 <code>{n,m}</code> 的大括号中的数字指定了要匹配项目 <code>n</code> 的 <span class="bold">最小</span> 匹配次数和 <span class="bold">最大</span> <code>m</code>。</p>
+        <p>该形式 <code>{n}</code> 等同于 <code>{n,n}</code>，并且恰好匹配 <code>n</code> 次。</p>
+        <p>该格式 <code>{n,}</code> 匹配 <code>n</code> 次或更多次。</p>
+        <p><code>n</code> 和 <code>m</code> 的大小没有限制，但较大的数字会减慢执行速度并消耗更多内存。</p>
+        <p>如果在其他任何上下文中出现花括号，它将被视为普通字符。</p>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">迭代器示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob.*r</div></td>
+            <td class="hintcell">匹配类似 <code>foobar</code>、<code>foobalkjdflkj9r</code> 和 <code>foobr</code> 的字符串</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob.+r</div></td>
+            <td class="hintcell">匹配字符串，如 <code>foobar</code>、<code>foobalkjdflkj9r</code>，但不匹配 <code>foobr</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob.?r</div></td>
+            <td class="hintcell">匹配类似 <code>foobar</code>、<code>foobbr</code> 和 <code>foobr</code> 的字符串，但不匹配 <code>foobalkj9r</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">fooba{2}r</div></td>
+            <td class="hintcell">匹配字符串 <code>foobaar</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">fooba{2,}r</div></td>
+            <td class="hintcell">匹配类似 <code>foobaar</code>、<code>foobaaar</code>、<code>foobaaaar</code> 等字符串。</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">fooba{2,3}r</div></td>
+            <td class="hintcell">匹配类似 <code>foobaar</code> 或 <code>foobaaar</code> 的字符串，但不匹配 <code>foobaaaar</code></td>
+          </tr>
+        </table>
+        <p>关于“贪婪”的一点解释。</p>
+        <p>“贪婪”尽可能多地获取，“非贪婪”尽可能少地获取。</p>
+        <p>例如，<code>b+</code> 和 <code>b*</code> 应用于字符串 <code>abbbbc</code> 返回 <code>bbbb</code>，<code>b+?</code> 返回 <code>b</code>，<code>b*?</code> 返回空字符串，<code>b{2,3}?</code> 返回 <code>bb</code>，<code>b{2,3}</code> 返回 <code>bbb</code>。</p>
+        <p>您可以将所有迭代器切换到“非贪婪”模式（请参见<a href="#modifiers">修饰符 g</a>）。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-vars">5.5. 元字符 - 备选项</a></h2>
+        <p>您可以使用 <code>|</code> 来分隔一系列 <span class="bold">替代方案</span>，以便 <code>fee|fie|foe</code> 可以匹配目标字符串中的 <code>fee</code>、<code>fie</code> 或 <code>foe</code>（就像 <code>f(e|i|o)e</code> 一样）。</p>
+        <p>第一个替代项包括从最后的模式分隔符 (<code>(</code>, <code>[</code>，或模式的开始) 到第一个 <code>|</code> 的所有内容，而最后一个替代项包含从最后一个 <code>|</code> 到下一个模式分隔符的所有内容。</p>
+        <p>因此，通常会在括号中包含替代选项，以减少对它们开始和结束位置的混淆。</p>
+        <p>从左到右尝试替代方案，因此找到的第一个与整个表达式匹配的替代方案就是被选择的。</p>
+        <p>这意味着替代方案不一定是贪婪的。</p>
+        <p>例如：当将 <code>foo|foot</code> 与 <code>barefoot</code> 匹配时，只有 <code>foo</code> 部分会匹配，因为这是第一个尝试的替代项，并且它成功匹配了目标字符串。（这看起来可能不重要，但在使用括号捕获匹配文本时，这一点很重要。）</p>
+        <p>也请记住，<code>|</code> 在方括号内被解释为字面量，因此如果您写 <code>[fee|fie|foe]</code>，您实际上只是在匹配 <code>[feio|]</code>。</p>
+        <p>示例：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">替代方案示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foo(bar|foo)</div></td>
+            <td class="hintcell">匹配字符串 <code>foobar</code> 或 <code>foofoo</code></td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-sub">5.6. 元字符 - 子表达式</a></h2>
+        <p>括号构造 <code>( ... )</code> 也可以用于定义正则表达式的子表达式。</p>
+        <p>搜索后，您可以调用任何子表达式，也可以将子表达式用作掩码。</p>
+        <p>子表达式的编号是根据其左括号的从左到右的顺序进行的。</p>
+        <p>第一个子表达式的编号为 1，最多支持 90 个子表达式（整个正则表达式匹配的编号为 0 - 你可以将其替换为 <code>$0</code> 或 <code>$&amp;</code>）。</p>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">子表达式</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(foobar){8,10}</div></td>
+            <td class="hintcell">匹配包含 8、9 或 10 个实例的字符串 <code>foobar</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">foob([0-9]|a+)r</div></td>
+            <td class="hintcell">匹配 <code>foob0r</code>、<code>foob1r</code>、<code>foobar</code>、<code>foobaar</code>、<code>foobaar</code> 等等。</td>
+          </tr>
+        </table>
+        <br>
+        <p><span class="bold">关于“替换为”模板的说明：</span></p>
+        <ul>
+          <li>如果您想在模板中放置原始<code>$</code>或<code>\</code>，请使用前缀<code>\</code>。<br>
+          	示例：<code>1\$ is $2\\rub\\</code> 将返回 <code>1$ is &lt;subexpr2&gt;\rub\</code>。</li>
+          <li>如果您想在<code>$n</code>后放置原始数字，则必须用大括号<code>{}</code>将<code>n</code>括起来。<br>
+          	例如，<code>a$12bc</code> 将返回 <code>a&lt;subexpr12&gt;bc</code>，但 <code>a${1}2bc</code> 将返回 <code>a&lt;subexpr1&gt;2bc</code>。</li>
+        </ul>
+        <p>示例：</p>
+        <p>让我们将日期反转 <code>21.01.2018</code> &gt; <code>2018.01.21</code>：<br>
+        	搜索：<code>(\d{2})\.(\d{2})\.(\d{4})</code><br>
+        	替换为：<code>$3.$2.$1</code></p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="meta-back">5.7. 元字符 - 反向引用</a></h2>
+        <p>元字符 <code>\1</code> 到 <code>\9</code> 被解释为反向引用。<code>\n</code> 匹配之前匹配的子表达式 <code>n</code>。</p>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>反向引用的示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(.)\1+</div></td>
+            <td class="hintcell">匹配 <code>aaaa</code> 和 <code>cc</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(.+)\1+</div></td>
+            <td class="hintcell">也匹配 <code>abab</code> 和 <code>123123</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(['"]?)(\d+)\1</div></td>
+            <td class="hintcell">匹配 <code>"13"</code>（双引号内），或 <code>'4'</code>（单引号内）或 <code>77</code>（没有引号）等</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="look">6. 断言（前瞻和后顾断言）</a></h2>
+        <p>正向前瞻断言：<code>foo(?=bar)</code> 仅在 <code>bar</code> 之前匹配 <code>foo</code>，并且 <code>bar</code> 被排除在匹配之外。</p>
+        <p>负向前瞻断言：<code>foo(?!bar)</code> 仅在后面不跟 <code>bar</code> 的情况下匹配 <code>foo</code>。</p>
+        <p>正向回顾断言：<code>(?&lt;=foo)bar</code> 仅在 <code>foo</code> 之后匹配 <code>bar</code>，并且 <code>foo</code> 被排除在匹配之外。</p>
+        <p>负向回顾断言：<code>(?&lt;!foo)bar</code> 仅在没有以 <code>foo</code> 为前缀时匹配 <code>bar</code>。</p>
+        <p>限制：</p>
+        <ul>
+          <li><p>前瞻的括号必须位于表达式的最末尾，而后顾的括号必须位于最开头。因此，在选择之间的断言 <code>|</code> 或在组内的断言是不支持的。</p></li>
+          <li><p>对于后向查找 <code>(?&lt;!foo)bar</code>，正则表达式 <code>foo</code> 必须是固定长度的，即仅包含固定长度匹配的操作。除了带有重复数字的花括号 <code>{n}</code> 或 <code>{n,n}</code>，不允许使用量词。这里允许字符类，允许使用点，<code>\b</code> 和 <code>\B</code> 也是允许的。不允许使用分组和选择。</p></li>
+          <li><p>对于其他三种断言类型，括号中的表达式可以是任何复杂性。</p></li>
+        </ul>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="noncapt">7. 非捕获组</a></h2>
+        <p>语法：<code>(?:expr)</code>。</p>
+        <p>这样的组没有“索引”，并且在反向引用中是不可见的。当您想要对一个子表达式进行分组，但又不想将其保存为匹配/捕获的字符串部分时，可以使用非捕获组。使用非捕获组可以加快正则表达式的工作速度。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">非捕获组</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(https?|ftp)://([^/\r\n]+)</div></td>
+            <td class="hintcell">在 <code>https://doublecmd.sourceforge.io</code> 中匹配 <code>https</code> 和 <code>doublecmd.sourceforge.io</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(?:https?|ftp)://([^/\r\n]+)</div></td>
+            <td class="hintcell">在 <code>https://doublecmd.sourceforge.io</code> 中仅匹配 <code>doublecmd.sourceforge.io</code></td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="agroups">8. 原子分组</a></h2>
+        <p>语法：<code>(?&gt;expr|expr|...)</code>。</p>
+        <p>原子组是非捕获组的特殊情况：如果模式的某部分已经被找到，这种分组会禁用括号组的回溯。原子组工作更快，在优化具有多种不同表达式的组时非常有用。</p>
+        <p>例如，<code>a(bc|b)c</code> 匹配 <code>abcc</code> 和 <code>abc</code>，<code>a(?&gt;bc|b)c</code> 匹配 <code>abcc</code> 但不匹配 <code>abc</code>，因为引擎被禁止回溯并尝试将组设置为 <code>b</code>。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="unicode">9. Unicode 类别</a></h2>
+        <p>Unicode 标准为字符类别命名。这些是 2 个字母的字符串。例如<code>Lu</code>是大写字母，<code>Ll</code>是小写字母。而 1 个字母的更大类别<code>L</code>是所有字母。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">Unicode 类别</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">类别</th><th class="categorydesccolumn">描述</th></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">L</div></td><td class="hintcell">字母</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Lu</div></td><td class="hintcell">大写字母</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Ll</div></td><td class="hintcell">小写字母</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Lt</div></td><td class="hintcell">标题字母</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Lm</div></td><td class="hintcell">修饰字母</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Lo</div></td><td class="hintcell">其他字母</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">M</div></td><td class="hintcell">标记</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Mn</div></td><td class="hintcell">非间距标记</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Mc</div></td><td class="hintcell">间距组合标记</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Me</div></td><td class="hintcell">封闭标记</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">N</div></td><td class="hintcell">数字</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Nd</div></td><td class="hintcell">十进制数字</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Nl</div></td><td class="hintcell">字母编号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">No</div></td><td class="hintcell">其他号码</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">P</div></td><td class="hintcell">标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Pc</div></td><td class="hintcell">连接符标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Pd</div></td><td class="hintcell">破折号标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Ps</div></td><td class="hintcell">开放标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Pe</div></td><td class="hintcell">关闭标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Pi</div></td><td class="hintcell">初始标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Pf</div></td><td class="hintcell">最终标点符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Po</div></td><td class="hintcell">其他标点符号</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">S</div></td><td class="hintcell">符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Sm</div></td><td class="hintcell">数学符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Sc</div></td><td class="hintcell">货币符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Sk</div></td><td class="hintcell">修饰符符号</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">So</div></td><td class="hintcell">其他符号</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Z</div></td><td class="hintcell">分隔符</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Zs</div></td><td class="hintcell">空间分隔符</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Zl</div></td><td class="hintcell">行分隔符</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Zp</div></td><td class="hintcell">段落分隔符</td></tr>
+          <tr><td colspan="2"></td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">C</div></td><td class="hintcell">其他</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Cc</div></td><td class="hintcell">控制</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Cf</div></td><td class="hintcell">格式</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Cs</div></td><td class="hintcell">代理</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Co</div></td><td class="hintcell">私人使用</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft">Cn</div></td><td class="hintcell">未分配</td></tr>
+        </table>
+        <p>元字符 <code>\p</code> 表示指定类别的一个 Unicode 字符。语法：<code>\pL</code> 和 <code>\p{L}</code> 用于 1 个字母名称，<code>\p{Lu}</code> 用于 2 个字母名称。</p>
+        <p>元字符 <code>\P</code> 是反转的，它表示一个不在指定类别中的 Unicode 字符。</p>
+        <p>这些元字符在字符类中也受到支持。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="modifiers">10. 修饰语</a></h2>
+        <p>一个修饰符的语法：<code>(?i)</code> 用于开启，<code>(?-i)</code> 用于关闭。许多修饰符可以这样使用：<code>(?msgxr-imsgxr)</code>。</p>
+        <p>修饰符用于改变正则表达式的行为。修饰符仅影响紧随其后的正则表达式部分 <code>(?imsgxr-imsgxr)</code> 操作符。</p>
+        <p>这些修饰符中的任何一个都可以嵌入到正则表达式中。如果修饰符嵌入到子表达式中，则它只影响该子表达式。</p>
+        <dl>
+          <dt><tt>i</tt></dt>
+          <dd>进行不区分大小写的模式匹配（使用您系统区域设置中安装的内容）。默认情况下禁用。</dd>
+          <dt><tt>m</tt></dt>
+          <dd>将字符串视为多行。也就是说，将<code>^</code>和<code>$</code>的匹配从仅在字符串的开头或结尾更改为在字符串中的任何行的开头或结尾，另见<a href="#meta-line">行分隔符</a>。默认情况下禁用。</dd>
+          <dt><tt>s</tt></dt>
+          <dd>将字符串视为单行。也就是说，将 <code>.</code> 更改为匹配任何字符，包括换行符（另见 <a href="#meta-line">换行符</a>），而它通常不会匹配。默认启用。</dd>
+          <dt><tt>g</tt></dt>
+          <dd>非标准修饰符。关闭它后，您将把所有后续操作符切换为非贪婪模式（默认情况下此修饰符是开启的）。因此，如果修饰符 <code>g</code> 关闭，则 <code>+</code> 的作用相当于 <code>+?</code>，<code>*</code> 的作用相当于 <code>*?</code>，依此类推。</dd>
+          <dt><tt>x</tt></dt>
+          <dd>通过允许空白和注释来扩展您模式的可读性（请参见下面的解释）。默认情况下禁用。</dd>
+          <dt><tt>r</tt></dt>
+          <dd>非标准修饰符。如果设置了，则范围<code>а-я</code>额外包括俄文字母<code>ё</code>，<code>А-Я</code>额外包括<code>Ё</code>，而<code>а-Я</code>包括所有俄文字母。默认启用。</dd>
+          <dt><tt>#</tt></dt>
+          <dd><tt>(?#text)</tt> ：一个注释，<code>text</code> 被忽略。请注意，TRegExpr 一旦看到 <code>)</code> 就会关闭注释，因此无法在注释中放置字面上的 <code>)</code>。</dd>
+        </dl>
+        <p>以下是一些例子：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2"><br>Perl 扩展的示例</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">表达</th><th class="categorydesccolumn">结果</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(?i)Saint-Petersburg</div></td>
+            <td class="hintcell">匹配 <code>Saint-petersburg</code> 和 <code>Saint-Petersburg</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(?i)Saint-(?-i)Petersburg</div></td>
+            <td class="hintcell">匹配 <code>Saint-Petersburg</code> 但不匹配 <code>Saint-petersburg</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">(?i)(Saint-)?Petersburg</div></td>
+            <td class="hintcell">匹配 <code>Saint-petersburg</code> 和 <code>saint-petersburg</code></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">((?i)Saint-)?Petersburg</div></td>
+            <td class="hintcell">匹配 <code>saint-Petersburg</code> 但不匹配 <code>saint-petersburg</code></td>
+          </tr>
+        </table>
+        <br>
+        <p>修饰符 <code>x</code> 本身需要更多的解释。</p>
+        <p>它告诉我们忽略既不是反斜杠也不在字符类中的空白。</p>
+        <p>您可以使用此功能将正则表达式分解为（稍微）更易读的部分。</p>
+        <p><code>#</code> 字符也被视为引入注释的元字符，例如：</p>
+        <pre class="code">(
+  (abc) # comment 1
+    |   # You can use spaces to format r.e. - TRegExpr ignores it
+  (efg) # comment 2
+)</pre>
+        <p>这也意味着，如果您想在模式中使用真实的空白或<code>#</code>字符（在字符类外部，它们不受<code>x</code>的影响），您必须对它们进行转义或使用八进制、十六进制转义编码。</p>
+        <p>综合来看，这些特性大大提高了正则表达式文本的可读性。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer"><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="cmds.html" title="Previous page">上一页</a> | <a href="lua.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>

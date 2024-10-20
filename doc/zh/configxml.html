@@ -1,0 +1,563 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+    <title>DC - doublecmd.xml</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="commandline.html" title="Previous page">上一页</a> | <a href="plugins.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.17. doublecmd.xml 中的设置</h1>
+      </div>
+
+      <div>
+        <h2 >内容</h2>
+        <dl>
+          <dt>1. <a href="#presenta">介绍</a></dt>
+          <dt>2. <a href="#location">位置</a></dt>
+          <dt>3. <a href="#manualed">手动更改选项</a></dt>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="presenta" >1. 介绍</a></h2>
+        <p>Double Commander的主要设置保存在名为 <tt>doublecmd.xml</tt> 的 <a href="https://en.wikipedia.org/wiki/XML" target="_blank">XML</a> 文件中，并可以从中恢复。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="location" >2. 位置</a></h2>
+        <p>此 <tt>doublecmd.xml</tt> 文件的位置可能在不同的地方：</p>
+        <ul>
+          <li>它可以配置为位于用户的 home 目录中。</li>
+          <li>它可以配置在程序目录中，这在便携式环境中通常是常见的情况。</li>
+          <li>我们可以在启动应用程序时通过命令行参数定义其位置。</li>
+        </ul>
+        <p>我们通过 <a href="commandline.html">这个链接</a> 来指定它，使用命令行参数 <code>--config-dir</code>。</p>
+        <p>除此之外，我们在配置 &gt; 选项... &gt; 树中选择 <img border="1px" height="20" width="100" alt="Double Commander" src="images/imgDC/optionconfiguration.png"> &gt; 设置选项 <i>配置文件的位置</i>。</p>
+        <p class="figure"><img class="largeimage" title="Location of configuration file" alt="Location of configuration file" src="images/imgDC/configlocation.png" width="496" height="141"></p>
+        <p>另一种快速查找当前实例的 Double Commander 所在位置的方法是访问 <a href="directoryhotlist.html">常用文件夹列表</a>。在其末尾有一个名为“特殊目录”的子部分。然后我们选择“转到 Double Commander 特殊路径”，接着选择“%DC_CONFIG_PATH%”。我们将在那里找到该应用程序当前使用的 <tt>doublecmd.xml</tt> 。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="manual">3. 手动更改选项</a></h2>
+        <p>在Double Commander中，大多数可能的设置可以通过应用程序本身通过各种选项类别进行设置。</p>
+        <p>我们只需从主菜单栏点击配置 &gt; 选项，那里配置的各种设置将在我们关闭应用程序时保存到 <tt>doublecmd.xml</tt> 文件中。然后，它们将在下次使用应用程序时恢复。</p>
+        <p><span class="uline">所以一般来说，我们不需要手动编辑配置文件的内容</span>。</p>
+        <p>但有一些非常罕见的特定设置需要从配置文件中手动编辑，如果我们想要调整应用程序。</p>
+        <br>
+        <p><b>警告：</b> 在Double Commander运行时，我们将不会编辑该文件！不仅因为在启动应用程序时它们的值是只读的，还因为如果我们在 DC 运行时编辑文件，当我们关闭应用程序时，我们所写的值将被应用程序重新保存其当前上下文以供下次会话而覆盖。如果我们需要编辑 <tt>doublecmd.xml</tt> 文件，我们需要确保关闭Double Commander，然后编辑文件，最后重新启动应用程序。<br>还有一个替代方案，更多细节请见<a href="configuration.html#ConfigDC">这里</a>（但要对某些参数应用更改，您可能仍然需要重新启动应用程序）。</p>
+        <br>
+        <p>下表提供了这些罕见的特定设置，如果我们需要更改它们，就需要手动编辑文件。</p>
+        <br>
+
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2" >如果需要，设置必须手动更改</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn" >标签</th><th class="categorydesccolumn" >描述</th></tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;Mode&gt;<br><small >来自 &lt;AutoRefresh&gt;</small></div></td>
+            <td class="hintcell">
+            删除已监视目录的能力。<br>“监视目录”是指Double Commander在其上有一种钩子的目录，因此它可以监控其中的任何修改。<br>这样，如果内容发生变化，它可以刷新可显示的内容。<br>
+            此设置允许控制当我们尝试删除当前在面板中显示的“监视目录”之一时，Double Commander将如何反应，即使在未激活的选项卡中也是如此。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0</td>
+                  <td class="innerdescdesccell" >防止删除已观看的目录。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1</td>
+                  <td class="innerdescdesccell" >不阻止删除已观看的目录（默认）。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">2</td>
+                  <td class="innerdescdesccell" >监视整个驱动器而不是单个目录，以避免删除被监视目录时出现的问题。</td>
+                </tr>
+              </table>
+              <i>示例：</i><code>&lt;Mode&gt;1&lt;/Mode&gt;</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ActiveRight&gt;<br><small >来自 &lt;Behaviours&gt;</small></div></td>
+            <td class="hintcell">
+右侧面板将在Double Commander启动时激活。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >True</td>
+                  <td class="innerdescdesccell" >右侧面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >False</td>
+                  <td class="innerdescdesccell" >左侧面板（默认）</td>
+                </tr>
+              </table>
+              <i>示例：</i> <code>&lt;ActiveRight&gt;True&lt;/ActiveRight&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt; ConfirmQuit&gt;<br><small >来自 &lt;Behaviours&gt;</small></div></td>
+            <td class="hintcell">确认是否关闭 Double Commander (<code>True</code>) 或不关闭 (<code>False</code>)。默认值为 <code>False</code>。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;gBorderFrameWidth&gt;<br><small >来自 &lt;Colors&gt;</small></div></td>
+            <td class="hintcell">
+            我们可以配置 DC，使其在我们在面板中循环浏览活动条目时，围绕活动条目绘制一个矩形。<br>
+              <code>&lt;gBorderFrameWidth&gt;</code> 允许我们配置用于绘制当前活动条目周围矩形的线条宽度。<br>
+              要查看该矩形，我们应该进入配置 &gt; 选项... &gt; 颜色 &gt; 文件面板，并勾选选项 <i>使用框架光标</i>。<br>
+              <i>示例：</i> <code>&lt;gBorderFrameWidth&gt;1&lt;/gBorderFrameWidth&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;FindWordAtCursor&gt;<br><small >来自 &lt;Editor&gt;</small></div></td>
+            <td class="hintcell">内部编辑器和差异工具：如果没有选择任何内容，搜索和替换对话框将使用光标下的单词（<code>True</code>）或搜索历史中的文本（<code>False</code>）。默认情况下为<code>True</code>。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;AutoExtractOpenMask&gt;<br><small >来自 &lt;FileOperations&gt;</small></div></td>
+            <td class="hintcell">
+            假设我们已经“进入”一个压缩文件，并在活动面板中浏览其内容。当我们按下 <kbd>Enter</kbd> 或双击这些具有指定扩展名的文件时，它们将自动从归档中解压，而不是显示属性窗口。<br>
+            <i>示例：</i> <code>&lt;AutoExtractOpenMask&gt;*.txt;*.mp3;*.mp4&lt;/AutoExtractOpenMask&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;LongNameAlert&gt;<br><small>来自&lt;FileOperations&gt;</small></div></td>
+            <td class="hintcell">如果目标路径超过路径的最大长度，则发出警告（某些程序将无法访问具有如此长名称的文件/目录）。在 Windows 中，此值（MAX_PATH）定义为 260 个字符。默认情况下为<code>True</code>。</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;NtfsHourTimeDelay&gt;<br><small>来自 &lt;FileOperations&gt;</small></div></td>
+            <td class="hintcell">
+            忽略条目之间的时间差为正好一小时时的日期和时间比较。<br>
+            这发生在使用内部命令 <a href="cmds.html#cm_CompareDirectories">cm_CompareDirectories</a> 或 <a href="cmds.html#cm_SyncDirs">cm_SyncDirs</a> 时。<br>
+            在比较位于 NTFS 分区的项目与不在该分区的其他项目时，这非常有用。<br>
+            由于<a href="https://support.microsoft.com/en-us/help/129574/time-stamp-changes-with-daylight-savings">NTFS 分区中的文件时间戳</a>在夏令时期间会发生变化，而同一文件在 FAT32 中则不会，因此我们希望这两个文件被视为相同，即使我们明显看到它们之间有一个小时的差异。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">True</td>
+                  <td class="innerdescdesccell">启用时，差异恰好为一小时将被视为相同时间</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">False</td>
+                  <td class="innerdescdesccell">禁用（默认）</td>
+                </tr>
+              </table>
+              <i>示例：</i> <code>&lt;NtfsHourTimeDelay&gt;True&lt;/NtfsHourTimeDelay&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;CopyAttributes&gt;<br><small>来自 &lt;FileOperations&gt;&lt;Options&gt;</small></div></td>
+            <td class="hintcell">
+            Windows：如果 <code>True</code>，在复制/移动文件时，源文件的属性将被复制；如果 <code>False</code>，源文件的属性也将被复制，并且 Double Commander 将设置“归档”属性。<br>
+            Linux 和其他系统：在 <a href="copymove.html">复制/移动对话窗口</a> 中使用 <span class="italic">复制属性</span> 参数。<br>
+            默认值为<code>True</code> 。
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;CopyTime&gt;<br><small>来自&lt;FileOperations&gt;&lt;Options&gt;</small></div></td>
+            <td class="hintcell">
+            Windows：如果 <code>True</code>，在复制/移动文件时，源文件的时间戳（创建日期、修改日期、最后访问日期）将被复制；否则，仅复制修改日期，其他日期将使用当前日期。<br>
+            Linux 和其他系统：在 <a href="copymove.html">复制/移动对话窗口</a> 中使用 <span class="italic">复制日期/时间</span> 参数。<br>
+            默认值为<code>True</code>。
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;CopyXattributes&gt;<br><small>来自 &lt;FileOperations&gt;&lt;Options&gt;</small></div></td>
+            <td class="hintcell">
+			在复制/移动文件时是否复制文件系统扩展属性。<br>
+			Windows：如果 <code>True</code>，则压缩和加密属性也将被复制。<br>
+			Linux 和其他类 Unix 系统：如果 <code>True</code>，Double Commander 将复制文件系统扩展属性（xattr，即命名属性）。<br>
+            默认值为<code>True</code>。
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ExtraLineSpan&gt;<br><small >来自 &lt;FilesViews&gt;</small></div></td>
+            <td class="hintcell">
+            此设置允许为文件面板中显示的每个元素的高度添加一些额外的像素。<br>该值直接以像素为单位。<br>默认值为 2。<br>
+            <i>示例：</i> <code>&lt;ExtraLineSpan&gt;2&lt;/ExtraLineSpan&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;FolderPrefix&gt; <small>和</small> <br><small >来自 &lt;FilesViews&gt;</small></div></td>
+            <td class="hintcell">
+            默认情况下，DC 在目录名称周围显示方括号（这是文件视图中的可选参数 &gt; 文件视图额外），但我们可以使用任何符号代替它们。<br>
+            注意：在 XML 中，一些特殊符号被保留作为标记的一部分，我们不能直接使用它们。有五个预定义实体：<code>&lt;</code> 应写为 <code>&amp;lt;</code>，<code>&gt;</code> 应写为 <code>&amp;gt;</code>，<code>&amp;</code> 应写为 <code>&amp;amp;</code>，<code>'</code> 应写为 <code>&amp;apos;</code>，<code>"</code> 应写为 <code>&amp;quot;</code>。
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;AutoSaveWidth&gt;<br><small>来自 &lt;FilesViews&gt;&lt;ColumnsView&gt;</small></div></td>
+            <td class="hintcell">
+            当我们手动使用鼠标调整列宽时，默认情况下，DC 会同时为两个面板更改列宽，并保存一个新值以供下次启动使用。<br>
+            如果我们想禁用这种行为并仅在当前会话中使用新值，我们应该将 <code>True</code> 替换为 <code>False</code>，即使用 <code>&lt;AutoSaveWidth&gt;False&lt;/AutoSaveWidth&gt;</code> 。
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;LongInStatus&gt;<br><small>来自 &lt;FilesViews&gt;&lt;ColumnsView&gt;</small></div></td>
+            <td class="hintcell">如果设置了列视图且没有选定的文件，状态栏会显示光标下的文件名（<code>True</code>）或文件数量（<code>False</code>，默认情况下）。<br>
+            如果 <code>True</code>，状态栏还会在光标位于“..”项时显示文件数量。对于链接，目标对象将额外显示。</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;TitleStyle&gt;<br><small>来自 &lt;FilesViews&gt;&lt;ColumnsView&gt;</small></div></td>
+            <td class="hintcell">
+				更改制表符标题栏的外观。<br>默认值取决于您的操作系统。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0</td>
+                  <td class="innerdescdesccell" ><b>tsLazarus</b>: 默认的 Lazarus 外观。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1</td>
+                  <td class="innerdescdesccell" ><b>tsStandard</b>：一种更具对比度的外观，类似于 Delphi 网格。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">2</td>
+                  <td class="innerdescdesccell" ><b>tsNative</b>: 尝试设置与当前小部件主题一致的外观。</td>
+                </tr>
+              </table>
+              <i>示例：</i><code>&lt;TitleStyle&gt;2&lt;/TitleStyle&gt;</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;Quality&gt;<br><small>来自标签 &lt;Fonts&gt;</small></div></td>
+            <td class="hintcell">
+				确定将使用哪种<a href="https://en.wikipedia.org/wiki/Font_rasterization">字体光栅化</a>。换句话说，它决定了字体的质量。<br>
+				有许多标签可以单独适用。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0</td>
+                  <td class="innerdescdesccell" ><b>Default</b>: 质量由系统设置（默认）决定。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1</td>
+                  <td class="innerdescdesccell" ><b>Draft</b>: 对于光栅字体，启用了缩放；字体大小可以增大，但质量可能会降低。<br>该字体还支持粗体、斜体、下划线或删除线（如有必要）。<br>使用 Proof 时，质量的重要性较低。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">2</td>
+                  <td class="innerdescdesccell" ><b>Proof</b>: 字符的质量很重要，因此对于光栅字体，缩放被禁用，并选择最接近大小的字体。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">3</td>
+                  <td class="innerdescdesccell" ><b>NonAntialiased</b>: 字体从不进行抗锯齿处理。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">4</td>
+                  <td class="innerdescdesccell" ><b>Antialiased</b>: 如果字体支持，它将始终使用抗锯齿。<br>字体大小不能太小也不能太大。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">5</td>
+                  <td class="innerdescdesccell" ><b>ClearType</b>: 字体使用 <a href="https://en.wikipedia.org/wiki/ClearType">清晰类型</a> 抗锯齿方法进行渲染。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">6</td>
+                  <td class="innerdescdesccell" ><b>ClearTypeNatural</b>: 字体使用自然 ClearType 抗锯齿方法进行渲染。</td>
+                </tr>
+              </table>
+              <i>示例：</i><code>&lt;Quality&gt;1&lt;/Quality&gt;</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;CustomIcons&gt;<br><small >来自&lt;Icons&gt;</small></div></td>
+            <td class="hintcell">
+			仅限 Windows：此选项将帮助确定用于驱动器、文件夹或归档的图标是否为系统默认图标，或者是否为我们可以自定义的图标。<br>
+			<code>CustomIcons</code> 选项将设置为一个单一数字，该数字表示根据我们的偏好从以下表格中数字的总和：<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >元素</th>
+                  <th class="innerdescheader" >来自系统</th>
+                  <th class="innerdescheader" >自定义</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >驱动器</td>
+                  <td class="innerdescdesccell">0</td>
+                  <td class="innerdescdesccell">1</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >文件夹</td>
+                  <td class="innerdescdesccell">0</td>
+                  <td class="innerdescdesccell">2</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >压缩包</td>
+                  <td class="innerdescdesccell">0</td>
+                  <td class="innerdescdesccell">4</td>
+                </tr>
+              </table>
+              <br>
+              <i>
+              如果我们想要...<br>
+              ...全部用系统默认：0 + 0 + 0 = 0 所以 <code>&lt;CustomIcons&gt;0&lt;/CustomIcons&gt;</code><br>
+              ...全部都是定制的：1 + 2 + 4 = 7 所以 <code>&lt;CustomIcons&gt;7&lt;/CustomIcons&gt;</code><br>
+              ...驱动器自定义，其他是系统默认：1 + 0 + 0 = 1 所以 <code>&lt;CustomIcons&gt;1&lt;/CustomIcons&gt;</code><br>
+              等等...
+              </i>
+              <br><br>
+              如果我们希望使用自定义图标，以下是每个项目的位置：<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >元素</th>
+                  <th class="innerdescheader" >位置</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >驱动器</td>
+                  <td class="innerdescdesccell" >%commander_path%\pixmaps\theme\XxX\devices\</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >文件夹</td>
+                  <td class="innerdescdesccell" >%commander_path%\pixmaps\theme\XxX\places\folder.png</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >压缩包</td>
+                  <td class="innerdescdesccell"><small >%commander_path%\pixmaps\theme\XxX\mimetypes\package-x-generic.png</small></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;DiskAlpha&gt;<br><small >来自 &lt;Icons&gt;</small></div></td>
+            <td class="hintcell">
+			设置未挂载驱动器图标透明度的选项。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader" >值</th>
+                  <th class="innerdescheader" >描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >1 到 99</td>
+                  <td class="innerdescdesccell" >有效的透明度级别（默认值为 50）。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell" >0 或 100</td>
+                  <td class="innerdescdesccell" >禁用功能。</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ToolSize&gt;<br><small >来自 &lt;Icons&gt;</small></div></td>
+            <td class="hintcell">内部编辑器、查看器和差异工具中工具栏图标的大小，支持的值：16、24 或 32。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ShowColonAfterDrive&gt;<br><small >来自 &lt;Layout&gt;</small></div></td>
+            <td class="hintcell">仅限 Windows：在<a href="help.html#iface_drive_pane">驱动器按钮栏</a>和<a href="help.html#iface_drive_btn">驱动器列表</a>中，在磁盘字母后显示冒号。默认值为<code>False</code>。</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;UppercaseDriveLetter&gt;<br><small >来自 &lt;Layout&gt;</small></div></td>
+            <td class="hintcell">仅限 Windows：在<a href="help.html#iface_drive_pane">驱动器按钮栏</a>和<a href="help.html#iface_drive_btn">驱动器列表</a>中使用大写字母。默认值为<code>False</code>。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt; SystemItemProperties&gt;<br><small >来自 &lt;Miscellaneous&gt;</small></div></td>
+            <td class="hintcell">Linux/FreeBSD：<code>True</code> 值允许使用文件管理器的文件属性对话框，该对话框在桌面环境设置中指定为默认程序（如果可能），否则，Double Commander 将使用其自己的 <a href="help.html#cm_FileProperties">属性窗口</a>。默认值为 <code>False</code>。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Attribute <i>Save</i><br><small>来自 &lt;SyncDirs&gt;&lt;Asymmetric&gt;</small></div></td>
+            <td class="hintcell">
+			同步目录：默认情况下保存或不保存非对称模式。<br>
+			如果我们想保存模式的状态，那么 <code>&lt;Asymmetric Save="True"&gt;</code>
+			或 <code>&lt;Asymmetric Save="False"&gt;</code> 否则（默认情况下）。
+			</td>
+          </tr>
+          
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Attribute <i>Save</i><br><small>从 &lt;SyncDirs&gt;&lt;FileMask&gt;</small></div></td>
+            <td class="hintcell">
+			同步目录：默认情况下，程序将最后使用的文件掩码保存为下次运行同步工具的默认掩码（如果它不是搜索模板）
+			要禁用此行为，我们可以将 <code>True</code> 替换为 <code>False</code><br>
+            <code>&lt;FileMask Save="False"&gt;</code><br>
+            并且 DC 将默认每次建议&lt;FileMask&gt; 的值（默认是“*”，即所有文件）。
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;DateTimeFormat&gt;<br><small>来自 &lt;SyncDirs&gt;</small></div></td>
+            <td class="hintcell">此设置允许在<a href="syncdirs.html">目录同步工具</a>中指定首选的日期和时间格式。日期和时间格式符号在<a href="configuration.html#dt_format">这里</a>描述。<br>默认值为 <code>yyyy.mm.dd hh:nn:ss</code>。</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;AutoCopy&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">对于内部查看器，启用（<code>True</code>）或禁用（<code>False</code>）将选定文本自动复制到剪贴板。默认情况下为<code>True</code>。</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ExtraLineSpan&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			对于内部查看器，此设置允许为每行增加一些额外的像素高度。<br>
+			该值直接以像素为单位进行解释。<br>
+			默认值为 0。<br>
+            <i>示例：</i> <code>&lt;ExtraLineSpan&gt;2&lt;/ExtraLineSpan&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;ImageExifRotate&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			Double Commander能够识别可能编码在 JPEG 图像文件中的<a href="https://en.wikipedia.org/wiki/Exif">EXIF</a>元数据格式。<br>
+			在该元数据中，有一个<a href="https://www.impulseadventure.com/photo/exif-orientation.html">方向标志</a>，可以用来将图片显示为拍摄时的相同方向，例如竖屏、横屏、倒置、镜像等。<br>
+			<code>ImageExifRotate</code> 标签配置Double Commander，以指示我们是否希望查看器使用该信息显示图像。<br>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">True</td>
+                  <td class="innerdescdesccell">使用嵌入图像文件中的方向标志（默认）。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">False</td>
+                  <td class="innerdescdesccell">忽略方向标志。</td>
+                </tr>
+              </table>
+              <i>示例：</i><code>&lt;ImageExifRotate&gt;True&lt;/ImageExifRotate&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;JpegQuality&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">对于内部查看器，Double Commander 在保存为 JPEG 格式时默认使用的质量值（命令 <span class="italic">保存</span> 和 <span class="italic">另存为...</span>）。默认值为 80。</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;LeftMargin&gt;<br><small>来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			对于内部查看器，此选项允许在窗口的左边框和文本边框之间添加空间。<br>
+			该值直接以像素为单位进行解释。<br>
+			默认值为 4。<br>
+            <i>示例：</i><code>&lt;LeftMargin&gt;4&lt;/LeftMargin&gt;</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;MaxTextWidth&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			对于内部查看器，配置在换行到下一行之前可以显示的最大字符数。<br>
+			有效范围为 80 到 16384，默认值为 1024。<br>
+            <i>示例：</i> <code>&lt;MaxTextWidth&gt;1024&lt;/MaxTextWidth&gt;</code> 
+            </td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;SynEditMask&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			对于内部查看器，此选项允许管理代码视图模式的文件扩展名列表（当然，在可用列表内）。
+			我们可以指定文件掩码（用分号“;”分隔且不带空格），这些文件将自动以此模式打开，而不是以纯文本形式打开，或者指定要排除的搜索模板名称。我们还可以通过设置空字符串来禁用此模式下文件的自动打开。
+			默认值为“*”。
+			</td>
+          </tr>
+
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">&lt;TabSpaces&gt;<br><small >来自 &lt;Viewer&gt;</small></div></td>
+            <td class="hintcell">
+			对于内部查看器，设置制表符停靠的宽度以供使用。<br>
+			有效范围为 1 到 32，默认值为 8。<br>
+            <i>示例：</i><code>&lt;TabSpaces&gt;4&lt;/TabSpaces&gt;</code>
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="commandline.html" title="Previous page">上一页</a> | <a href="plugins.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>DC - Toolbars</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="multiarc.html" title="Previous page">上一页</a> | <a href="variables.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1 >2.11. 工具栏</h1>
+      </div>
+
+      <div>
+        <h2>内容</h2>
+        <dl>
+          <dt>1. <a href="#toolbardefinition">工具栏是什么以及如何使用它</a></dt>
+          <dt>2. <a href="#toolbarshowit">如何显示它</a></dt>
+          <dt>3. <a href="#toolbarelementlist">工具栏中可能包含什么</a></dt>
+          <dt>4. <a href="#toolbarconfig">如何配置工具栏</a></dt>
+          <dt>5. <a href="#toolbardescription">元素的描述</a></dt>
+          <dd>
+            <dl>
+              <dd>5.1. <a href="#catseparator">分隔符</a></dd>
+              <dd>5.2. <a href="#catinternal">内部命令</a></dd>
+              <dd>5.3. <a href="#catexternal">外部命令</a></dd>
+              <dd>5.4. <a href="#catmenu">菜单</a></dd>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="toolbardefinition">工具栏是什么以及如何使用它</a></h2>
+        <p>当我们频繁使用双面板文件管理器如 Double Commander 时，最终会发现直接从管理器启动我们正在使用的应用程序比去桌面、任务栏或开始菜单寻找快捷方式更为方便。</p>
+        <p>这对于我们经常做的任务尤其如此。</p>
+        <p>工具栏的想法是让每个人可以自定义工具栏内的按钮，以便执行我们需要经常进行的功能。</p>
+        <p>Double Commander还建议使用基于当前显示/选择文件的众多可能参数，以便将它们作为参数传递给要启动的应用程序。</p>
+        <p>以下是默认安装后在文件面板上方显示的 DC 默认工具栏。但不用担心：您可以根据自己的需求和喜好配置它。</p>
+        <p class="figure"><img class="largeimage" title="Toolbar sample" alt="Toolbar sample" src="images/imgDC/toolbarsample.png" width="713" height="39"></p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="toolbarshowit" >2. 如何显示它</a></h2>
+        <p>工具栏的显示与否取决于在<a href="#ConfigLayout">布局</a>配置设置中所设定的内容。</p>
+        <p>要激活它，我们只需确保已设置 <span class="italic">显示工具栏</span> 选项。</p>
+        <p class="figure"><img class="largeimage" title="Show toolbar" alt="Show toolbar" src="images/imgDC/toolbarshowit.png" width="640" height="165"></p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="toolbarelementlist" >工具栏中可能包含什么</a></h2>
+        <p>这里是一个可能出现在工具栏中的内容表</p>
+        <table class="category">
+          <tbody><tr class="rowcategorytable"><th colspan="2">工具栏内可能的元素</th></tr>
+          <tr class="rowcategorysubtitle"><th class="categorynamecolumn" >元素</th><th class="categorydesccolumn" >描述</th></tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catseparator" >分隔符</a></div></td>
+            <td class="categorydesc">垂直栏帮助我们将相似的功能和/或相似的上下文分组在一起。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catinternal" >内部命令</a></div></td>
+            <td class="categorydesc">调用Double Commander中的内部命令。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catexternal" >外部命令</a></div></td>
+            <td class="categorydesc">启动外部应用程序、可执行文件、脚本等。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catmenu" >菜单</a></div></td>
+            <td class="categorydesc">配置将从主工具栏显示为下拉菜单的其他工具栏元素。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="toolbarconfig">4. 如何配置工具栏</a></h2>
+        <p>要配置我们工具栏中将出现的内容，我们需要进行配置。</p>
+        <p>我们可以去Double Commander的主要配置，向下滚动左侧栏并选择“工具栏”，我们就可以访问它。</p>
+        <p class="figure"><img class="largeimage" title="Toolbar configuration" alt="Toolbar configuration" src="images/imgDC/toolbarconfig1.png" width="646" height="156"></p>
+        <p>另一种快速访问配置的方法是直接在工具栏的空白区域右键单击，然后选择<span class="italic">编辑</span>。</p>
+        <p class="figure"><img class="largeimage" title="Toolbar configuration" alt="Toolbar configuration" src="images/imgDC/toolbarconfig2.png" width="200" height="72"></p>
+        <p>随着我们逐渐熟悉工具栏，我们可能会直接右键单击工具栏上的一个按钮，这样不仅可以打开工具栏编辑器，还可以立即准备编辑我们右键单击的工具栏按钮的相关操作。</p>
+        <p class="figure"><img class="largeimage" title="Toolbar configuration" alt="Toolbar configuration" src="images/imgDC/toolbarconfig3.png" width="618" height="254"></p>
+        <p>此外，上下文菜单允许删除选定的按钮、剪切或复制到剪贴板，或从剪贴板插入一个按钮。</p>
+        <p>我们还可以在不打开设置窗口的情况下更改工具栏元素的顺序：Double Commander支持在按住 <kbd>Shift</kbd> 键的同时用鼠标拖动按钮。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catseparator">5.1. 元素描述 - 分隔符</a></h2>
+        <p>分隔符只是一个垂直条，可以用来将一组按钮分开，以便将具有相似相关操作的按钮分组在一起。</p>
+        <p>没有真正的活跃功能，它只是为了好看而装饰。</p>
+        <p>在以下示例中，个人使用分隔符将与比较相关的功能隔离在一起，然后是与剪贴板相关的功能，等等。</p>
+        <p class="figure"><img class="largeimage" title="Example of separator" alt="Example of separator" src="images/imgDC/toolbarseparator.png" width="420" height="192"></p>
+      </div>
+      <br>
+
+      <div>
+        <h2><a name="catinternal">5.2. 元素描述 - 内部命令</a></h2>
+        <p>内部命令与 Double Commander 直接执行的操作相关，无需调用外部应用程序。</p>
+        <p>命令种类繁多。请参见<a href="cmds.html">此页面</a>，该页面专门描述所有内部命令。</p>
+        <p>例如，如果我们想要一个工具栏按钮来启动搜索，我们只需从命令的下拉框中选择 <tt>cm_Search</tt> 命令。</p>
+        <p>如我们在下面的图像中所见，我们可以为其选择一个自定义图标，但通常只需从命令的下拉框中选择命令即可，命令已经有一个内部关联的图标。</p>
+        <p>工具提示的作用是让我们写一些容易记住的小词，以便在鼠标悬停时提醒我们按钮的任务。</p>
+        <p>这里是一个包含<a href="cmds.html#cm_Search">cm_Search</a>命令的示例：</p>
+        <p class="figure"><img class="largeimage" title="Example of internal command with no parameter" alt="Example of internal command with no parameter" src="images/imgDC/toolbarinternal1.png" width="611" height="186"></p>
+        <p>某些内部命令可能接受参数以配置其操作。当需要这样做时，我们只需在参数框中写入参数：大多数参数必须以 <i>parameter=value</i> 的形式添加（除非另有说明），不带引号，并且每个参数单独一行。</p>
+        <p>在以下示例中，我们使用内部命令 <a href="cmds.html#cm_ChangeDir">cm_ChangeDir</a>，并提供两个参数以指示要加载和显示在每个面板中的目录。</p>
+        <p class="figure"><img class="largeimage" title="Example of internal command with parameters" alt="Example of internal command with parameters" src="images/imgDC/toolbarinternal2.png" width="611" height="210"></p>
+      </div>
+      <br>
+
+      <div>
+        <h2><a name="catexternal">5.3. 元素描述 - 外部命令</a></h2>
+        <p>外部命令与需要调用外部程序的操作相关。</p>
+        <p>对于外部命令，我们可以设置更多选项，以便精确配置我们想要启动的命令、我们希望在哪个目录中启动它，以及如果需要，我们希望提供给命令的参数。</p>
+        <p>“命令”字段仅用于可执行文件（原样，不带引号）：我们可以指定文件名或带有完整路径的文件名，我们还可以使用<a href="variables.html#envvariables">环境变量</a>。</p>
+        <p>关于参数，我们可以选择用户变量，这些变量将根据活动面板当前选定的文件等被替换为其实际值。请参见<a href="variables.html">此链接</a>下可用作参数的变量专用页面（请注意<a href="variables.html#quotation">引号</a>的使用）。要在终端中运行命令，我们可以使用变量<a href="variables.html#executeterm">%t0 和%t1</a>。</p>
+        <p>在以下示例中，我们设置了一个工具栏按钮来启动应用程序 GIMP，<code>%p</code> 作为参数意味着当我们点击按钮启动 GIMP 时，当前活动面板中所选文件的完整文件名将作为参数传递，因为这就是 <code>%p</code> 的含义。</p>
+        <p class="figure"><img class="largeimage" title="Example of external command" alt="Example of external command" src="images/imgDC/toolbarexternal.png" width="611" height="230"></p>
+        <p>如果我们不需要明确指定工作目录，那么可以将“起始路径”字段留空，在这种情况下，工作目录将是活动文件面板的当前目录。</p>
+      </div>
+      <br>
+
+      <div>
+        <h2><a name="catmenu">5.4. 元素描述 - 菜单</a></h2>
+        <p>如果我们配置很多工具栏按钮，可能会没有足够的空间将所有按钮放在同一水平线上。</p>
+        <p>为了让我们添加更多按钮，我们可能会添加一种特殊的按钮类型，该按钮会在下方出现一个下拉菜单，以便我们访问类似于工具栏的按钮，但以下拉菜单的形式呈现。</p>
+        <p>请看下面的示例，我们添加了一个类型为“菜单”的按钮。</p>
+        <p>这将会在下面出现一个新的子工具栏，我们可以根据需要用指向不同任务的新工具栏按钮来填充它。</p>
+        <p>这个例子还告诉我们，将与同一项目、同一领域相关的按钮分组在一起可能会有所帮助。</p>
+        <p>在这个例子中，子工具栏具有与安装在虚拟机中的不同类型操作系统相关的功能。</p>
+        <p class="figure"><img class="largeimage" title="Example of menu" alt="Example of menu" src="images/imgDC/toolbarmenu.png" width="624" height="319"></p>
+        <p>以下是配置的子工具栏在应用程序中将如何显示：</p>
+        <p class="figure"><img class="largeimage" title="Example of drop menu" alt="Example of drop menu" src="images/imgDC/toolbarmenudrop.png" width="250" height="342"></p>
+        <p>配置成这种方式的子工具栏可能包含之前呈现的相同类型的按钮。</p>
+        <p>我们甚至可能在一个子工具栏内再有一个子工具栏，依此类推。</p>
+        <p>这将在应用程序中作为菜单元素的子菜单显示。</p>
+        <p >请看下面的示例：</p>
+        <p class="figure"><img class="largeimage" title="Example of toolbar in a toolbar" alt="Example of toolbar in a toolbar" src="images/imgDC/toolbarinbar.png" width="732" height="558"></p>
+      </div>
+
+      <div>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="multiarc.html" title="Previous page">上一页</a> | <a href="variables.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>

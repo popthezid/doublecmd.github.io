@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  
+<head>
+    <title>DC - Built-in file viewer</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="syncdirs.html" title="Previous page">上一页</a> | <a href="directoryhotlist.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.8. 内置文件查看器</h1>
+      </div>
+
+      <div>
+        <h2 >内容</h2>
+        <dl>
+          <dt>1. <a href="#intro">介绍</a></dt>
+          <dt>2. <a href="#mainmenu">主菜单</a></dt>
+          <dd>
+            <dl>
+              <dt>2.1. <a href="#mnu_file">"文件"</a></dt>
+              <dt>2.2. <a href="#mnu_edit">"编辑"</a></dt>
+              <dt>2.3. <a href="#mnu_view">"查看"</a></dt>
+              <dt>2.4. <a href="#mnu_plug">"插件"</a></dt>
+              <dt>2.5. <a href="#mnu_enc">"编码"</a></dt>
+              <dt>2.6. <a href="#mnu_image">"图像"</a></dt>
+              <dt>2.7. <a href="#mnu_about">"关于"</a></dt>
+            </dl>
+          </dd>
+          <dt>3. <a href="#toolbar">工具栏</a></dt>
+          <dt>4. <a href="#statusbar">状态栏</a></dt>
+          <dt>5. <a href="#preview">预览</a></dt>
+          <dt>6. <a href="#copymove">复制/移动文件</a></dt>
+          <dt>7. <a href="#quick">快速查看</a></dt>
+          <dt>8. <a href="#asettings">附加设置</a></dt>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="intro" >1. 引言</a></h2>
+        <p>内置查看器旨在以文本、十六进制或二进制格式以及图像文件查看任何大小的文件。</p>
+        <p class="figure"><img class="largeimage" title="Built-in file viewer" alt="Built-in file viewer" src="images/imgDC/viewer.png" width="792" height="432"></p>
+        <p>选定的文本将自动复制到剪贴板，要禁用此功能，我们可以使用 <a href="configxml.html">&lt;AutoCopy&gt;</a> 参数。</p>
+        <p>默认情况下，查看器（内部命令 <tt>cm_View</tt> ）调用分配给 <kbd>F3</kbd> 键，我们可以在 <a href="configuration.html#ConfigHotKeys">按键&nbsp;&gt; 快捷键</a> 设置部分更改此设置。如果选择了多个文件，将打开第一个选定的文件，我们可以使用 <span class="italic">上一个文件</span> 和 <span class="italic">下一个文件</span> 命令切换这些文件（否则，这些命令将加载当前目录中的文件）。</p>
+        <p>1) 支持的图像格式：BMP、CUR、GIF、ICNS、ICO、JPEG、PNG、PNM（PBM、PGM 和 PPM）、PSD、SVG/SVGZ、TIFF、XPM。此外，如果所需的库可用：</p>
+        <ul>
+          <li><p>HEIF/HEIC 和 AVIF: <tt>libheif.dll</tt> （Windows）或 <tt>libheif.so.1</tt> （Linux 和其他类 Unix 系统）。</p></li>
+          <li><p>WebP: <tt>libwebp.so.n</tt> ，其中“n”是 7、6 或 5（Linux 和其他类 Unix 系统）。</p></li>
+          <li><p>SVG/SVGZ: <tt>librsvg-2-2.dll</tt> , <tt>libcairo-2.dll</tt> 和 <tt>libgobject-2.0-0.dll</tt> （Windows）或 <tt>librsvg-2.so.2</tt> , <tt>libcairo.so.2</tt> 和 <tt>libgobject-2.0.so.0</tt> （Linux 和其他类 Unix 系统）。如果这些文件可用，Double Commander 将使用 librsvg 库，而不是内置的 Image32 图形库。</p></li>
+          <li><p>Double Commander支持 TurboJPEG 库，它是一个 JPEG 编解码器，使用 SIMD 指令加速图像的解码和编码： <tt>libturbojpeg.dll</tt> （Windows）， <tt>libturbojpeg.so.0</tt> （Linux 和其他类 Unix 系统）或 <tt>libturbojpeg.dylib</tt> （macOS）。</p></li>
+        </ul>
+        <p>注意：在 Windows 中，库必须位于 Double Commander 可执行文件附近或在 PATH 中。</p>
+        <p>2) Double Commander支持 Windows 图像组件(Windows Vista 及更新版本)：图像组件(WIC)提供了一个可扩展的框架用于处理图像。WIC 包括几个内置编解码器（BMP、DDS、GIF、ICO、JPEG、JPEG XR、PNG 和 TIFF），此外还有可免费使用和专有的 RAW 图像格式、HEIF/HEIC、WebP 的外部编解码器。Double Commander将跳过 BMP、GIF、ICO、JPEG、PNG 和 TIFF 的编解码器，因为这些格式已经得到支持。</p>
+        <p>内置查看器支持保存为以下图像格式：BMP、ICO、JPEG（我们可以选择质量从 1 到 100；默认值为 80，见<a href="configxml.html">&lt;JpegQuality&gt;</a>）、PNG（Double Commander将使用与原始图像相同的颜色深度）和 PNM（Double Commander将使用二进制格式，颜色深度将自动设置：每像素 1、8 或 24 位）。</p>
+        <p>注意：在修改图像时，我们必须使用 <span class="italic">保存</span> 或 <span class="italic">另存为</span> 命令保存所有更改：Double Commander在关闭查看器窗口或切换到另一个文件时不会检查文件的状态（是否已更改）。</p>
+        <p>我们可以在<a href="configuration.html#ConfigHotKeys">按键&nbsp;&gt; 快捷键</a>设置部分为查看器中可用的命令分配或更改快捷键（切换到<span class="italic">查看器</span>类别）。快捷键可以分别为文本模式和图像查看模式设置。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mainmenu" >2. 主菜单</a></h2>
+        <p>主菜单的外观和内容取决于查看模式：文本、图像或 <a href="configuration.html#ConfigPlugins">WLX 插件</a>。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_file" >2.1. "文件"</a></h2>
+        <p>项目 <span class="italic">上一个</span> 和 <span class="italic">下一个</span> 用于加载目录中的上一个或下一个文件。如果选择了多个文件，命令将加载这些文件。文件面板中的排序顺序将被使用。</p>
+        <p>项目 <span class="italic">保存</span> 和 <span class="italic">另存为...</span> 仅在查看图像时可用。</p>
+        <p><span class="italic">打印...</span> – 打开一个系统对话框以发送文件进行打印。仅在使用支持打印文件的插件查看时，才能进行打印。</p>
+        <p><span class="italic">打印设置...</span> – 打开一个对话框以设置打印边距（左、右、上和下页边距）。</p>
+        <p><span class="italic">重新加载</span> – Double Commander将强制重新读取文件，而无需关闭查看器窗口。如果文件已被外部程序修改，这样做很方便。</p>
+        <p><span class="italic">自动重载</span> – 仅适用于文本模式：如果启用，Double Commander 将每 2 秒检查一次文件大小，如果发生变化，将重新读取文件并将其内容滚动到末尾。这对于查看不断更新的日志文件非常方便。此模式仅适用于当前文件，在切换到另一个文件或关闭查看器窗口时将被禁用。如果启用，Double Commander 将在文件名之前的状态栏中显示一个星号 "*"。</p>
+        <p><span class="italic">退出</span> – 关闭查看器窗口。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_edit" >2.2. "编辑"</a></h2>
+        <p>菜单包含用于选择和复制文本的命令，以及用于搜索正在查看的文件内容的命令：<span class="italic">查找</span>、<span class="italic">查找下一个</span>和<span class="italic">查找上一个</span>。</p>
+        <p >搜索选项：</p>
+        <ul>
+          <li><p><span class="italic">区分大小写</span> – 表示大写字母与小写字母应当区分，例如“Fallout”和“fallout”将是不同的。</p></li>
+          <li><p><span class="italic">十六进制</span> – 搜索十六进制字符（不区分大小写，字符之间可以有或没有空格，例如“C0 C1 C2”或“c0c1c2”）。</p></li>
+          <li><p><span class="italic">正则表达式</span>&nbsp;– 如果启用，我们可以使用 <a href="regexp.html">正则表达式</a>。</p></li>
+          <li><p><span class="italic">向后</span> – 切换搜索方向：从文件末尾开始搜索，而不是从开头搜索。</p></li>
+        </ul>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_view" >2.3. "视图"</a></h2>
+        <p>此菜单用于切换查看模式，并包含几个附加选项。</p>
+        <p><span class="italic">预览</span> – 显示或隐藏<a href="#preview">预览</a>面板。</p>
+        <p>该程序会自动选择适当的文件查看模式，以下项目允许强制切换</p>
+        <ul>
+          <li><p><span class="italic">以文本形式显示</span> – 以纯文本形式显示文件内容（或控制台命令输出，见 <a href="configuration.html#ConfigAssociations">文件关联</a>）。我们可以设置在换行之前每行显示的最大字符数（默认 1024）。</p></li>
+          <li><p><span class="italic">以二进制形式显示</span> – 以原样显示文件内容。不可打印字符将显示为点，但在复制文本时，将尊重控制字符（换行、回车、制表符等）。使用固定的行宽为 80 个字符。</p></li>
+          <li><p><span class="italic">以十六进制显示</span>&nbsp;– 窗口将显示三列：文件开头的偏移量（以字节为单位）、16 个字符的十六进制表示和相同的 16 个字符的纯文本表示。不可打印字符将显示为点。当选择第二列中的值时，第三列中相应的符号将被选中（反之亦然）。</p></li>
+          <li><p><span class="italic">以十进制显示</span> – 与之前相似，但字节将以十进制表示。</p></li>
+          <li><p><span class="italic">以书籍形式显示</span> – 一种特殊的查看模式：文本将以多列形式显示（像书籍的展开页或报纸）。我们可以设置字体和大小、文本和背景颜色，以及列数（1、2 或 3）。</p></li>
+          <li><p><span class="italic">图形</span> – 切换到图像查看。请参阅<a href="#intro">页面开头</a>支持的图像格式列表。</p></li>
+          <li><p><span class="italic">插件</span> – 使用 WLX 插件查看。如果所选文件可以由多个已安装的插件打开，则重复调用此命令将循环切换它们。</p></li>
+          <li><p><span class="italic">Office XML（仅文本）</span> – 该查看器将显示来自基于 XML 的办公文档的文本：Microsoft Office（DOCX，XLSX）和 OpenOffice/LibreOffice（ODT，ODS）。没有文本格式，但保留段落。</p></li>
+          <li><p><span class="italic">代码</span> – 该查看器将以代码视图模式显示所选文件：带有语法高亮和行号。将使用与内置文本编辑器相同的高亮规则和扩展名列表（更多细节请见<a href="configuration.html#ConfigToolsEditorHL">这里</a>）。在此模式下，查看器使用<a href="configuration.html#ConfigToolsEditor">内置编辑器的设置</a>，另请参见<a href="configxml.html">&lt;SynEditMask&gt;</a>的描述。</p></li>
+        </ul>
+        <p>插件优先于其他支持的视图模式。</p>
+        <p><span class="italic">换行文本</span> – 启用或禁用在窗口中不适合的行（按单词边界）换行。</p>
+        <p><span class="italic">显示文本光标</span> – 启用闪烁文本光标的显示。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_plug" >2.4. "插件"</a></h2>
+        <p>菜单包含所有已添加和启用的 WLX 插件的列表。菜单的第一部分将包含适合当前文件的插件（Double Commander检查检测字符串），所有其他插件将列在第二部分。</p>
+        <p>在未排序的情况下，使用插件在相应设置部分添加时的相同顺序。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_enc" >2.5. "编码"</a></h2>
+        <p>在以文本模式查看文件时：可用文本编码的菜单列表，默认启用自动检测。</p>
+        <p>使用插件时，此菜单仅包含三个项目：</p>
+        <ul>
+          <li><p><span class="italic">自动检测</span> – 自动编码检测。</p></li>
+          <li><p><span class="italic">ANSI</span>&nbsp;– 默认系统 ANSI 编码（取决于系统区域设置）。</p></li>
+          <li><p><span class="italic">OEM</span>&nbsp;– 默认系统 OEM (DOS) 编码（取决于系统区域设置）。</p></li>
+        </ul>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_image" >2.6. "图像"</a></h2>
+        <p><span class="italic">图像</span>菜单在查看 GIF 文件时将不可用。</p>
+        <p><span class="italic">拉伸</span> – 调整图像大小以填充查看窗口（宽高比将自动保存）。</p>
+        <p><span class="italic">仅拉伸大图</span> – 仅在图像大于当前窗口大小时调整图像大小（宽高比将自动保存）。</p>
+        <p><span class="italic">居中</span> – 图像将显示在查看窗口的中心，而不是左上角。</p>
+        <p><span class="italic">显示透明度</span> – 允许使用棋盘格图案作为图像透明部分的背景。</p>
+        <p><span class="italic">旋转</span>子菜单包含几个相似的操作：</p>
+        <ul>
+          <li><p>前三个命令围绕图像中心按指定的度数旋转图像：<span class="italic">+ 90</span>（向右旋转 90 度），<span class="italic">+ 180</span> 和 <span class="italic">- 90</span>（向左旋转 90 度）。</p></li>
+          <li><p><span class="italic">水平翻转</span> – 水平反转图像，即从左到右。</p></li>
+          <li><p><span class="italic">垂直翻转</span> – 将图像垂直反转，即从上到下。</p></li>
+        </ul>
+        <p><span class="italic">放大</span> 和 <span class="italic">缩小</span> – 用于改变图像比例的命令。</p>
+        <p><span class="italic">全屏</span> – 将窗口切换到全屏模式（窗口内容不包含操作系统的典型窗口边框界面）。此模式不仅在查看图像时可用，只需使用快捷键（默认情况下为 <kbd>Alt+Enter</kbd> ）。</p>
+        <p><span class="italic">截图</span>子菜单 - 立即或延迟（3 或 5 秒）创建桌面的截图。</p>
+        <p>使用插件时，此菜单仅包含三个项目：<span class="italic">拉伸</span>、<span class="italic">仅拉伸大图</span>和<span class="italic">居中</span>。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mnu_about" >2.7. "关于"</a></h2>
+        <p >仅仅是一个名称。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="toolbar">3. 工具栏</a></h2>
+        <p>内部查看器的多个命令和额外工具，集中在工具栏中。仅在查看图像时使用。</p>
+        <p class="figure"><img class="largeimage" title="Toolbar" alt="Toolbar" src="images/imgDC/viewertoolbar.png" width="834" height="33"></p>
+        <p><span class="italic">重新加载当前文件</span> – Double Commander将强制重新读取文件，而不关闭查看器窗口。如果文件已被外部程序修改，这样做很方便。</p>
+        <p>按钮 <span class="italic">加载上一个文件</span> 和 <span class="italic">加载下一个文件</span> 用于加载目录中的上一个或下一个文件。文件面板中的排序顺序被使用。</p>
+        <p><span class="italic">复制文件</span> – 请参见 <a href="#copymove">复制/移动文件</a>。</p>
+        <p><span class="italic">移动文件</span> – 参见 <a href="#copymove">复制/移动文件</a>。</p>
+        <p><span class="italic">删除文件</span> – 将删除正在查看的文件，并会请求确认。</p>
+        <p><span class="italic">放大</span> 和 <span class="italic">缩小</span> – 用于改变图像比例的命令。</p>
+        <p><span class="italic">旋转 -90 度</span> – 将图像绕其中心向左旋转 90 度。</p>
+        <p><span class="italic">旋转 +90 度</span> – 将图像绕其中心向右旋转 90 度。</p>
+        <p><span class="italic">镜像</span> – <span class="italic">水平镜像</span> 命令：将图像水平反转，即从左到右。</p>
+        <p>下一个组仅用于 GIF 动画：</p>
+        <ul>
+          <li><p><span class="italic">暂停/播放</span> – 暂停动画播放。</p></li>
+          <li><p><span class="italic">上一帧</span> 和 <span class="italic">下一帧</span> – 在动画帧之间来回切换。</p></li>
+          <li><p><span class="italic">导出帧</span> – 允许保存当前动画帧。</p></li>
+        </ul>
+        <p>下一组按钮与选择相关：</p>
+        <ul>
+          <li><p><span class="italic">高亮</span> – 打开选择工具（矩形）。</p></li>
+          <li><p><span class="italic">裁剪</span> – 通过选择裁剪图像。</p></li>
+          <li><p><span class="italic">红眼</span> – 红眼去除功能。</p></li>
+        </ul>
+        <p>下一组按钮与绘图相关：</p>
+        <ul>
+          <li><p><span class="italic">绘画</span> – 启用绘图工具。</p></li>
+          <li><p><span class="italic">撤销</span> – 取消最后一个操作。</p></li>
+          <li><p>选择绘图工具的菜单：<span class="italic">钢笔</span>、<span class="italic">矩形</span>和<span class="italic">椭圆</span>。</p></li>
+          <li><p><span class="italic">宽度</span> – 选择线条宽度的菜单（从 1 到 25 像素）。</p></li>
+          <li><p><span class="italic">颜色</span> – 允许设置线条的颜色。</p></li>
+        </ul>
+        <p><span class="italic">调整大小</span> – 图像调整大小工具允许指定宽度和高度（宽高比将自动保存）。</p>
+        <p><span class="italic">全屏</span> – 切换窗口到全屏模式（窗口内容不包含操作系统的典型窗口边框界面）和返回。此模式不仅在查看图像时可用，只需使用快捷键（默认情况下为 <kbd>Alt+Enter</kbd> ）。</p>
+        <p>当窗口扩展到全屏时，将会出现一个额外的 <span class="italic">幻灯片放映</span> 按钮：我们可以启用自动加载当前目录中的下一张图片，并设置文件显示时间（从 1 到 25 秒）。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="statusbar" >状态栏</a></h2>
+        <p>状态栏的外观和内容取决于查看模式：文本、图像或 WLX 插件。</p>
+        <p>在状态栏的开头，显示当前目录中打开文件的数量和文件的总数量。</p>
+        <p>文件内容中的位置（以字节和百分比表示）、文件大小和文本编码。</p>
+        <p class="figure"><img class="largeimage" title="Status bar: text" alt="Status bar: text" src="images/imgDC/viewerstatus1.png" width="642" height="24"></p>
+        <p>图像：当前分辨率（以像素和百分比表示）、实际文件分辨率和选择大小（使用选择工具时）。</p>
+        <p class="figure"><img class="largeimage" title="Status bar: image" alt="Status bar: image" src="images/imgDC/viewerstatus2.png" width="642" height="24"></p>
+        <p>WLX 插件：插件名称和编码。</p>
+        <p class="figure"><img class="largeimage" title="Status bar: WLX plugin" alt="Status bar: WLX plugin" src="images/imgDC/viewerstatus3.png" width="642" height="24"></p>
+        <p>在状态栏的末尾，显示正在查看的文件的完整名称。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="preview" >5. 预览</a></h2>
+        <p>窗口左侧的面板中，目录文件以缩略图的形式显示（缩略图下方有文件名）。这看起来像文件面板中的缩略图模式。</p>
+        <p class="figure"><img class="largeimage" title="Preview" alt="Preview" src="images/imgDC/viewerpreview.png" width="720" height="418"></p>
+        <p>文件面板中使用了排序顺序。启动查看器时使用的文件将始终是列表中的第一个。</p>
+        <p>预览面板可以展开以显示多列缩略图列表。</p>
+        <p>带有多个常用功能的独立工具栏：<span class="italic">重新加载当前文件</span>、<span class="italic">加载上一个文件</span>、<span class="italic">加载下一个文件</span>、<span class="italic">复制文件</span>、<span class="italic">删除文件</span>和<span class="italic">移动文件</span>，请参见<a href="#toolbar">上面的</a>类似按钮的描述。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="copymove" >6. 复制/移动文件</a></h2>
+        <p>查看器可以使用快捷键或工具栏或预览面板上的按钮复制或移动查看的文件（内部查看器命令 <tt>cm_CopyFile</tt> 和 <tt>cm_MoveFile</tt> ）。我们可以指定最多 5 个目录并在它们之间切换：</p>
+        <p class="figure"><img class="largeimage" title="Copying/moving files" alt="Copying/moving files" src="images/imgDC/viewercopymove.png" width="322" height="234"></p>
+        <p>这在我们需要将查看的文件放入不同目录或制作额外副本时很方便。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="quick" >7. 快速查看</a></h2>
+        <p>附加文件查看模式（默认 <kbd>Ctrl+Q</kbd> ）：内容将显示在相对的（非活动）文件面板中，而不是单独的窗口。当我们导航到下一个项目时，显示的内容会更新，这使得通过在文件面板中移动光标即可查看文件内容。</p>
+        <p>快速查看可以通过再次按下 <kbd>Ctrl+Q</kbd> 来禁用，当切换任何面板（活动或非活动）到另一个标签时，它也会被禁用。</p>
+        <p>在<a href="configuration.html#ConfigAssociations">文件关联</a>设置中添加的“查看”操作会被忽略，除了使用 <tt>{!DC-VIEWER}</tt> 宏启动的应用程序。</p>
+        <p>并非所有查看器命令都可以在此模式下工作，例如，加载目录中上一个或下一个文件的命令（默认情况下为 <kbd>P</kbd> 和 <kbd>N</kbd> ）。</p>
+        <p>右键单击状态栏会弹出一个菜单，其中包含几个子菜单（取决于当前模式）：</p>
+        <ul>
+          <li><p>“插件”模式：“查看”、“插件”、“编码”和“图像”；</p></li>
+          <li><p>“图形”模式：“视图”、“插件”和“图像”；</p></li>
+          <li><p>其他模式：“视图”、“插件”和“编码”。</p></li>
+        </ul>
+        <p >（请参见上面的描述。）</p>
+        <p>某些界面元素可能会被隐藏（例如，在“图形”模式下查看图像时，Double Commander会隐藏工具栏）。对于插件没有一般规则或建议，决定由插件作者做出。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="asettings" >8. 额外设置</a></h2>
+        <p>查看Double Commander设置部分的描述：<a href="configuration.html#ConfigToolsViewer">工具&nbsp;&gt; 查看器</a> 和 <a href="configuration.html#ConfigColor">颜色</a>（<span class="italic">查看器</span>类别）。有<a href="configxml.html">几个参数</a>只能在 <tt>doublecmd.xml</tt> 配置文件中手动更改。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="syncdirs.html" title="Previous page">上一页</a> | <a href="directoryhotlist.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>

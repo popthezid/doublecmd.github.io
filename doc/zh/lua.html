@@ -1,0 +1,1231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>DC - Lua Scripting</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a  href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a  href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer"><div class="nav"><a  href="index.html" title="Index">索引</a> | <a  href="regexp.html" title="Previous page">上一页</a> | <a  href="commandline.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.15. Lua 脚本</h1>
+      </div>
+
+      <div>
+        <h2>内容</h2>
+        <dl>
+          <dt>1. <a  href="#preface">介绍</a></dt>
+          <dt>2. <a  href="#dllrequired">需要 DLL</a></dt>
+          <dt>3. <a  href="#libraries">Double Commander功能库</a></dt>
+          <dd>
+            <dl>
+              <dt>3.1. <a  href="#libdc">直流库</a></dt>
+              <dd>
+                <dl>
+                  <dt>3.1.1. <a  href="#exampleex">使用 DC.ExecuteCommand 的示例</a></dt>
+                </dl>
+              </dd>
+              <dt>3.2. <a  href="#librarysystem">系统库</a></dt>
+              <dd>
+                <dl>
+                  <dt>3.2.1. <a  href="#detailattr">SysUtils.FileGetAttr 返回值的详细信息</a></dt>
+                  <dt>3.2.2. <a  href="#exampleattr">使用 SysUtils.FileGetAttr 的示例</a></dt>
+                  <dt>3.2.3. <a  href="#examplefind">使用 FindFirst、FindNext 和 FindClose 的示例</a></dt>
+                </dl>
+              </dd>
+              <dt>3.3. <a  href="#libraryclip">剪贴板库</a></dt>
+              <dd>
+                <dl>
+                  <dt>3.3.1. <a  href="#exampleclip">剪贴板库的使用示例</a></dt>
+                </dl>
+              </dd>
+              <dt>3.4. <a  href="#librarydialogs">对话框库</a></dt>
+              <dd>
+                <dl>
+                  <dt>3.4.1. <a  href="#dlgbuts">在对话框中显示的按钮.MessageBox</a></dt>
+                  <dt>3.4.2. <a  href="#dlgstyle">对话框.MessageBox 的框样式</a></dt>
+                  <dt>3.4.3. <a  href="#dlgdefbut">对话框.MessageBox 的默认活动按钮</a></dt>
+                  <dt>3.4.4. <a  href="#msgreturn">对话框.MessageBox 的返回值</a></dt>
+                  <dt>3.4.5. <a  href="#mesgboxsample">Dialogs.MessageBox 的使用示例</a></dt>
+                  <dt>3.4.6. <a  href="#querysample">Dialogs.InputQuery 的使用示例</a></dt>
+                </dl>
+              </dd>
+              <dt>3.5. <a  href="#libraryutf8">UTF-8 库</a></dt>
+              <dt>3.6. <a  href="#librarychar">字符库</a></dt>
+              <dt>3.7. <a  href="#libraryos">操作系统库</a></dt>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="preface">1. 引言</a></h2>
+        <p>关于 Lua 脚本编程语言的详细信息可以在<a  href="https://www.lua.org/">Lua 网站</a>上找到。</p>
+        <p>Double Commander可以通过 <a  href="cmds.html#cm_ExecuteScript">cm_ExecuteScript</a> 命令执行 Lua 脚本。<br>
+         脚本参数必须原样传递，不得转义（不带引号或“\”），为此我们需要使用 <a  href="variables.html#quotation">%"0</a> 变量：例如，<code>%"0%p0</code> 用于光标下的文件，而不是 <code>%p0</code> 或 <code>%"0%D</code> 用于当前目录，而不是 <code>%D</code>。否则，如果Double Commander自动添加引号，它们将作为参数的一部分传递，您将不得不考虑它们。<br>
+         要获取所有选定文件的列表，我们可以使用 <a  href="variables.html#listoffiles">变量</a> (<code>%LU</code>, <code>%FU</code> 或 <code>%RU</code>) 或内部命令 (<a  href="cmds.html#cm_SaveSelectionToFile">cm_SaveSelectionToFile</a>, <a  href="cmds.html#cm_SaveFileDetailsToFile">cm_SaveFileDetailsToFile</a>, <a  href="cmds.html#cm_CopyFullNamesToClip">cm_CopyFullNamesToClip</a> 或 <a  href="cmds.html#cm_CopyFileDetailsToClip">cm_CopyFileDetailsToClip</a>)。
+         我们可以使用，例如，<code>%p</code>：在这种情况下，Double Commander 将在一行中传递所有选定文件的名称，用空格分隔名称。</p>
+        <p>也可以使用 Lua 脚本编写内容插件，示例可以在程序文件夹中找到（ <tt>plugins/wdx/scripts</tt> ）。
+           Wiki 有一个<a  href="https://github.com/doublecmd/doublecmd/wiki/Plugins-development">页面</a>专门用于编写插件。
+           限制：仅支持以下数据类型</p>
+        <ul>
+          <li><i>ft_numeric_32</i> (1)&nbsp;&ndash; 一个 32 位有符号数字；</li>
+          <li><i>ft_numeric_64</i> (2)&nbsp;&ndash; 一个 64 位有符号数字；</li>
+          <li><i>ft_numeric_floating</i> (3)&nbsp;&ndash; 浮点数；</li>
+          <li><i>ft_boolean</i> (6)&nbsp;&ndash; 布尔类型: <i>true</i> 或 <i>false</i>;</li>
+          <li><i>ft_multiplechoice</i> (7)&nbsp;&ndash; 允许有限选择数量的值；</li>
+          <li><i>ft_string</i> (8)&nbsp;&ndash; 一段文本字符串；</li>
+          <li><i>ft_fulltext</i> (9)&nbsp;&ndash; 完整文本（多个文本字符串），仅用于与插件一起搜索；</li>
+          <li><i>ft_datetime</i> (10)&nbsp;&ndash; 对于日期/时间：返回的日期将被转换为格式化的日期和时间字符串（值取决于您的区域设置）。<br>
+          日期必须采用 Windows 格式，但 Lua 和 Double Commander 提供的搜索文件的函数使用 Unix 时间格式。我们可以使用以下公式进行转换：<br>
+          = UnixTime * 10000000 + 116444736000000000<br>
+          这是一个大数字，因此您需要 64 位版本的 Double Commander 或 Lua 5.3 及以上版本。</li>
+        </ul>
+        <p>上面的列表包含了头文件中的名称，在 Lua 脚本中我们必须使用括号中指定的数值。</p>
+        <p>注意：对于<a  href="help.html#cm_FileProperties">文件属性</a>对话框，调用<code>ContentGetValue</code>函数时使用<code>CONTENT_DELAYIFSLOW</code>标志（第四个参数，值为 1），这可以避免打开窗口时的延迟：如果数据检索较慢，我们可以通过简单地添加标志值检查并对这样的字段或插件返回<code>nil</code>来排除这些数据。</p>
+        <p>注意：如果插件需要返回一个空字符串，传递 <code>nil</code> 会比传递 <code>""</code> 更快。</p>
+        <p>注意：Lua 函数 <code>io.open</code> 使用标准 C 函数 <code>fopen</code>：在文本模式下，该函数在读取和写入时可以转换行结束符的类型（CRLF、LF 或 CR），这可能导致意外结果。如果您遇到具有不同类型行结束符的文件，或者如果您正在编写跨平台脚本，则必须考虑这一点，或者更实际的做法是优先选择二进制模式。</p>
+       <br>
+
+        <p><span class="bold">关于文本编码</span></p>
+        <p>所有下面描述的附加功能都接受 UTF-8 编码的字符串参数，并以这种编码返回字符串（<a  href="#libraryutf8">LazUtf8.ConvertEncoding</a>函数除外）。</p>
+        <p>一些标准 Lua 库中的函数已被 Double Commander 或 Free Pascal/Lazarus 中的函数替换（或编写了新的函数），这提供了 UTF-8 支持。</p>
+        <p>在编写插件时，我们也应该对文本数据使用 UTF-8（<i>ft_multiplechoice</i>、<i>ft_string</i> 和 <i>ft_fulltext</i>）。</p>
+        <p>保存脚本时，请使用不带 BOM 的 UTF-8 编码。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="dllrequired">2. 需要 DLL</a></h2>
+        <p>为了解释 Lua 脚本文件，我们需要一个 Lua DLL 文件，Double Commander 支持 5.1 到 5.4 版本。</p>
+        <p>默认情况下，DC 在其目录和系统目录中查找名为 <tt>lua5.1.dll</tt> （Windows）、 <tt>liblua5.1.so.0</tt> （Unix 或 GNU/Linux）或 <tt>liblua5.1.dylib</tt> （macOS）的文件。我们可以在 <a  href="configuration.html#luapathtolibrary">Lua 库文件中更改</a> 文件名（和路径）以使用参数。</p>
+        <p>我们可以使用来自 <a href="https://luajit.org/" target="_blank">LuaJIT 项目</a> 的 DLL 文件。
+           LuaJIT 结合了用汇编语言编写的高速解释器和最先进的 JIT 编译器。此外，我们还获得了 FFI 库，它允许从纯 Lua 代码调用外部 C 函数并使用 C 数据结构。</p>
+        <p>DC 的 Windows 发行版默认包含 Lua DLL（在 DC 0.9.7 及更新版本中来自 LuaJIT 项目），在其他情况下，我们可以通过包管理器找到并安装它，或者自行编译。如果我们使用的是 64 位版本的 DC，DLL 也必须是 64 位版本。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="libraries">3. Double Commander功能库</a></h2>
+        <p>Double Commander为我们的 Lua 脚本提供了一些功能库。</p>
+        <p>这是它们的列表。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="3">库列表</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">库名称</th><th class="namecolumn">脚本名称</th><th class="categorydesccolumn">快速描述</th></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#libdc">DC库</a></div></td><td class="hintcell">DC</td><td class="hintcell">Double Commander特定功能</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#librarysystem">系统库</a></div></td><td class="hintcell">SysUtils</td><td class="hintcell">各种系统功能</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#libraryclip">剪贴板库</a></div></td><td class="hintcell">Clipbrd</td><td class="hintcell">提供外部剪贴板功能</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#librarydialogs">对话框库</a></div></td><td class="hintcell">Dialogs</td><td class="hintcell">与用户互动</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#libraryutf8">UTF-8库</a></div></td><td class="hintcell">LazUtf8</td><td class="hintcell">UTF-8 字符功能</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#librarychar">字符库</a></div></td><td class="hintcell">Char</td><td class="hintcell">获取字符信息</td></tr>
+          <tr><td class="varcell"><div class="firstcolumnaleft"><a href="#libraryos">操作系统库</a></div></td><td class="hintcell">os</td><td class="hintcell">与操作系统相关的功能</td></tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="libdc">3.1. DC 库</a></h2>
+        <p>该库包含Double Commander特定功能。</p>
+        <p>它在表格 <code>DC</code> 内提供所有功能。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">DC 库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">DC.LogWrite</div></td>
+            <td class="hintcell">
+              <p class="definition">DC.LogWrite(sMessage, iMsgType, bForce, bLogFile)</p>
+              <p>写一条消息到日志窗口。</p>
+              <p>以下是每个字段的描述：</p>
+              <ul>
+                <li><var>sMessage</var> : 消息文本。</li>
+                <li><var>iMsgType</var> : 消息类型：0 - 信息，1 - 成功，2 - 错误。</li>
+                <li><var>bForce</var> : 一个布尔值，当为真时，如果不可见，将显示日志窗口。</li>
+                <li><var>bLogFile</var> : 一个布尔值，当为真时，也会将消息写入日志文件。</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">DC.CurrentPanel</div></td>
+            <td class="hintcell">
+              <p class="definition">iPanel = DC.CurrentPanel()</p>
+              <p>获取活动面板：如果左侧面板处于活动状态则返回 0，如果右侧面板处于活动状态则返回 1。</p>
+              <p class="definition">DC.CurrentPanel(iPanel)</p>
+              <p>设置活动面板：如果 <var>iPanel</var> 等于 0，则为左面板；如果等于 1，则为右面板。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">DC.ExecuteCommand</div></td>
+            <td class="hintcell">
+              <p class="definition">DC.ExecuteCommand(sCommand, Param1, Param2,...,ParamX)</p>
+              <p>这允许脚本调用 DC 的内部命令。</p>
+              <p><var>sCommand</var> 正在保存实际的内部命令名称。</p>
+              <p>我们可以提供尽可能多的 <var>Param...</var>，只要命令支持。</p>
+            </td>
+          </tr>
+        </table>
+        <p><b>注意</b>: 脚本在Double Commander的主线程中运行，因此有时顺序执行<a  href="cmds.html#catnavigation">导航命令</a>可能无法正常工作（例如，大目录、慢磁盘），在这种情况下，请尝试在<a  href="configuration.html#ConfigViewEx">设置</a>中禁用<i>在单独线程中加载文件列表</i>。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="exampleex">3.1.1. 使用 DC.ExecuteCommand 的示例</a></h2>
+        <p>在这个例子中，我们编写了一个简单的脚本，它将执行以下操作：</p>
+        <ol>
+          <li>聚焦右侧面板</li>
+          <li>关闭所有打开的标签页</li>
+          <li>切换到特定文件夹</li>
+          <li>聚焦左侧面板</li>
+          <li>关闭所有打开的标签页</li>
+          <li>切换到特定文件夹</li>
+          <li>打开新标签页</li>
+          <li>切换到特定文件夹</li>
+        </ol>
+
+        <pre>
+<span  class="luacmt">-- 1. 聚焦右侧面板。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_FocusSwap"</span>, <span  class="luastr">"side=right"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 2. 关闭所有标签。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_CloseAllTabs"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 3. 切换到特定目录。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_ChangeDir"</span>, <span  class="luastr">"E:\\FakeKey\\Documents\\Music"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 4. 聚焦左侧面板。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_FocusSwap"</span>, <span  class="luastr">"side=left"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 5. 关闭所有标签。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_CloseAllTabs"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 6. 切换到特定目录。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_ChangeDir"</span>, <span  class="luastr">"C:\\Users\\Public\\Music"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 7. 打开一个新标签。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_NewTab"</span><span  class="luasbl">)</span>
+
+<span  class="luacmt">-- 8. 切换到特定目录。</span>
+<span  class="mark">DC.ExecuteCommand</span><span  class="luasbl">(</span><span  class="luastr">"cm_ChangeDir"</span>, <span  class="luastr">"E:\\VirtualMachines\\ShareFolder"</span><span  class="luasbl">)</span></pre>
+
+        <p>使用内部命令 <a  href="cmds.html#cm_ExecuteScript">cm_ExecuteScript</a>，我们可以配置一个工具栏按钮来执行我们的脚本。</p>
+        <p>假设这个脚本文件是 <code>E:\scripts\lua\music.lua</code>，我们可以这样配置按钮：</p>
+        <p class="figure"><img class="largeimage" title="Invoking a lua script from toolbar" alt="Invoking a lua script from toolbar" src="images/imgDC/luaimg1.png" width="560" height="290"></p>
+
+        <p>此外，我们可能会使用内部的Double Commander编辑器来编辑我们的脚本。</p>
+        <p>如果文件名具有 <code>.lua</code> 文件扩展名，它将被内部编辑器识别，并为我们提供特定于此 Lua 语言的语法高亮。</p>
+        <p class="figure"><img class="largeimage" title="Lua syntax highlighting with internal editor" alt="Lua syntax highlighting with internal editor" src="images/imgDC/luaimg2.png" width="660" height="480"></p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="librarysystem">3.2. 系统库</a></h2>
+        <p>该库包含各种系统功能。</p>
+        <p>它在表 <code>SysUtils</code> 内提供所有功能。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">系统库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.Sleep</div></td>
+            <td class="hintcell">
+              <p class="definition">SysUtils.Sleep(iMilliseconds)</p>
+              <p>暂停脚本的执行，直到指定的<var>iMilliseconds</var>毫秒。在指定期限到期后，脚本执行将恢复。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.GetTickCount</div></td>
+            <td class="hintcell">
+              <p class="definition">SysUtils.GetTickCount()</p>
+              <p>返回一个递增的时钟滴答计数。它对于时间测量很有用，但不应对滴答之间的间隔做出任何假设。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.FileExists</div></td>
+            <td class="hintcell">
+              <p class="definition">bExists = SysUtils.FileExists(sFileName)</p>
+              <p>检查特定文件是否存在于文件系统中。</p>
+              <p>在<var>bExists</var>中返回值<code>true</code>，如果名为<var>sFileName</var>的文件存在于磁盘上，否则返回<code>false</code>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.DirectoryExists</div></td>
+            <td class="hintcell">
+              <p class="definition">bExists = SysUtils.DirectoryExists(sDirectory)</p>
+              <p>检查 <var>sDirectory</var> 是否存在于文件系统中，并且确实是一个目录。</p>
+              <p>如果是这种情况，函数在 <var>bExists</var> 中返回值 <code>true</code>，否则返回 <code>false</code>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.FileGetAttr</div></td>
+            <td class="hintcell">
+              <p class="definition">iAttr = SysUtils.FileGetAttr(sFileName)</p>
+              <p>在<var>iAttr</var>中返回文件<var>sFileName</var>的属性设置。</p>
+              <p>查看返回值的详细说明 <a  href="#detailattr">在这里</a>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.FindFirst</div></td>
+            <td class="hintcell">
+              <p class="definition">Handle,FindData = SysUtils.FindFirst(sPath)</p>
+              <p>查找与<var>sPath</var>匹配的文件，通常使用通配符。</p>
+              <p>如果未找到文件，<var>Handle</var> 将是 <code>nil</code>。</p>
+              <p>当找到至少一个项目时，返回的 <var>Handle</var> 可用于后续的 <code>SysUtils.FindNext</code> 以查找相同模式的其他出现。</p>
+              <p><var>FindData</var> 表包含有关找到的文件或目录的信息。</p>
+              <p><var>FindData</var> 表的字段是：</p>
+              <ul>
+                <li><var>Name </var> : 文件名（不带路径）。</li>
+                <li><var>Attr </var> : 文件的文件属性（详细信息请见<a  href="#detailattr">这里</a>）。</li>
+                <li><var>Size </var> : 文件的大小（以字节为单位）。</li>
+                <li><var>Time </var> : 文件的时间戳（自 1970 年 1 月 1 日起的秒数）</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.FindNext</div></td>
+            <td class="hintcell">
+              <p class="definition">Result，FindData = SysUtils.FindNext(Handle)</p>
+              <p>通过重新使用之前返回的 <var>Handle</var>，找到由 <code>FindFirst</code> 发起的搜索序列的下一个出现。</p>
+              <p>返回的 <var>结果</var> 如果找到文件或目录将为非空，否则将为 <code>空</code>。</p>
+              <p>对于<code>SysUtils.FindFirst</code>提到的相同注意事项在这里也适用。</p>
+              <p><span  class="uline">备注：</span> 最后一次 <code>SysUtils.FindNext</code> 调用必须始终跟随相同 <code>SysUtils.FindClose</code> 调用，使用相同的 <var>Handle</var>。<b>不这样做将导致内存泄漏。</b></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.FindClose</div></td>
+            <td class="hintcell">
+              <p class="definition">SysUtils.FindClose(Handle)</p>
+              <p>结束一系列<code>SysUtils.FindFirst</code>/<code>SysUtils.FindNext</code>调用。</p>
+              <p>释放这些调用所使用的任何内存。</p>
+              <p>这通电话是<em>绝对</em>必要的，否则可能会发生记忆丧失。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.CreateDirectory</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = SysUtils.CreateDirectory(sDirectory)</p>
+              <p>创建一个目录链，<var>sDirectory</var> 是目录的完整路径。</p>
+              <p>返回 <code>true</code> 如果 <var>sDirectory</var> 已经存在或成功创建。如果创建任何部分失败，则返回 <code>false</code>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.CreateHardLink</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = SysUtils.CreateHardLink(sFileName, sLinkName)</p>
+              <p>创建硬链接 <var>sLinkName</var> 到文件 <var>sFileName</var>。</p>
+              <p>返回 <code>true</code> 如果成功，<code>false</code> 否则。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.CreateSymbolicLink</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = SysUtils.CreateSymbolicLink(sFileName, sLinkName)</p>
+              <p>创建符号链接 <var>sLinkName</var> 到文件或目录 <var>sFileName</var>。</p>
+              <p>返回 <code>true</code> 如果成功，<code>false</code> 否则。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ReadSymbolicLink</div></td>
+            <td class="hintcell">
+              <p class="definition">sTarget = SysUtils.ReadSymbolicLink(sLinkName, bRecursive)</p>
+              <p>读取符号链接的目标 <var>sLinkName</var>。</p>
+              <p>如果 <var>bRecursive</var> 为 <code>true</code> 并且链接指向一个链接，则会递归解析，直到找到一个有效的文件名，该文件名不是链接。</p>
+              <p>返回符号链接 <var>sLinkName</var> 指向的路径，或者在链接无效或指向的文件不存在且 <var>bRecursive</var> 为 <code>true</code> 时返回空字符串。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ExtractFileName</div></td>
+            <td class="hintcell">
+              <p class="definition">sName = SysUtils.ExtractFileName(sFileName)</p>
+              <p>从完整路径文件名中提取文件名部分。</p>
+              <p>文件名由最后一个目录分隔符（"/"或"\"）或驱动器字母之后的所有字符组成。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ExtractFileExt</div></td>
+            <td class="hintcell">
+              <p class="definition">sExt = SysUtils.ExtractFileExt(sFileName)</p>
+              <p>从文件名中提取扩展名（最后一个“.”（点）之后的所有字符，包括“.”字符）。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ExtractFilePath</div></td>
+            <td class="hintcell">
+              <p class="definition">sPath = SysUtils.ExtractFilePath(sFileName)</p>
+              <p>从文件名中提取路径（包括驱动器字母）。</p>
+              <p>路径由最后一个目录分隔符（“/”或“\”）之前的所有字符组成，包括目录分隔符本身。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ExtractFileDir</div></td>
+            <td class="hintcell">
+              <p class="definition">sDir = SysUtils.ExtractFileDir(sFileName)</p>
+              <p>提取<var>sFileName</var>的目录部分，包括驱动器字母。</p>
+              <p>目录名称没有结束目录分隔符，这与<code>SysUtils.ExtractFilePath</code>不同。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.ExtractFileDrive</div></td>
+            <td class="hintcell">
+              <p class="definition">sDrive = SysUtils.ExtractFileDrive(sFileName)</p>
+              <p>从文件名中提取驱动器部分。</p>
+              <p>请注意，某些操作系统不支持驱动器字母。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.GetAbsolutePath</div></td>
+            <td class="hintcell">
+              <p class="definition">sName = SysUtils.GetAbsolutePath(sFileName, sBaseDirectory)</p>
+              <p>返回文件的绝对（完整）路径：</p>
+              <ul>
+                <li><var>sFileName</var> : 带有相对路径的文件名。</li>
+                <li><var>sBaseDirectory</var> : 用作<var>sFileName</var>的基础目录。</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.GetRelativePath</div></td>
+            <td class="hintcell">
+              <p class="definition">sName = SysUtils.GetRelativePath(sFileName, sBaseDirectory)</p>
+              <p>返回相对于指定目录的文件名：</p>
+               <ul>
+                <li><var>sFileName</var> : 完整的（绝对）文件名。</li>
+                <li><var>sBaseDirectory</var> : 将用作基本目录的目录 <var>sFileName</var>。</li>
+              </ul>
+              <p>如果 <var>sFileName</var> 和 <var>sBaseDirectory</var> 包含相同的值，函数将返回一个空字符串 ("")。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.MatchesMask</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = SysUtils.MatchesMask(sFileName, sMask, iMaskOptions)</p>
+              <p>返回 <code>true</code> 如果 <var>sFileName</var> 匹配传递的掩码 <var>sMask</var>。</p>
+              <p><var>iMaskOptions</var>（可选参数，默认值为 0）设置为以下值的总和：</p>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc">
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="varcell"><div class="firstcolumnaleft">1</div></td>
+                  <td class="hintcell">区分大小写</td>
+                </tr>
+                <tr>
+                  <td class="varcell"><div class="firstcolumnaleft">2</div></td>
+                  <td class="hintcell">忽略重音和连字</td>
+                </tr>
+                <tr>
+                  <td class="varcell"><div class="firstcolumnaleft">4</div></td>
+                  <td class="hintcell">Windows 样式过滤器：“*.*”也匹配没有扩展名的文件等。</td>
+                </tr>
+                <tr>
+                  <td class="varcell"><div class="firstcolumnaleft">8</div></td>
+                  <td class="hintcell">启用拼音支持（将使用文件 <tt>pinyin.tbl</tt> ）</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.MatchesMaskList</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = SysUtils.MatchesMaskList(sFileName, sMaskList, sSeparator, iMaskOptions)</p>
+              <p>返回 <code>true</code> 如果 <var>sFileName</var> 至少与传入的掩码 <var>sMaskList</var> 中的一个匹配，掩码由 <var>sSeparator</var> 分隔（默认是 ";"）。</p>
+              <p><var>sSeparator</var> 和 <var>iMaskOptions</var>（见上文）是可选参数。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.GetTempName</div></td>
+            <td class="hintcell">
+              <p class="definition">sTempFileName = SysUtils.GetTempName()</p>
+              <p>将返回一个文件名，用作临时文件名（在临时文件的系统目录中），类似于 <a  href="#libraryos">os.tmpname</a> 函数，但该文件将在一个子目录中创建，该子目录在关闭 Double Commander 时会自动删除。如果函数无法创建唯一名称，它将返回一个空字符串。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">SysUtils.PathDelim</div></td>
+            <td class="hintcell">
+              <p class="definition">SysUtils.PathDelim</p>
+              <p>当前操作系统用于在完整文件名中分隔目录名称的字符。</p>
+              <p>在 Unix/Linux 系统中，目录分隔符是"/"，而在 Windows 中则是"\\"。</p>
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="detailattr">3.2.1. SysUtils.FileGetAttr 返回值的详细信息</a></h2>
+        <p><code>FileGetAttr</code> 返回文件 <var>sFileName</var> 的属性设置。</p>
+        <p>该属性是以下常量的<var>OR</var>组合：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">SysUtils.FileGetAttr 返回值中使用的常量</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">值</th><th class="categorydesccolumn">含意</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000001<br><small class="firstcolumnaleft">faReadOnly</small></div></td>
+            <td class="hintcell">该文件是只读的。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000002<br><small class="firstcolumnaleft">faHidden</small></div></td>
+            <td class="hintcell">文件是隐藏的。<br>在 Unix/Linux 中，这意味着文件名以点开头。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000004<br><small class="firstcolumnaleft">faSysFile</small></div></td>
+            <td class="hintcell">该文件是系统文件。<br>在 Unix/Linux 中，这意味着该文件是一个字符设备或块设备，一个命名管道（FIFO）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000008<br><small class="firstcolumnaleft">faVolumeId</small></div></td>
+            <td class="hintcell">卷标。<br>仅适用于在普通 FAT（非 VFAT 或 FAT32）文件系统上的 DOS/Windows。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000010<br><small class="firstcolumnaleft">faDirectory</small></div></td>
+            <td class="hintcell">文件是一个目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000020<br><small class="firstcolumnaleft">faArchive</small></div></td>
+            <td class="hintcell">文件已归档。在 Unix/Linux 中不可能。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">0x00000400<br><small class="firstcolumnaleft">faSymLink</small></div></td>
+            <td class="hintcell">文件是一个符号链接。</td>
+          </tr>
+          <tr>
+            <td colspan="2"><p><b>注意：如果发生错误，将返回-1。</b></p>
+          </td></tr>
+        </table>
+        <p>在<a  href="#exampleattr">下一节</a>中查看示例。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="exampleattr">3.2.2. 使用 SysUtils.FileGetAttr 的示例</a></h2>
+        <p>以下脚本是使用 <code>SysUtils.FileGetAttr</code> 的示例。</p>
+        <p>当参数被检测为目录时，它将在活动面板中打开一个新标签并切换到该标签。</p>
+        <pre>
+<span class="luakyw">local</span> params <span class="luasbl">=</span> <span class="luasbl">{...}</span>
+<span class="luakyw">local</span> iAttr
+
+<span class="luakyw">if</span> <span class="luasbl">#</span>params <span class="luasbl">==</span> <span class="luanum">1</span> <span class="luakyw">then</span> <span class="luacmt">-- We got at least one parameter?</span>
+  iAttr <span class="luasbl">=</span> <span class="mark">SysUtils.FileGetAttr</span><span class="luasbl">(</span>params<span class="luasbl">[</span><span class="luanum">1</span><span class="luasbl">])</span>
+  <span class="luakyw">if</span> iAttr <span class="luasbl">&gt;</span> <span class="luanum">0</span> <span class="luakyw">then</span> <span class="luacmt">-- We got a valid attribute?</span>
+    <span class="luakyw">if</span> math<span class="luasbl">.</span><span class="luafct">floor</span><span class="luasbl">(</span>iAttr <span class="luasbl">/</span> <span class="luanum">0x00000010</span><span class="luasbl">)</span> <span class="luasbl">%</span> <span class="luanum">2</span> <span class="luasbl">~=</span> <span class="luanum">0</span> <span class="luakyw">then</span>
+      <span class="luacmt">-- bit 4 is set? So it's a directory.</span>
+      DC.ExecuteCommand<span class="luasbl">(</span><span class="luastr">"cm_NewTab"</span><span class="luasbl">)</span>
+      DC.ExecuteCommand<span class="luasbl">(</span><span class="luastr">"cm_ChangeDir"</span><span class="luasbl">,</span> params<span class="luasbl">[</span><span class="luanum">1</span><span class="luasbl">])</span>
+    <span class="luakyw">end</span>
+  <span class="luakyw">end</span>
+<span class="luakyw">end</span></pre>
+
+        <p>在上述示例中，<var>params[1]</var> 是传递给脚本的第一个参数。</p>
+        <p>在使用内部命令 <a  href="cmds.html#cm_ExecuteScript">cm_ExecuteScript</a> 时，它将是脚本文件名之后传递的第一个参数。</p>
+        <p>在我们的示例中，我们可以编程一个样本工具栏按钮，如下所示：</p>
+        <p class="figure"><img class="largeimage" title="Parameter with cm_ExecuteScript" alt="Parameter with cm_ExecuteScript" src="images/imgDC/luaimg3.png" width="560" height="290"></p>
+        <p>在这个例子中，参数 <code>%"0%p</code> 将被传递给脚本。这将表示在我们按下工具栏按钮时，当前在活动面板中选定的项目的文件名（未加引号）。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="examplefind">3.2.3. 使用 FindFirst、FindNext 和 FindClose 的示例</a></h2>
+        <p>在以下脚本示例中，我们将扫描作为参数接收的目录内容，并将结果数据存储到作为第二个参数传递的文本文件中。</p>
+        <p>这将使我们对 <code>FindFirst</code>、<code>FindNext</code> 和 <code>FindClose</code> 的使用有一个很好的了解。</p>
+
+        <pre>
+<span class="luakyw">local</span> params <span class="luasbl">=</span> <span class="luasbl">{...}</span>
+
+<span class="luakyw">if</span> <span class="luasbl">#</span>params <span class="luasbl">==</span> <span class="luanum">2</span> then <span class="luacmt">-- We got our 2 parameters?</span>
+  <span class="luakyw">local</span> Result <span class="luasbl">=</span> <span class="luakyw">nil</span>
+  <span class="luakyw">local</span> hOutputFile <span class="luasbl">=</span> <span class="luakyw">nil</span>
+
+  hOutputFile <span class="luasbl">=</span> io<span class="luasbl">.</span>output<span class="luasbl">(</span>params<span class="luasbl">[</span><span class="luanum">2</span><span class="luasbl">])</span>
+
+  <span class="luakyw">local</span> Handle<span class="luasbl">,</span> FindData <span class="luasbl">=</span> <span class="mark">SysUtils.FindFirst</span><span class="luasbl">(</span>params<span class="luasbl">[</span><span class="luanum">1</span><span class="luasbl">]</span> <span class="luasbl">..</span> <span class="luastr">"\\*"</span><span class="luasbl">)</span>
+  <span class="luakyw">if</span> Handle <span class="luasbl">~=</span> <span class="luakyw">nil</span> <span class="luakyw">then</span>
+    <span class="luakyw">repeat</span>
+      io.<span class="luafct">write</span><span class="luasbl">(</span>FindData.Name <span class="luasbl">..</span> <span class="luastr">"\r"</span><span class="luasbl">)</span>
+      io.<span class="luafct">write</span><span class="luasbl">(</span>FindData.Size <span class="luasbl">..</span> <span class="luastr">"\r"</span><span class="luasbl">)</span>
+      io.<span class="luafct">write</span><span class="luasbl">(</span><span class="luastr">"---------------\r"</span><span class="luasbl">)</span>
+
+      Result<span class="luasbl">,</span>FindData <span class="luasbl">=</span> <span class="mark">SysUtils.FindNext</span><span class="luasbl">(</span>Handle<span class="luasbl">)</span>
+    <span class="luakyw">until</span> Result <span class="luasbl">==</span> <span class="luakyw">nil</span>
+
+    <span class="mark">SysUtils.FindClose</span><span class="luasbl">(</span>Handle<span class="luasbl">)</span>
+    io<span class="luasbl">.</span>close<span class="luasbl">(</span>hOutputFile<span class="luasbl">)</span>
+  <span class="luakyw">end</span>
+<span class="luakyw">end</span></pre>
+        <p>在上述示例中，我们需要向我们的脚本传递两个参数：</p>
+        <ol>
+          <li><var>params[1]</var> - 这是我们想要内容的目录</li>
+          <li><var>params[2]</var> - 这是用于存储结果的输出文件名</li>
+        </ol>
+        <p>所以使用内部命令 <a  href="cmds.html#cm_ExecuteScript">cm_ExecuteScript</a> 配置工具栏按钮并传递参数以完成所有这些是很简单的。</p>
+        <p class="figure"><img class="largeimage" title="Parameter with cm_ExecuteScript" alt="Parameter with cm_ExecuteScript" src="images/imgDC/luaimg4.png" width="560" height="262"></p>
+        <p>在这个例子中，参数 <code>%"0%Ds</code> 将作为第一个参数传递给脚本。这将表示活动面板显示的目录，未加引号。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="libraryclip">3.3. 剪贴板库</a></h2>
+        <p>Double Commander可能为我们的 Lua 脚本提供外部剪贴板功能。</p>
+        <p>下表给出了相关功能：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">剪贴板库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Clipbrd.Clear</div></td>
+            <td class="hintcell">
+              <p class="definition">Clipbrd.Clear()</p>
+              <p>清空剪贴板的内容。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Clipbrd.GetAsText</div></td>
+            <td class="hintcell">
+              <p class="definition">sVar = Clipbrd.GetAsText()</p>
+              <p>获取剪贴板的当前文本内容并将其分配给 <var>sVar</var>。如果剪贴板不包含文本，则该函数返回一个空字符串。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Clipbrd.SetAsText</div></td>
+            <td class="hintcell">
+              <p class="definition">Clipbrd.SetAsText(sVar)</p>
+              <p>将<var>sVar</var>的文本内容存储在剪贴板中。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Clipbrd.SetAsHtml</div></td>
+            <td class="hintcell">
+              <p class="definition">Clipbrd.SetAsHtml(sHtml)</p>
+              <p>将格式化的 html 文本 <var>sHtml</var> 添加到剪贴板 (<code>CF_HTML</code> 剪贴板格式)。</p>
+              <p>此内容将插入支持此剪贴板格式的应用程序中，如 MS Word、LO Writer 等。</p>
+              <p>正确地使用 <code>Clipbrd.SetAsText</code> 和 <code>Clipbrd.SetAsHtml</code> 存储数据。当我们粘贴时，应用程序将使用它支持的最佳格式。</p>
+              <p>例如，我们可能会有这个：</p>
+              <ul>
+                <li><code>Clipbrd.SetAsText("Welcome to Double Commander!")</code></li>
+                <li><code>Clipbrd.SetAsHtml("Welcome to &lt;b&gt;Double Commander&lt;/b&gt;!")</code></li>
+              </ul>
+              <p>如果我们切换到记事本尝试粘贴某些内容，它将以纯文本形式粘贴我们复制的消息 <code>Clipbrd.SetAsText</code>。但是如果我们切换到 Microsoft Word 并粘贴某些内容，它将粘贴第二个，即带有 <b>Double Commander</b> 的加粗文本，因为 Microsoft Word 识别并支持该剪贴板内容类型。</p>
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="exampleclip">3.3.1. 剪贴板库使用示例</a></h2>
+        <p>以下示例使用了与剪贴板相关的三个函数：<code>Clear</code>、<code>GetAsText</code> 和 <code>SetAsText</code>。</p>
+        <p>这是一个相对较长的脚本，但将我们上面看到的一些功能放在一起是很好的。</p>
+        <p>它假设我们的活动面板当前位于一个包含许多源文本文件的目录中。</p>
+        <p>它还假设我们当前剪贴板中有一个单词，并且它将作为一个单一参数接收当前活动文件夹。</p>
+        <p>脚本将扫描当前目录级别中的文件，并逐个读取它们的内容，以检测包含剪贴板中单词的文本行。</p>
+        <p>然后，包含至少一行该词的文件的文件名将被放入剪贴板。</p>
+        <p>然后，脚本将使用内部命令 <a  href="cmds.html#cm_LoadSelectionFromClip">cm_LoadSelectionFromClip</a>，然后包含这些词的文件将被选中。</p>
+        <p>此外，在最后，我们将需要搜索的原始词汇放回剪贴板。</p>
+        <pre>
+<span class="luakyw">local</span> params <span class="luasbl">=</span> <span class="luasbl">{...}</span>
+<span class="luakyw">local</span> Result <span class="luasbl">=</span> <span class="luakyw">nil</span>
+<span class="luakyw">local</span> iAttr
+<span class="luakyw">local</span> bFound <span class="luasbl">=</span> false
+<span class="luakyw">local</span> sCompleteFilename <span class="luasbl">=</span> <span class="luastr">""</span>
+<span class="luakyw">local</span> hInputFile <span class="luasbl">=</span> <span class="luakyw">nil</span>
+<span class="luakyw">local</span> sLine <span class="luasbl">=</span> <span class="luastr">""</span>
+<span class="luakyw">local</span> iPosS
+<span class="luakyw">local</span> iPosE
+<span class="luakyw">local</span> sFileToSelect <span class="luasbl">=</span> <span class="luastr">""</span>
+<span class="luakyw">local</span> sSearchString <span class="luasbl">=</span> <span class="luastr">""</span>
+
+<span class="luakyw">if</span> <span class="luasbl">#</span>params <span class="luasbl">==</span> <span class="luanum">1</span> <span class="luakyw">then</span> <span class="luacmt">-- We got our parameter?</span>
+  sSearchString <span class="luasbl">=</span> <span class="mark">Clipbrd.GetAsText</span><span class="luasbl">()</span> <span class="luacmt">-- Get the expression to search.</span>
+  <span class="mark">Clipbrd.Clear</span><span class="luasbl">()</span> <span class="luacmt">-- Making sure we have nothing in clipboard.</span>
+  DC.ExecuteCommand<span class="luasbl">(</span><span class="luastr">"cm_MarkUnmarkAll"</span><span class="luasbl">)</span> <span class="luacmt">-- Make sure nothing is selected.</span>
+
+  <span class="luacmt">-- Let's scan one by one all the files of our directory.</span>
+  <span class="luakyw">local</span> Handle<span class="luasbl">,</span> FindData <span class="luasbl">=</span> SysUtils.FindFirst(params<span class="luasbl">[</span><span class="luanum">1</span><span class="luasbl">]</span> <span class="luasbl">..</span> <span class="luastr">"\\*"</span><span class="luasbl">)</span>
+  <span class="luakyw">if</span> Handle <span class="luasbl">~=</span> <span class="luakyw">nil</span> <span class="luakyw">then</span>
+    <span class="luakyw">repeat</span>
+      sCompleteFilename <span class="luasbl">=</span> params<span class="luasbl">[</span><span class="luanum">1</span><span class="luasbl">]</span> <span class="luasbl">..</span> <span class="luastr">"\\"</span> <span class="luasbl">..</span> FindData<span class="luasbl">.</span>Name
+      iAttr <span class="luasbl">=</span> SysUtils.FileGetAttr<span class="luasbl">(</span>sCompleteFilename<span class="luasbl">)</span>
+      <span class="luakyw">if</span> iAttr <span class="luasbl">&gt;</span> <span class="luanum">0</span> <span class="luakyw">then</span> <span class="luacmt">-- We got a valid attribute?</span>
+        <span class="luacmt">-- We need file, not directory!</span>
+        <span class="luakyw">if</span> math<span class="luasbl">.</span><span class="luafct">floor</span><span class="luasbl">(</span>iAttr <span class="luasbl">/</span> <span class="luanum">0x00000010</span><span class="luasbl">)</span> <span class="luasbl">%</span> <span class="luanum">2</span> <span class="luasbl">==</span> <span class="luanum">0</span> <span class="luakyw">then</span>
+
+          <span class="luacmt">-- Let's now read the file line by line until the the end OR a found.</span>
+          hInputFile <span class="luasbl">=</span> io<span class="luasbl">.</span>open<span class="luasbl">(</span>sCompleteFilename<span class="luasbl">,</span> <span class="luastr">"r"</span><span class="luasbl">)</span>
+          bFound <span class="luasbl">=</span> false
+
+          <span class="luakyw">while</span> bFound <span class="luasbl">==</span> false <span class="luakyw">do</span>
+            sLine <span class="luasbl">=</span> hInputFile<span class="luasbl">:</span><span class="luafct">read</span><span class="luasbl">()</span>
+            <span class="luakyw">if</span> sLine <span class="luasbl">==</span> <span class="luakyw">nil</span> <span class="luakyw">then</span> <span class="luakyw">break</span> <span class="luakyw">end</span>
+            iPosS<span class="luasbl">,</span> iPosE <span class="luasbl">=</span> string<span class="luasbl">.</span>find<span class="luasbl">(</span>sLine, sSearchString<span class="luasbl">)</span>
+            <span class="luakyw">if</span> iPosS <span class="luasbl">~=</span> <span class="luakyw">nil</span> <span class="luakyw">then</span> bFound <span class="luasbl">=</span> true <span class="luakyw">end</span>
+          <span class="luakyw">end</span>
+
+          <span class="luakyw">if</span> bFound <span class="luasbl">==</span> true <span class="luakyw">then</span>
+            sFileToSelect <span class="luasbl">=</span> sFileToSelect <span class="luasbl">..</span> FindData<span class="luasbl">.</span>Name <span class="luasbl">..</span> <span class="luastr">"\n"</span>
+          <span class="luakyw">end</span>
+
+          io<span class="luasbl">.</span>close<span class="luasbl">(</span>hInputFile<span class="luasbl">)</span>
+        <span class="luakyw">end</span>
+      <span class="luakyw">end</span>
+      Result<span class="luasbl">,</span>FindData <span class="luasbl">=</span> SysUtils<span class="luasbl">.</span>FindNext<span class="luasbl">(</span>Handle<span class="luasbl">)</span>
+    <span class="luakyw">until</span> Result <span class="luasbl">==</span> <span class="luakyw">nil</span>
+
+    SysUtils<span class="luasbl">.</span>FindClose<span class="luasbl">(</span>Handle<span class="luasbl">)</span>
+  <span class="luakyw">end</span>
+
+  <span class="luacmt">-- If we've found something, select it!</span>
+  <span class="luakyw">if</span> sFileToSelect <span class="luasbl">~=</span> <span class="luastr">""</span> <span class="luakyw">then</span>
+    <span class="mark">Clipbrd.SetAsText</span><span class="luasbl">(</span>sFileToSelect<span class="luasbl">)</span>
+    DC<span class="luasbl">.</span>ExecuteCommand<span class="luasbl">(</span><span class="luastr">"cm_LoadSelectionFromClip"</span><span class="luasbl">)</span>
+  <span class="luakyw">end</span>
+
+  <span class="mark">Clipbrd.SetAsText</span><span class="luasbl">(</span>sSearchString<span class="luasbl">)</span> <span class="luacmt">-- Restoring what we had in clipboard.</span>
+<span class="luakyw">end</span></pre>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="librarydialogs">3.4. 对话框库</a></h2>
+        <p>这个库允许我们的脚本与用户互动，以显示消息、提示答案等。</p>
+        <p>下表给出了相关功能：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">对话框库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Dialogs.MessageBox</div></td>
+            <td class="hintcell">
+              <p class="definition">iButton = Dialogs.MessageBox(sMessage, sTitle, iFlags)</p>
+              <p>将显示一个消息框，提示用户点击一个按钮，该按钮将由函数返回。</p>
+              <p>以下是每个字段的描述：</p>
+              <ul>
+                <li><var>sMessage</var> : 盒子里的消息。</li>
+                <li><var>sTitle</var> : 显示为框标题的文本。</li>
+                <li><var>iFlags</var> : OR 运算的常量值，用于确定将显示的按钮、窗口的样式以及为答案选择的默认按钮。请参见下表中的 <a  href="#dlgbuts">显示的按钮</a>、<a  href="#dlgstyle">窗口样式</a> 或 <a  href="#dlgdefbut">默认按钮</a>。</li>
+                <li><var>iButton</var> : 返回值指示用户按下的按钮（请参见<a  href="#msgreturn">此表</a>）。</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Dialogs.InputQuery</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult, sAnswer = Dialogs.InputQuery(sTitle, sMessage, bMask, sDefault)</p>
+              <p>将显示一个请求框，用户可以在其中输入字符串值。</p>
+              <p>以下是每个字段的描述：</p>
+              <ul>
+                <li><var>sTitle</var> : 显示为框标题的文本。</li>
+                <li><var>sMessage</var> : 盒子里的消息。</li>
+                <li><var>bMask</var> : 一个布尔值，当为真时，将显示“星星”以隐藏字符。</li>
+                <li><var>sDefault</var> : 用户可以在必要时覆盖的默认建议文本。</li>
+                <li><var>bResult</var> : 返回布尔值，指示用户是否有效地输入了内容。</li>
+                <li><var>sAnswer</var> : 用户输入内容并点击确定后返回的字符串。</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Dialogs.InputListBox</div></td>
+            <td class="hintcell">
+              <p class="definition">sItem, iItem = Dialogs.InputListBox(sTitle, sMessage, aItems, sDefault)</p>
+              <p>显示一个对话框，以允许用户从项目列表中进行选择。</p>
+              <p>以下是每个字段的描述：</p>
+              <ul>
+                <li><var>sTitle</var> : 显示为对话框标题的文本。</li>
+                <li><var>sMessage</var> : 对话框中的消息。</li>
+                <li><var>aItems</var> : 一个 Lua 表，表中的每个元素必须是一个字符串。</li>
+                <li><var>sDefault</var> : 列表中默认选中的项目。</li>
+                <li><var>sItem</var> : 返回所选项作为字符串，如果对话框被关闭，则返回<code>nil</code>。</li>
+                <li><var>iItem</var> : 选定项的索引（从一开始计数，这在 Lua 表中是惯例）。</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="dlgbuts">3.4.1. Dialogs.MessageBox中显示的按钮</a></h2>
+        <p>在<code>Dialogs.MessageBox</code>函数显示的框中显示的按钮由以下之一的 OR'ed 值控制：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">关于 Dialogs.MessageBox 中显示的按钮的 ButFlags 常量</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">常量值</th><th class="categorydesccolumn">从左到右显示的按钮</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0000<br><small class="firstcolumnaleft">MB_OK</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button OK" alt="Button OK" src="images/imgDC/luaimg11.png" width="66" height="21">
+            </td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0001<br><small class="firstcolumnaleft">MB_OKCANCEL</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button OK" alt="Button OK" src="images/imgDC/luaimg11.png" width="66" height="21">
+              <img class="largeimage" title="Button CANCEL" alt="Button CANCEL" src="images/imgDC/luaimg12.png" width="66" height="21">
+            </td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0002<br><small class="firstcolumnaleft">MB_ABORTRETRYIGNORE</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button ABORT" alt="Button ABORT" src="images/imgDC/luaimg15.png" width="66" height="21">
+              <img class="largeimage" title="Button RETRY" alt="Button RETRY" src="images/imgDC/luaimg14.png" width="66" height="21">
+              <img class="largeimage" title="Button IGNORE" alt="Button IGNORE" src="images/imgDC/luaimg13.png" width="66" height="21">
+            </td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0003<br><small class="firstcolumnaleft">MB_YESNOCANCEL</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button YES" alt="Button YES" src="images/imgDC/luaimg16.png" width="66" height="21">
+              <img class="largeimage" title="Button NO" alt="Button NO" src="images/imgDC/luaimg17.png" width="66" height="21">
+              <img class="largeimage" title="Button CANCEL" alt="Button CANCEL" src="images/imgDC/luaimg12.png" width="66" height="21">
+            </td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0004<br><small class="firstcolumnaleft">MB_YESNO</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button YES" alt="Button YES" src="images/imgDC/luaimg16.png" width="66" height="21">
+              <img class="largeimage" title="Button NO" alt="Button NO" src="images/imgDC/luaimg17.png" width="66" height="21">
+            </td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0005<br><small class="firstcolumnaleft">MB_RETRYCANCEL</small></div></td>
+            <td class="hintcell">
+              <img class="largeimage" title="Button RETRY" alt="Button RETRY" src="images/imgDC/luaimg14.png" width="66" height="21">
+              <img class="largeimage" title="Button CANCEL" alt="Button CANCEL" src="images/imgDC/luaimg12.png" width="66" height="21">
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="dlgstyle">3.4.2. Dialogs.MessageBox的样式</a></h2>
+        <p>由<code>Dialogs.MessageBox</code>函数显示的框的样式由一个与以下之一进行或运算的值控制：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">关于 Dialogs.MessageBox 图标和样式的 ButFlags 常量</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">常量值</th><th class="categorydesccolumn">窗口样式</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0040<br><small class="firstcolumnaleft">MB_ICONINFORMATION</small></div></td>
+            <td class="hintcell"> <img  height="32" width="32" src="images/imgDC/luaimg8.png" alt="Icon INFORMATION" title="Icon INFORMATION" class="largeimage"> 信息窗口</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0030<br><small class="firstcolumnaleft">MB_ICONWARNING</small></div></td>
+            <td class="hintcell"> <img  height="32" width="32" src="images/imgDC/luaimg9.png" alt="Icon WARNING" title="Icon WARNING" class="largeimage"> 警告窗口</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0020<br><small class="firstcolumnaleft">MB_ICONQUESTION</small></div></td>
+            <td class="hintcell"> <img  height="32" width="32" src="images/imgDC/luaimg7.png" alt="Icon QUESTION" title="Icon QUESTION" class="largeimage"> 确认窗口</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0010<br><small class="firstcolumnaleft">MB_ICONERROR</small></div></td>
+            <td class="hintcell"> <img  height="32" width="32" src="images/imgDC/luaimg10.png" alt="Icon ERROR" title="Icon ERROR" class="largeimage"> 错误窗口</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="dlgdefbut">3.4.3. Dialogs.MessageBox默认活动按钮</a></h2>
+        <p>由<code>Dialogs.MessageBox</code>函数显示的框的默认活动按钮由以下之一的 OR 值控制：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">Dialogs.MessageBox 默认按钮的 ButFlags 常量</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">常量值</th><th class="categorydesccolumn">默认按钮</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0000<br><small class="firstcolumnaleft">MB_DEFBUTTON1</small></div></td>
+            <td class="hintcell">默认将是左侧的第一个</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0100<br><small class="firstcolumnaleft">MB_DEFBUTTON2</small></div></td>
+            <td class="hintcell">默认将是从左边第二个</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0200<br><small class="firstcolumnaleft">MB_DEFBUTTON3</small></div></td>
+            <td class="hintcell">默认将是从左边数起的第三个</td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="msgreturn">3.4.4. Dialogs.MessageBox 的返回值</a></h2>
+        <p>由<code>Dialogs.MessageBox</code>函数返回的数字表示用户按下的按钮，具体如下：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">但按下的值是基于对话框.MessageBox 中按下的按钮返回的。</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">常量值</th><th class="categorydesccolumn">按钮被按下</th></tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0000<br><small class="firstcolumnaleft">mrNone</small></div></td>
+            <td class="hintcell">未按下任何按钮</td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0001<br><small class="firstcolumnaleft">mrOK</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result OK" alt="Result OK" src="images/imgDC/luaimg11.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0002<br><small class="firstcolumnaleft">mrCancel</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result CANCEL" alt="Result CANCEL" src="images/imgDC/luaimg12.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0003<br><small class="firstcolumnaleft">mrAbort</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result ABORT" alt="Result ABORT" src="images/imgDC/luaimg15.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0004<br><small class="firstcolumnaleft">mrRetry</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result RETRY" alt="Result RETRY" src="images/imgDC/luaimg14.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0005<br><small class="firstcolumnaleft">mrIgnore</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result IGNORE" alt="Result IGNORE" src="images/imgDC/luaimg13.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0006<br><small class="firstcolumnaleft">mrYes</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result YES" alt="Result YES" src="images/imgDC/luaimg16.png" width="66" height="21"></td>
+          </tr>
+          <tr>
+            <td class="varcell"><div class="firstcolumnaleft">0x0007<br><small class="firstcolumnaleft">mrNo</small></div></td>
+            <td class="hintcell"><img class="largeimage" title="Result NO" alt="Result NO" src="images/imgDC/luaimg17.png" width="66" height="21"></td>
+          </tr>
+        </table>
+        <p>注意：如果我们点击右上角的“x”或按 <kbd>Esc</kbd> 关闭窗口，则“取消”按钮的值将被返回。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="mesgboxsample">3.4.5. Dialogs.MessageBox的使用示例</a></h2>
+        <p>这里有一个小脚本，使用 <code>Dialogs.MessageBox</code> 和将要显示的结果窗口：</p>
+        <pre>
+<span  class="luacmt">-- 显示的按钮</span>
+MB_OK <span  class="luasbl">=</span> <span  class="luanum">0x0000</span>
+MB_OKCANCEL <span  class="luasbl">=</span> <span  class="luanum">0x0001</span>
+MB_ABORTRETRYIGNORE <span  class="luasbl">=</span> <span  class="luanum">0x0002</span>
+MB_YESNOCANCEL <span  class="luasbl">=</span> <span  class="luanum">0x0003</span>
+MB_YESNO <span  class="luasbl">=</span> <span  class="luanum">0x0004</span>
+MB_RETRYCANCEL <span  class="luasbl">=</span> <span  class="luanum">0x0005</span>
+
+<span  class="luacmt">-- 框样式</span>
+MB_ICONINFORMATION <span  class="luasbl">=</span> <span  class="luanum">0x0040</span>
+MB_ICONWARNING <span  class="luasbl">=</span> <span  class="luanum">0x0030</span>
+MB_ICONQUESTION <span  class="luasbl">=</span> <span  class="luanum">0x0020</span>
+MB_ICONERROR <span  class="luasbl">=</span> <span  class="luanum">0x0010</span>
+
+<span  class="luacmt">-- 默认按钮</span>
+MB_DEFBUTTON1 <span  class="luasbl">=</span> <span  class="luanum">0x0000</span>
+MB_DEFBUTTON2 <span  class="luasbl">=</span> <span  class="luanum">0x0100</span>
+MB_DEFBUTTON3 <span  class="luasbl">=</span> <span  class="luanum">0x0200</span>
+
+<span  class="luacmt">-- 返回的按钮被按下</span>
+mrNone <span  class="luasbl">=</span> <span  class="luanum">0x0000</span>
+mrOK <span  class="luasbl">=</span> <span  class="luanum">0x0001</span>
+mrCancel <span  class="luasbl">=</span> <span  class="luanum">0x0002</span>
+mrAbort <span  class="luasbl">=</span> <span  class="luanum">0x0003</span>
+mrRetry <span  class="luasbl">=</span> <span  class="luanum">0x0004</span>
+mrIgnore <span  class="luasbl">=</span> <span  class="luanum">0x0005</span>
+mrYes <span  class="luasbl">=</span> <span  class="luanum">0x0006</span>
+mrNo <span  class="luasbl">=</span> <span  class="luanum">0x0007</span>
+
+iFlags <span  class="luasbl">=</span> MB_YESNO <span  class="luasbl">+</span> MB_ICONQUESTION <span  class="luasbl">+</span> MB_DEFBUTTON2
+iButton <span  class="luasbl">=</span> <span  class="mark">Dialogs.MessageBox</span><span  class="luasbl">(</span><span  class="luastr">"Do you want to quit?"</span><span  class="luasbl">,</span> <span  class="luastr">"Question"</span><span  class="luasbl">,</span> iFlags<span  class="luasbl">)</span>
+
+<span class="luakyw">if</span> iButton <span  class="luasbl">==</span> mrYes <span  class="luakyw">then</span>
+  DC<span  class="luasbl">.</span>ExecuteCommand<span  class="luasbl">(</span><span  class="luastr">"cm_Exit"</span><span  class="luasbl">)</span>
+<span  class="luakyw">end</span></pre>
+        <p class="figure"><img class="largeimage" title="Example of usage of the Dialogs.MessageBox" alt="Example of usage of the Dialogs.MessageBox" src="images/imgDC/luaimg6.png" width="362" height="120"></p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="querysample">3.4.6. Dialogs.InputQuery 的使用示例</a></h2>
+        <p>这里有一个小脚本，使用了 <code>Dialogs.InputQuery</code> 和将要显示的结果窗口：</p>
+        <pre>
+bResult<span class="luasbl">,</span> sAnswer <span class="luasbl">=</span> <span class="mark">Dialogs.InputQuery</span><span class="luasbl">(</span><span class="luastr">"Identification"</span><span class="luasbl">,</span> <span class="luastr">"Enter your name:"</span><span class="luasbl">,</span> false<span class="luasbl">,</span> <span class="luastr">"John"</span><span class="luasbl">)</span>
+
+<span class="luakyw">if</span> bResult <span class="luasbl">==</span> true then
+  Dialogs<span class="luasbl">.</span>MessageBox<span class="luasbl">(</span><span class="luastr">"Hello "</span> <span class="luasbl">..</span> sAnswer .. <span class="luastr">"!"</span><span class="luasbl">,</span> <span class="luastr">"Welcome!"</span><span class="luasbl">,</span> <span class="luanum">0x0040</span><span class="luasbl">)</span>
+<span class="luakyw">end</span></pre>
+        <p class="figure"><img class="largeimage" title="Example of usage of the Dialogs.InputQuery" alt="Example of usage of the Dialogs.InputQuery" src="images/imgDC/luaimg5.png" width="364" height="112"></p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="libraryutf8">3.5. UTF-8 库</a></h2>
+        <p>该库提供对 UTF-8 编码的基本支持。</p>
+        <p>它在表格内提供所有功能 <code>LazUtf8</code>。</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">UTF-8 库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.Pos</div></td>
+            <td class="hintcell">
+              <p class="definition">iResult = LazUtf8.Pos(SearchText, SourceText, Offset)</p>
+              <p>在字符串中搜索子字符串，从某个位置开始。搜索是区分大小写的。</p>
+              <p>返回子字符串 <var>SearchText</var> 在字符串 <var>SourceText</var> 中第一次出现的位置，从位置 <var>Offset</var> 开始搜索（默认值为 1）。</p>
+              <p>如果 <var>SearchText</var> 在给定的 <var>Offset</var> 之后未出现在 <var>SourceText</var> 中，则返回零。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.Next</div></td>
+            <td class="hintcell">
+              <p class="definition">LazUtf8.Next(字符串)</p>
+              <p>一个迭代器函数，每次被调用时返回<var>字符串</var>中的下一个字符及该字符的起始位置（以字节为单位）。</p>
+              <p>示例：</p>
+<pre>
+<span class="luacmt">-- Print pairs of values in the form "position : character"</span>
+<span class="luakyw">for</span> iPos, sChar <span class="luakyw">in</span> LazUtf8.Next<span class="luasbl">(</span>String<span class="luasbl">)</span> <span class="luakyw">do</span>
+  DC.LogWrite<span class="luasbl">(</span>iPos .. <span class="luastr">" : "</span> .. sChar<span class="luasbl">)</span>
+<span class="luakyw">end</span>
+</pre>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.Copy</div></td>
+            <td class="hintcell">
+              <p class="definition">sResult = LazUtf8.Copy(字符串, iIndex, iCount)</p>
+              <p>复制字符串的一部分。</p>
+              <p>复制返回一个字符串，该字符串是从位置 <var>iIndex</var> 开始的 <var>String</var> 中 <var>iCount</var> 个字符的副本。</p>
+              <p>如果 <var>iCount</var> 大于字符串 <var>String</var> 的长度，则结果会被截断。如果 <var>iIndex</var> 大于字符串 <var>String</var> 的长度，则返回一个空字符串。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.Length</div></td>
+            <td class="hintcell">
+              <p class="definition">iResult = LazUtf8.Length(字符串)</p>
+              <p>返回字符串中的 UTF-8 字符数。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.UpperCase</div></td>
+            <td class="hintcell">
+              <p class="definition">sResult = LazUtf8.UpperCase(字符串)</p>
+              <p>接收一个字符串，并返回该字符串的副本，其中所有小写字母都被转换为大写字母。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.LowerCase</div></td>
+            <td class="hintcell">
+              <p class="definition">sResult = LazUtf8.LowerCase(字符串)</p>
+              <p>接收一个字符串，并返回该字符串的副本，其中所有大写字母都被转换为小写字母。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.ConvertEncoding</div></td>
+            <td class="hintcell">
+              <p class="definition">sResult = LazUtf8.ConvertEncoding(字符串, 从编码, 到编码)</p>
+              <p>将<var>字符串</var>编码从<var>FromEnc</var>转换为<var>ToEnc</var>。</p>
+              <p>支持的编码值列表：</p>
+              <ul>
+                <li>默认系统编码（取决于系统区域设置）:“默认”。</li>
+                <li>默认 ANSI（Windows）编码（取决于系统区域设置）:“ansi”。</li>
+                <li>默认 OEM（DOS）编码（取决于系统区域设置）:“oem”。</li>
+                <li>Unicode: "utf8", "utf8bom", "ucs2le", "ucs2be".</li>
+                <li>ANSI（Windows）：“cp1250”，“cp1251”，“cp1252”，“cp1253”，“cp1254”，“cp1255”，“cp1256”，“cp1257”，“cp1258”。</li>
+                <li>OEM (DOS): "cp437", "cp850", "cp852", "cp866", "cp874", "cp932", "cp936", "cp949", "cp950".</li>
+                <li>ISO 8859: "iso88591", "iso88592", "iso885915".</li>
+                <li>其他：“macintosh”，“koi8”。</li>
+              </ul>
+              特殊编码的含义（示例）
+              <br><br>
+              在 Windows（英语或俄语）：
+              <ul>
+              <li>"默认" - cp1252 或 cp1251</li>
+              <li>"ansi" - cp1252 或 cp1251</li>
+              <li>"oem" - cp850 或 cp866</li>
+              </ul>
+              在 Linux（英语或俄语）：
+              <ul>
+              <li>"default" - utf8</li>
+              <li>"ansi" - cp1252 或 cp1251</li>
+              <li>"oem" - cp850 或 cp866</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">LazUtf8.DetectEncoding</div></td>
+            <td class="hintcell">
+              <p class="definition">sEnc = LazUtf8.DetectEncoding(字符串)</p>
+              <p>返回传输文本的编码值。<br>支持的编码列表类似于 <code>LazUtf8.ConvertEncoding</code> 函数中使用的编码。</p>
+            </td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="librarychar">3.6. 字符库</a></h2>
+        <p>该库包含用于检查字符是否属于特定 Unicode 类别的函数，以及获取字符类别的函数。</p>
+        <p>该库中可用功能列表：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">字符库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.GetUnicodeCategory</div></td>
+            <td class="hintcell">
+              <p class="definition">iResult = Char.GetUnicodeCategory(字符)</p>
+              <p>返回字符 <code>Character</code> 的 Unicode 类别，以下是可能的值：</p>
+              <table class="innercmddesc">
+                <tr class="rowinnerdesc"><th class="innerdescheader">值</th><th class="innerdescheader">描述</th>
+                <tr><td colspan="2">字母：</td></tr>
+                <tr><td class="innerdescvaluecell">0</td><td class="innerdescdesccell">大写字母 (Lu)</td></tr>
+                <tr><td class="innerdescvaluecell">1</td><td class="innerdescdesccell">小写字母 (Ll)</td></tr>
+                <tr><td class="innerdescvaluecell">2</td><td class="innerdescdesccell">标题字母 (Lt)</td></tr>
+                <tr><td class="innerdescvaluecell">3</td><td class="innerdescdesccell">修饰字母 (Lm)</td></tr>
+                <tr><td class="innerdescvaluecell">4</td><td class="innerdescdesccell">其他字母（Lo）</td></tr>
+                <tr><td colspan="2">标记：</td></tr>
+                <tr><td class="innerdescvaluecell">5</td><td class="innerdescdesccell">非间距标记 (Mn)</td></tr>
+                <tr><td class="innerdescvaluecell">6</td><td class="innerdescdesccell">间距组合标记 (Mc)</td></tr>
+                <tr><td class="innerdescvaluecell">7</td><td class="innerdescdesccell">封闭标记（Me）</td></tr>
+                <tr><td colspan="2">数字：</td></tr>
+                <tr><td class="innerdescvaluecell">8</td><td class="innerdescdesccell">十进制数字 (Nd)</td></tr>
+                <tr><td class="innerdescvaluecell">9</td><td class="innerdescdesccell">字母编号 (Nl)</td></tr>
+                <tr><td class="innerdescvaluecell">10</td><td class="innerdescdesccell">其他号码（No）</td></tr>
+                <tr><td colspan="2">标点符号：</td></tr>
+                <tr><td class="innerdescvaluecell">11</td><td class="innerdescdesccell">连接符标点符号 (Pc)</td></tr>
+                <tr><td class="innerdescvaluecell">12</td><td class="innerdescdesccell">破折号标点符号 (Pd)</td></tr>
+                <tr><td class="innerdescvaluecell">13</td><td class="innerdescdesccell">开放标点符号 (Ps)</td></tr>
+                <tr><td class="innerdescvaluecell">14</td><td class="innerdescdesccell">关闭标点符号（Pe）</td></tr>
+                <tr><td class="innerdescvaluecell">15</td><td class="innerdescdesccell">初始标点符号 (Pi)</td></tr>
+                <tr><td class="innerdescvaluecell">16</td><td class="innerdescdesccell">最终标点符号 (Pf)</td></tr>
+                <tr><td class="innerdescvaluecell">17</td><td class="innerdescdesccell">其他标点符号 (Po)</td></tr>
+                <tr><td colspan="2">符号：</td></tr>
+                <tr><td class="innerdescvaluecell">18</td><td class="innerdescdesccell">数学符号 (Sm)</td></tr>
+                <tr><td class="innerdescvaluecell">19</td><td class="innerdescdesccell">货币符号 (Sc)</td></tr>
+                <tr><td class="innerdescvaluecell">20</td><td class="innerdescdesccell">修饰符符号 (Sk)</td></tr>
+                <tr><td class="innerdescvaluecell">21</td><td class="innerdescdesccell">其他符号 (So)</td></tr>
+                <tr><td colspan="2">分隔符：</td></tr>
+                <tr><td class="innerdescvaluecell">22</td><td class="innerdescdesccell">空格分隔符 (Zs)</td></tr>
+                <tr><td class="innerdescvaluecell">23</td><td class="innerdescdesccell">行分隔符 (Zl)</td></tr>
+                <tr><td class="innerdescvaluecell">24</td><td class="innerdescdesccell">段落分隔符 (Zp)</td></tr>
+                <tr><td colspan="2">其他：</td></tr>
+                <tr><td class="innerdescvaluecell">25</td><td class="innerdescdesccell">控制 (Cc)</td></tr>
+                <tr><td class="innerdescvaluecell">26</td><td class="innerdescdesccell">格式 (Cf)</td></tr>
+                <tr><td class="innerdescvaluecell">27</td><td class="innerdescdesccell">代理 (Cs)</td></tr>
+                <tr><td class="innerdescvaluecell">28</td><td class="innerdescdesccell">私人使用（Co）</td></tr>
+                <tr><td class="innerdescvaluecell">29</td><td class="innerdescdesccell">未分配 (Cn)</td></tr>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.IsDigit</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = Char.IsDigit(Character)</p>
+              <p>返回 <code>true</code> 如果 <var>Character</var> 字符属于 <i>Nd</i> 类别。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.IsLetter</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = Char.IsLetter(Character)</p>
+              <p>返回 <code>true</code> 如果 <var>Character</var> 字符属于类别 <i>Lu</i>、<i>Ll</i>、<i>Lt</i>、<i>Lm</i> 或 <i>Lo</i>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.IsLetterOrDigit</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = Char.IsLetterOrDigit(Character)</p>
+              <p>返回 <code>true</code> 如果 <var>Character</var> 字符属于类别 <i>Lu</i>、<i>Ll</i>、<i>Lt</i>、<i>Lm</i><i>Lo</i>、<i>Nd</i> 或 <i>Nl</i>。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.IsLower</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = Char.IsLower(Character)</p>
+              <p>返回 <code>true</code> 如果 <var>Character</var> 字符属于 <i>Ll</i> 类别。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">Char.IsUpper</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult = Char.IsUpper(字符)</p>
+              <p>返回 <code>true</code> 如果 <var>Character</var> 字符属于 <i>Lu</i> 类别。</p>
+            </td>
+          </tr>
+        </table>
+        <p>此外，这些函数支持使用两个参数：我们可以指定一个字符串和该字符串中字符的位置，而不是单个字符。</p>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="libraryos">3.7. 操作系统库</a></h2>
+        <p>该库包含与运行 Double Commander 的操作系统相关的函数。</p>
+        <p>这是该库中可用功能的列表：</p>
+        <table>
+          <tr class="rowcategorytitle"><th colspan="2">操作系统库</th></tr>
+          <tr class="rowsubtitle"><th class="categorynamecolumn">函数名称</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.execute</div></td>
+            <td class="hintcell">
+              <p class="definition">iResultCode = os.execute(sCommand)</p>
+              <p>将执行 <var>sCommand</var>，就像在命令行中输入一样，并返回操作的结果代码。</p>
+              <p><var>sCommand</var> 可以是：</p>
+              <ul>
+                <li>一个终端命令，如 <code>os.execute("dir &gt; all.txt")</code></li>
+                <li>一个可执行文件，如 <code>os.execute("C:\\Windows\\System32\\calc.exe")</code> </li>
+                <li>带参数的可执行文件<code>os.execute("C:\\Utils\\fsum.exe -md5 test.bin &gt; md5.txt")</code></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.tmpname</div></td>
+            <td class="hintcell">
+              <p class="definition">sTempFileName = os.tmpname()</p>
+              <p>将返回一个文件名，用作临时文件名（在临时文件的系统目录中）。如果函数无法创建唯一名称，它将返回一个空字符串。</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.remove</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult, sError, iError = os.remove(sFileName)</p>
+              <p>将删除名为 <var>sFileName</var> 的文件或目录。</p>
+              <p>如果它有效，函数返回 <code>true</code>。</p>
+              <p>如果失败，函数将返回三样东西：</p>
+              <ol>
+                <li><code>nil</code> 表示失败</li>
+                <li><var>sError</var> 用于错误消息描述</li>
+                <li><var>iError</var> 对于错误代码编号</li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.rename</div></td>
+            <td class="hintcell">
+              <p class="definition">bResult, sError, iError = os.rename(sOldName, sNewName)</p>
+              <p>将文件 <var>sOldName</var> 重命名为新名称 <var>sNewName</var>。</p>
+              <p><b><span  class="uline">注意：</span> 如果名为 <var>sNewName</var> 的文件已经存在，它将被替换！</b></p>
+              <p>如果它有效，函数返回 <code>true</code>。</p>
+              <p>如果失败，函数将返回三样东西：</p>
+              <ol>
+                <li><code>nil</code> 表示失败</li>
+                <li><var>sError</var> 用于错误消息描述</li>
+                <li><var>iError</var> 对于错误代码编号</li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.getenv</div></td>
+            <td class="hintcell">
+              <p class="definition">值 = os.getenv(变量名)</p>
+              <p>将返回传入参数的变量<var>VariableName</var>的<var>值</var>。如果不存在该名称的变量，它将返回 <code>nil</code>。</p></td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.setenv</div></td>
+            <td class="hintcell">
+              <p class="definition">os.setenv(变量名, 值)</p>
+              <p>添加或更改 <var>VariableName</var> 环境变量。如果发生错误，函数返回 -1。</p></td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><div class="firstcolumnaleft">os.unsetenv</div></td>
+            <td class="hintcell">
+              <p class="definition">os.unsetenv(变量名)</p>
+              <p>删除 <var>VariableName</var> 环境变量。如果发生错误，函数返回 -1。</p></td>
+          </tr>
+        </table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      <br>
+      </div>
+    </div>
+    <div class="footer"><div class="nav"><a  href="index.html" title="Index">索引</a> | <a  href="regexp.html" title="Previous page">上一页</a> | <a  href="commandline.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    <br>
+  
+
+</body></html>

@@ -1,0 +1,3171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+  <head>
+    <title>DC - Internal Commands</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ </head>
+ 
+ <body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer"><div class="nav"><a href="index.html" title="Index">索引</a> | <a href="variables.html" title="Previous page">上一页</a> | <a href="regexp.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.13. 内部命令</h1>
+      </div>
+
+      <div>
+        <h2>内容</h2>
+        <dl>
+          <dt>1. <a href="#commandcategory">命令类别表</a></dt>
+          <dt>2. <a href="#commanddescription">按类别描述所有命令</a></dt>
+          <dd>
+            <dl>
+              <dt>2.1. <a href="#catactivepanel">活动面板</a></dt>
+              <dt>2.2. <a href="#catleftpanel">左侧面板</a></dt>
+              <dt>2.3. <a href="#catrightpanel">右侧面板</a></dt>
+              <dt>2.4. <a href="#catfileoperations">文件操作</a></dt>
+              <dt>2.5. <a href="#catconfiguration">配置</a></dt>
+              <dt>2.6. <a href="#catnetwork">网络</a></dt>
+              <dt>2.7. <a href="#catmiscellaneous">杂项</a></dt>
+              <dt>2.8. <a href="#catmark">标记</a></dt>
+              <dt>2.9. <a href="#catclipboard">剪贴板</a></dt>
+              <dt>2.10. <a href="#catnavigation">导航</a></dt>
+              <dt>2.11. <a href="#cathelp">帮助</a></dt>
+              <dt>2.12. <a href="#catwindow">窗口</a></dt>
+              <dt>2.13. <a href="#catcommandline">命令行</a></dt>
+              <dt>2.14. <a href="#cattools">工具</a></dt>
+              <dt>2.15. <a href="#catview">查看</a></dt>
+              <dt>2.16. <a href="#cattabs">标签</a></dt>
+              <dt>2.17. <a href="#catlogs">日志</a></dt>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="commandcategory">1. 命令类别表</a></h2>
+      </div>
+
+      <div>
+        <p>内部命令可以按类别分组，以下是它们：</p>
+        <table>
+          <tbody><tr class="rowcategorytable"><th colspan="2">指令类别表</th></tr>
+          <tr class="rowcategorysubtitle"><th class="categorynamecolumn">类别</th><th class="categorydesccolumn">描述</th></tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catactivepanel">活动面板</a></div></td>
+            <td class="categorydesc">这些命令适用于<b>当前选定的面板</b>，左侧或右侧。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catleftpanel">左侧面板</a></div></td>
+            <td class="categorydesc">这些命令适用于<b>左侧面板</b>，无论当前选择的是哪个。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catrightpanel">右侧面板</a></div></td>
+            <td class="categorydesc">这些命令适用于<b>右侧面板</b>，无论当前选择的是哪个。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catfileoperations">文件操作</a></div></td>
+            <td class="categorydesc">这些命令适用于当前选定面板中的当前选定项。<br>它包括查看/复制/移动/重命名/删除/打包/解包/分割等操作。<br>这些是可以对您的 <b>文件产生直接影响</b> 的命令。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catconfiguration">配置</a></div></td>
+            <td class="categorydesc">Double Commander的访问选项和配置。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catnetwork">网络</a></div></td>
+            <td class="categorydesc">与计算机网络直接相关。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catmiscellaneous">杂项</a></div></td>
+            <td class="categorydesc">不可避免的类别，包含那些我们不知道该将其归入哪个类别的命令！<br>已尽力避免将过多命令归入此类别。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catmark">标记</a></div></td>
+            <td class="categorydesc">选择将进行文件操作的项目。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catclipboard">剪贴板</a></div></td>
+            <td class="categorydesc">系统剪贴板与选定项目之间的交互。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catnavigation">导航</a></div></td>
+            <td class="categorydesc">在不同文件夹之间移动，以根据其位置访问不同的项目。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#cathelp">帮助</a></div></td>
+            <td class="categorydesc">访问Double Commander的集成帮助文件。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catwindow">窗口</a></div></td>
+            <td class="categorydesc">与Double Commander窗口及其外观和行为相关的命令，类似于其他计算机应用程序。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catcommandline">命令行</a></div></td>
+            <td class="categorydesc">与命令行交互以查看过去的命令并帮助调用新的命令。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#cattools">工具</a></div></td>
+            <td class="categorydesc">对于需要超过一次点击的操作。这些操作通常会显示另一个窗口，以便让Double Commander执行一些更复杂的任务。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catview">查看</a></div></td>
+            <td class="categorydesc">与数据文件、系统文件等的可见性和外观相关的命令。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#cattabs">标签</a></div></td>
+            <td class="categorydesc">通过创建新标签与标签进行交互，从一个目录导航到另一个目录等。</td>
+          </tr>
+          <tr>
+            <td class="categorycell"><div class="categoryname"><a href="#catlogs">日志</a></div></td>
+            <td class="categorydesc">与 DC 日志文件相关的操作。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="commanddescription">2. 按类别描述所有命令</a></h2>
+        <p>这里是所有内部命令的简要描述。</p>
+        <p>对于其中的每一项，我们都将:</p>
+        <ul>
+          <li>列出命令名称</li>
+          <li>显示其图标</li>
+          <li>在适用的情况下，其默认键盘快捷键</li>
+          <li>它的简要描述</li>
+          <li>在适用的情况下，简要描述其可能的参数</li>
+        </ul>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catactivepanel">2.1. 活动面板</a></h2>
+        <p>这些命令适用于<b>当前选定的面板</b>，左侧或右侧。</p>
+        <table>
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别“活动面板”</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_BriefView" alt="cm_BriefView" src="../../pixmaps/dctheme/32x32/actions/cm_briefview.png"  >
+              <div class="cmdname"><a name="cm_BriefView">cm_BriefView</a></div>
+              <div class="shrtctkey">Ctrl+F1</div></td>
+            <td class="cmdhintcell">仅项目名称。<br>如果可能，存在多个列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ColumnsView" alt="cm_ColumnsView" src="../../pixmaps/dctheme/32x32/actions/cm_columnsview.png"  >
+              <div class="cmdname"><a name="cm_ColumnsView">cm_ColumnsView</a></div>
+              <div class="shrtctkey">Ctrl+F2</div></td>
+            <td class="cmdhintcell">每行一个项目，带有默认或用户定义的列。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">columnset</td>
+                  <td class="innerdescvaluecell"><i>column set name</i></td>
+                  <td class="innerdescdesccell">显示用户定义的列集</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">显示默认列集</td>
+                </tr>
+              </tbody></table>
+              <br>查看<a href="configuration.html#ConfigColumns">列部分</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ThumbnailsView" alt="cm_ThumbnailsView" src="../../pixmaps/dctheme/32x32/actions/cm_thumbnailsview.png"  >
+              <div class="cmdname"><a name="cm_ThumbnailsView">cm_ThumbnailsView</a></div>
+              <div class="shrtctkey">Ctrl+Shift+F1</div></td>
+            <td class="cmdhintcell">显示为缩略图。<br>如果可能的话，最好使用多于一列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FlatView" alt="cm_FlatView" src="../../pixmaps/dctheme/32x32/actions/cm_flatview.png"  >
+              <div class="cmdname"><a name="cm_FlatView">cm_FlatView</a></div>
+              <div class="shrtctkey">Ctrl+B</div></td>
+            <td class="cmdhintcell">将扫描面板的所有目录，以在一个面板中显示所有内容。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">在左侧面板中，作为<a href="#cm_LeftFlatView">cm_LeftFlatView</a>命令</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">在右侧面板中，作为<a href="#cm_RightFlatView">cm_RightFlatView</a>命令</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">在非活动面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">当前活动面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">当前活动面板</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FlatViewSel" alt="cm_FlatViewSel" src="../../pixmaps/dctheme/32x32/actions/cm_flatviewsel.png"  >
+              <div class="cmdname"><a name="cm_FlatViewSel">cm_FlatViewSel</a></div>
+              <div class="shrtctkey">Ctrl+Shift+B</div></td>
+            <td class="cmdhintcell">像没有参数的 cm_FlatView 命令，但仅适用于选定的文件和文件夹。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_QuickView" alt="cm_QuickView" src="../../pixmaps/dctheme/32x32/actions/cm_quickview.png"  >
+              <div class="cmdname"><a name="cm_QuickView">cm_QuickView</a></div>
+              <div class="shrtctkey">Ctrl+Q</div></td>
+            <td class="cmdhintcell">所选项目的内容显示在对面面板中（而不是单独的窗口）。<br>查看详细信息 <a href="viewer.html">这里</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SortByName" alt="cm_SortByName" src="../../pixmaps/dctheme/32x32/actions/cm_sortbyname.png"  >
+              <div class="cmdname"><a name="cm_SortByName">cm_SortByName</a></div>
+              <div class="shrtctkey">Ctrl+F3</div></td>
+            <td class="cmdhintcell">在活动面板中按<a href="help.html#cm_SortByName">名称</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SortByExt" alt="cm_SortByExt" src="../../pixmaps/dctheme/32x32/actions/cm_sortbyext.png"  >
+              <div class="cmdname"><a name="cm_SortByExt">cm_SortByExt</a></div>
+              <div class="shrtctkey">Ctrl+F4</div></td>
+            <td class="cmdhintcell">按<a href="help.html#cm_SortByExt">扩展</a>对活动面板中的项目进行排序。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SortBySize" alt="cm_SortBySize" src="../../pixmaps/dctheme/32x32/actions/cm_sortbysize.png"  >
+              <div class="cmdname"><a name="cm_SortBySize">cm_SortBySize</a></div>
+              <div class="shrtctkey">Ctrl+F6</div></td>
+            <td class="cmdhintcell">在活动面板中按 <a href="help.html#cm_SortBySize">文件大小</a> 排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SortByDate" alt="cm_SortByDate" src="../../pixmaps/dctheme/32x32/actions/cm_sortbydate.png"  >
+              <div class="cmdname"><a name="cm_SortByDate">cm_SortByDate</a></div>
+              <div class="shrtctkey">Ctrl+F5</div></td>
+            <td class="cmdhintcell">在活动面板中按<a href="help.html#cm_SortByDate">日期</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SortByAttr" alt="cm_SortByAttr" src="../../pixmaps/dctheme/32x32/actions/cm_sortbyattr.png"  >
+              <div class="cmdname"><a name="cm_SortByAttr">cm_SortByAttr</a></div></td>
+            <td class="cmdhintcell">在活动面板中按<a href="help.html#cm_SortByAttr">属性</a>对项目进行排序。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ReverseOrder" alt="cm_ReverseOrder" src="../../pixmaps/dctheme/32x32/actions/cm_reverseorder.png"  >
+              <div class="cmdname"><a name="cm_ReverseOrder">cm_ReverseOrder</a></div></td>
+            <td class="cmdhintcell">在活动面板中显示<a href="help.html#cm_ReverseOrder">反转排序</a> 的项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SrcOpenDrives" alt="cm_SrcOpenDrives" src="../../pixmaps/dctheme/32x32/actions/cm_srcopendrives.png"  >
+              <div class="cmdname"><a name="cm_SrcOpenDrives">cm_SrcOpenDrives</a></div></td>
+            <td class="cmdhintcell">打开活动面板的驱动器列表。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_UniversalSingleDirectSort" alt="cm_UniversalSingleDirectSort" src="../../pixmaps/dctheme/32x32/actions/cm_universalsingledirectsort.png"  >
+              <div class="cmdname"><a name="cm_UniversalSingleDirectSort">cm_UniversalSingleDirectSort</a></div></td>
+            <td class="cmdhintcell">将指定面板中的指定列按指定顺序排序。<br>请参见下表以获取可能的参数值。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">panel</td>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">将在活动面板上操作</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">将对非活动面板进行操作</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">将在左侧面板上操作</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">将在右侧面板上操作</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">将在活动面板上操作</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">列</td>
+                  <td class="innerdescvaluecell">name</td>
+                  <td class="innerdescdesccell">排序的列将是“name-ext”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">ext</td>
+                  <td class="innerdescdesccell">排序列将是“ext”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">size</td>
+                  <td class="innerdescdesccell">排序列将是“大小”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">datetime</td>
+                  <td class="innerdescdesccell">排序列将是“日期时间”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">排序列将是“名称”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">order</td>
+                  <td class="innerdescvaluecell">ascending</td>
+                  <td class="innerdescdesccell">将按升序排序</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">descending</td>
+                  <td class="innerdescdesccell">将按降序排列</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">将按升序排序</td>
+                </tr>
+                <tr>
+                  <td colspan="3">注意：如果这三个参数中的任何一个未定义或定义不正确，则这些参数的默认值将为：面板=活动，列=名称，顺序=升序。</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_UniversalSingleDirectSort：面板=活动，列=大小，顺序=降序”<br>这将按大小对活动中的项目进行排序——先显示较大的文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CountDirContent" alt="cm_CountDirContent" src="../../pixmaps/dctheme/32x32/actions/cm_countdircontent.png"  >
+              <div class="cmdname"><a name="cm_CountDirContent">cm_CountDirContent</a></div>
+              <div class="shrtctkey">Alt+Shift+Enter</div></td>
+            <td class="cmdhintcell">计算当前选定面板中每个目录内容的总体大小。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catleftpanel">2.2. 左侧面板</a></h2>
+        <p>这些命令适用于<b>左侧面板</b>，无论当前选择的是哪个。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "左侧面板"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftBriefView" alt="cm_LeftBriefView" src="../../pixmaps/dctheme/32x32/actions/cm_leftbriefview.png"  >
+              <div class="cmdname"><a name="cm_LeftBriefView">cm_LeftBriefView</a></div></td>
+            <td class="cmdhintcell">左侧面板中，仅显示项目名称。<br>如果可能，多个列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftColumnsView" alt="cm_LeftColumnsView" src="../../pixmaps/dctheme/32x32/actions/cm_leftcolumnsview.png"  >
+              <div class="cmdname"><a name="cm_LeftColumnsView">cm_LeftColumnsView</a></div></td>
+            <td class="cmdhintcell">在左侧面板中，每行一个项目，带有默认或用户定义的列。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">columnset</td>
+                  <td class="innerdescvaluecell"><i>column set name	</i></td>
+                  <td class="innerdescdesccell">显示用户定义的列集</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">显示默认列集</td>
+                </tr>
+              </tbody></table>
+              <br>查看<a href="configuration.html#ConfigColumns">列部分</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftThumbView" alt="cm_LeftThumbView" src="../../pixmaps/dctheme/32x32/actions/cm_leftthumbview.png"  >
+              <div class="cmdname"><a name="cm_LeftThumbView">cm_LeftThumbView</a></div></td>
+            <td class="cmdhintcell">左侧面板中，项目以缩略图形式显示。<br>如果可能，多个列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftFlatView" alt="cm_LeftFlatView" src="../../pixmaps/dctheme/32x32/actions/cm_leftflatview.png"  >
+              <div class="cmdname"><a name="cm_LeftFlatView">cm_LeftFlatView</a></div></td>
+            <td class="cmdhintcell">将扫描左侧面板的所有目录，以在此单一面板中显示所有内容。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftSortByName" alt="cm_LeftSortByName" src="../../pixmaps/dctheme/32x32/actions/cm_leftsortbyname.png"  >
+              <div class="cmdname"><a name="cm_LeftSortByName">cm_LeftSortByName</a></div></td>
+            <td class="cmdhintcell">在左侧面板中按<a href="help.html#cm_SortByName">名称</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftSortByExt" alt="cm_LeftSortByExt" src="../../pixmaps/dctheme/32x32/actions/cm_leftsortbyext.png"  >
+              <div class="cmdname"><a name="cm_LeftSortByExt">cm_LeftSortByExt</a></div></td>
+            <td class="cmdhintcell">在左侧面板中按<a href="help.html#cm_SortByExt">扩展名</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftSortBySize" alt="cm_LeftSortBySize" src="../../pixmaps/dctheme/32x32/actions/cm_leftsortbysize.png"  >
+              <div class="cmdname"><a name="cm_LeftSortBySize">cm_LeftSortBySize</a></div></td>
+            <td class="cmdhintcell">在左侧面板中按<a href="help.html#cm_SortBySize">大小</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftSortByDate" alt="cm_LeftSortByDate" src="../../pixmaps/dctheme/32x32/actions/cm_leftsortbydate.png"  >
+              <div class="cmdname"><a name="cm_LeftSortByDate">cm_LeftSortByDate</a></div></td>
+            <td class="cmdhintcell">在左侧面板中按<a href="help.html#cm_SortByDate">日期</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftSortByAttr" alt="cm_LeftSortByAttr" src="../../pixmaps/dctheme/32x32/actions/cm_leftsortbyattr.png"  >
+              <div class="cmdname"><a name="cm_LeftSortByAttr">cm_LeftSortByAttr</a></div></td>
+            <td class="cmdhintcell">在左侧面板中按<a href="help.html#cm_SortByAttr">属性</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftReverseOrder" alt="cm_LeftReverseOrder" src="../../pixmaps/dctheme/32x32/actions/cm_leftreverseorder.png"  >
+              <div class="cmdname"><a name="cm_LeftReverseOrder">cm_LeftReverseOrder</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_ReverseOrder">反向排序</a> 左侧面板中的项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftOpenDrives" alt="cm_LeftOpenDrives" src="../../pixmaps/dctheme/32x32/actions/cm_leftopendrives.png"  >
+              <div class="cmdname"><a name="cm_LeftOpenDrives">cm_LeftOpenDrives</a></div>
+              <div class="shrtctkey">Alt+F1</div></td>
+            <td class="cmdhintcell">打开<a href="help.html#cm_LeftOpenDrives">驱动器列表</a>以供左侧面板使用。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catrightpanel">2.3. 右侧面板</a></h2>
+        <p>这些命令适用于<b>右侧面板</b>，无论当前选择的是哪个。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "右侧面板"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightBriefView" alt="cm_RightBriefView" src="../../pixmaps/dctheme/32x32/actions/cm_rightbriefview.png"  >
+              <div class="cmdname"><a name="cm_RightBriefView">cm_RightBriefView</a></div></td>
+            <td class="cmdhintcell">在右侧面板中，仅显示项目名称。<br>如果可能，多个列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightColumnsView" alt="cm_RightColumnsView" src="../../pixmaps/dctheme/32x32/actions/cm_rightcolumnsview.png"  >
+              <div class="cmdname"><a name="cm_RightColumnsView">cm_RightColumnsView</a></div></td>
+            <td class="cmdhintcell">在右侧面板中，每行一个项目，带有默认或用户定义的列。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">columnset</td>
+                  <td class="innerdescvaluecell"><i>column set name	</i></td>
+                  <td class="innerdescdesccell">显示用户定义的列集</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">显示默认列集</td>
+                </tr>
+              </tbody></table>
+              <br>查看<a href="configuration.html#ConfigColumns">列部分</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightThumbView" alt="cm_RightThumbView" src="../../pixmaps/dctheme/32x32/actions/cm_rightthumbview.png"  >
+              <div class="cmdname"><a name="cm_RightThumbView">cm_RightThumbView</a></div></td>
+            <td class="cmdhintcell">右侧面板中，项目以缩略图形式显示。<br>如果可能，多个列。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightFlatView" alt="cm_RightFlatView" src="../../pixmaps/dctheme/32x32/actions/cm_rightflatview.png"  >
+              <div class="cmdname"><a name="cm_RightFlatView">cm_RightFlatView</a></div></td>
+            <td class="cmdhintcell">将扫描右侧面板的所有目录，以在此单个面板中显示所有内容。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightSortByName" alt="cm_RightSortByName" src="../../pixmaps/dctheme/32x32/actions/cm_rightsortbyname.png"  >
+              <div class="cmdname"><a name="cm_RightSortByName">cm_RightSortByName</a></div></td>
+            <td class="cmdhintcell">在右侧面板中按<a href="help.html#cm_SortByName">名称</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightSortByExt" alt="cm_RightSortByExt" src="../../pixmaps/dctheme/32x32/actions/cm_rightsortbyext.png"  >
+              <div class="cmdname"><a name="cm_RightSortByExt">cm_RightSortByExt</a></div></td>
+            <td class="cmdhintcell">在右侧面板中按<a href="help.html#cm_SortByExt">扩展名</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightSortBySize" alt="cm_RightSortBySize" src="../../pixmaps/dctheme/32x32/actions/cm_rightsortbysize.png"  >
+              <div class="cmdname"><a name="cm_RightSortBySize">cm_RightSortBySize</a></div></td>
+            <td class="cmdhintcell">在右侧面板中按<a href="help.html#cm_SortBySize">大小</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightSortByDate" alt="cm_RightSortByDate" src="../../pixmaps/dctheme/32x32/actions/cm_rightsortbydate.png"  >
+              <div class="cmdname"><a name="cm_RightSortByDate">cm_RightSortByDate</a></div></td>
+            <td class="cmdhintcell">在右侧面板中按<a href="help.html#cm_SortByDate">日期</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightSortByAttr" alt="cm_RightSortByAttr" src="../../pixmaps/dctheme/32x32/actions/cm_rightsortbyattr.png"  >
+              <div class="cmdname"><a name="cm_RightSortByAttr">cm_RightSortByAttr</a></div></td>
+            <td class="cmdhintcell">在右侧面板中按<a href="help.html#cm_SortByAttr">属性</a>排序项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightReverseOrder" alt="cm_RightReverseOrder" src="../../pixmaps/dctheme/32x32/actions/cm_rightreverseorder.png"  >
+              <div class="cmdname"><a name="cm_RightReverseOrder">cm_RightReverseOrder</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_ReverseOrder">反向排序</a> 右侧面板中的项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightOpenDrives" alt="cm_RightOpenDrives" src="../../pixmaps/dctheme/32x32/actions/cm_rightopendrives.png"  >
+              <div class="cmdname"><a name="cm_RightOpenDrives">cm_RightOpenDrives</a></div>
+              <div class="shrtctkey">Alt+F2</div></td>
+            <td class="cmdhintcell">打开<a href="help.html#cm_RightOpenDrives">驱动器列表</a>以便于右侧面板。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catfileoperations">2.4. 文件操作</a></h2>
+        <p>这些命令适用于当前选定面板中的当前选定项。<br>它包括查看/复制/移动/重命名/删除/打包/解包/分割等操作。<br>这些可能是对您的文件有<b>直接影响</b>的命令。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">文件操作类别</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_View" alt="cm_View" src="../../pixmaps/dctheme/32x32/actions/cm_view.png"  >
+              <div class="cmdname"><a name="cm_View">cm_View</a></div>
+              <div class="shrtctkey">F3</div></td>
+            <td class="cmdhintcell">在<a href="viewer.html">查看器程序</a>中打开文件。<br>
+              <br>该命令支持一个参数，允许强制查看模式（在这种情况下，将忽略插件，但您可以稍后在查看器窗口中切换模式）。
+请查看<a href="viewer.html#mnu_view">此页面</a>上模式的描述。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">mode</td>
+                  <td class="innerdescvaluecell">text</td>
+                  <td class="innerdescdesccell">显示为纯文本</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">bin</td>
+                  <td class="innerdescdesccell">显示为二进制</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">hex</td>
+                  <td class="innerdescdesccell">显示为十六进制</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">dec</td>
+                  <td class="innerdescdesccell">显示为十进制</td>
+                </tr>
+              </tbody></table>
+              <br>注意：如果没有选择文件或仅选择了一个文件，则此参数将有效。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Edit" alt="cm_Edit" src="../../pixmaps/dctheme/32x32/actions/cm_edit.png"  >
+              <div class="cmdname"><a name="cm_Edit">cm_Edit</a></div>
+              <div class="shrtctkey">F4</div></td>
+            <td class="cmdhintcell">在编辑器中打开文件（内部或外部，请参见<a href="configuration.html#ConfigToolsEditor">工具&nbsp;&gt; 编辑器</a>）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_EditNew" alt="cm_EditNew" src="../../pixmaps/dctheme/32x32/actions/cm_editnew.png"  >
+              <div class="cmdname"><a name="cm_EditNew">cm_EditNew</a></div>
+              <div class="shrtctkey">Shift+F4</div></td>
+            <td class="cmdhintcell">在当前目录中创建一个新文本文件并在编辑器中打开（请参见 <a href="configuration.html#ConfigToolsEditor">工具&nbsp;&gt; 编辑器</a>）或打开现有文件（如果已存在同名文件）。<br>您可以输入文件的完整名称（包括路径），它将被创建在指定的目录中。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Copy" alt="cm_Copy" src="../../pixmaps/dctheme/32x32/actions/cm_copy.png"  >
+              <div class="cmdname"><a name="cm_Copy">cm_Copy</a></div>
+              <div class="shrtctkey">F5</div></td>
+            <td class="cmdhintcell">从源复制项目到目标。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">confirmation</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">显示确认对话框（默认）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">不显示确认对话框</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">queueid</td>
+                  <td class="innerdescvaluecell"><i>&lt;queue identifier&gt;</i></td>
+                  <td class="innerdescdesccell">默认情况下，将复制操作放入特定队列，仅在未显示确认对话框时有效，值为 0 表示将是独立操作（不排队）</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_Copy confirmation=1”将提示用户确认复制，无论文件操作的复制操作确认设置如何。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyNoAsk" alt="cm_CopyNoAsk" src="../../pixmaps/dctheme/32x32/actions/cm_copynoask.png"  >
+              <div class="cmdname"><a name="cm_CopyNoAsk">cm_CopyNoAsk</a></div></td>
+            <td class="cmdhintcell">从源位置复制项目到目标位置，无需确认。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopySamePanel" alt="cm_CopySamePanel" src="../../pixmaps/dctheme/32x32/actions/cm_copysamepanel.png"  >
+              <div class="cmdname"><a name="cm_CopySamePanel">cm_CopySamePanel</a></div>
+              <div class="shrtctkey">Shift+F5</div></td>
+            <td class="cmdhintcell">在同一目录中复制项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Rename" alt="cm_Rename" src="../../pixmaps/dctheme/32x32/actions/cm_rename.png"  >
+              <div class="cmdname"><a name="cm_Rename">cm_Rename</a></div>
+              <div class="shrtctkey">F6</div></td>
+            <td class="cmdhintcell">重命名或移动项目。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">confirmation</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">显示确认对话框（默认）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">不显示确认对话框</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">queueid</td>
+                  <td class="innerdescvaluecell"><i>&lt;queue identifier&gt;</i></td>
+                  <td class="innerdescdesccell">默认情况下，将复制操作放入特定队列，仅在未显示确认对话框时有效，值为 0 表示将是独立操作（不排队）</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_Rename confirmation=1”将提示用户确认重命名/移动，无论文件操作的移动操作确认设置如何。</td>
+          </tr><tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RenameNoAsk" alt="cm_RenameNoAsk" src="../../pixmaps/dctheme/32x32/actions/cm_renamenoask.png"  >
+              <div class="cmdname"><a name="cm_RenameNoAsk">cm_RenameNoAsk</a></div></td>
+            <td class="cmdhintcell">重命名或移动项目时无需确认。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RenameOnly" alt="cm_RenameOnly" src="../../pixmaps/dctheme/32x32/actions/cm_renameonly.png"  >
+              <div class="cmdname"><a name="cm_RenameOnly">cm_RenameOnly</a></div>
+              <div class="shrtctkey">F2，Shift+F6</div></td>
+            <td class="cmdhintcell">在同一目录中重命名文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MakeDir" alt="cm_MakeDir" src="../../pixmaps/dctheme/32x32/actions/cm_makedir.png"  >
+              <div class="cmdname"><a name="cm_MakeDir">cm_MakeDir</a></div>
+              <div class="shrtctkey">F7</div></td>
+            <td class="cmdhintcell">创建一个新目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Delete" alt="cm_Delete" src="../../pixmaps/dctheme/32x32/actions/cm_delete.png"  >
+              <div class="cmdname"><a name="cm_Delete">cm_Delete</a></div>
+              <div class="shrtctkey">F8, Del</div></td>
+            <td class="cmdhintcell">将选定的项目删除到回收站或永久删除。<br>删除到回收站可能并不适用于所有平台。<br>删除到回收站或永久删除时会显示不同的确认消息。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">confirmation</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">显示确认对话框（默认）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">不显示确认对话框（请小心！）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">trashcan</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">删除到回收站</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">永久删除</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">setting</td>
+                  <td class="innerdescdesccell">（默认）根据<a href="configuration.html#ConfigOperations">文件操作</a>中的全局设置进行相应的操作，如果该设置已启用，则会删除到回收站，否则将永久删除</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">reversesetting</td>
+                  <td class="innerdescdesccell">与设定相反的方式行事</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Wipe" alt="cm_Wipe" src="../../pixmaps/dctheme/32x32/actions/cm_wipe.png"  >
+              <div class="cmdname"><a name="cm_Wipe">cm_Wipe</a></div>
+              <div class="shrtctkey">Alt+Del</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_Wipe">擦除</a> 文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_PackFiles" alt="cm_PackFiles" src="../../pixmaps/dctheme/32x32/actions/cm_packfiles.png"  >
+              <div class="cmdname"><a name="cm_PackFiles">cm_PackFiles</a></div>
+              <div class="shrtctkey">Alt+F5</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_PackFiles">打包</a> 项目到档案中。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">PackHere</td>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">压缩文件将位于活动面板目录中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">压缩文件将位于非活动面板目录中</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_TestArchive" alt="cm_TestArchive" src="../../pixmaps/dctheme/32x32/actions/cm_testarchive.png"  >
+              <div class="cmdname"><a name="cm_TestArchive">cm_TestArchive</a></div>
+              <div class="shrtctkey">Alt+Shift+F9</div></td>
+            <td class="cmdhintcell">验证所选归档文件内容的完整性。<br>如果归档内容损坏，将会报告错误信息。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OpenArchive" alt="cm_OpenArchive" src="../../pixmaps/dctheme/32x32/actions/cm_openarchive.png"  >
+              <div class="cmdname"><a name="cm_OpenArchive">cm_OpenArchive</a></div>
+              <div class="shrtctkey">Ctrl+PgDn</div></td>
+            <td class="cmdhintcell">如果选择了一个目录，将打开该目录以显示其内容。<br>如果选择了一个文件，忽略其扩展名，将根据检测到的内容尝试将其作为归档打开（请参见其他帮助页面中的 <a href="multiarc.html#configids">ID 配置</a>）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ExtractFiles" alt="cm_ExtractFiles" src="../../pixmaps/dctheme/32x32/actions/cm_extractfiles.png"  >
+              <div class="cmdname"><a name="cm_ExtractFiles">cm_ExtractFiles</a></div>
+              <div class="shrtctkey">Alt+F9</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_ExtractFiles">解压</a> 一个或多个选定的档案。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">ExtractHere</td>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">提取的项目将位于活动面板目录中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">提取的项目将位于非活动面板目录中</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OpenVirtualFileSystemList" alt="cm_OpenVirtualFileSystemList" src="../../pixmaps/dctheme/32x32/actions/cm_openvirtualfilesystemlist.png"  >
+              <div class="cmdname"><a name="cm_OpenVirtualFileSystemList">cm_OpenVirtualFileSystemList</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_OpenVirtualFileSystemList">打开 VFS 列表</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FileProperties" alt="cm_FileProperties" src="../../pixmaps/dctheme/32x32/actions/cm_fileproperties.png"  >
+              <div class="cmdname"><a name="cm_FileProperties">cm_FileProperties</a></div>
+              <div class="shrtctkey">Alt+Enter</div></td>
+            <td class="cmdhintcell">显示项目 <a href="help.html#cm_FileProperties">属性</a>（大小、数据、属性等）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetFileProperties" alt="cm_SetFileProperties" src="../../pixmaps/dctheme/32x32/actions/cm_setfileproperties.png"  >
+              <div class="cmdname"><a name="cm_SetFileProperties">cm_SetFileProperties</a></div></td>
+            <td class="cmdhintcell">调整项目属性，如创建日期、修改日期和最后访问日期、文件权限等。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_EditComment" alt="cm_EditComment" src="../../pixmaps/dctheme/32x32/actions/cm_editcomment.png"  >
+              <div class="cmdname"><a name="cm_EditComment">cm_EditComment</a></div>
+              <div class="shrtctkey">Ctrl+Z</div></td>
+            <td class="cmdhintcell">创建或编辑<a href="help.html#cm_EditComment">注释</a>以用于文件/目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ContextMenu" alt="cm_ContextMenu" src="../../pixmaps/dctheme/32x32/actions/cm_contextmenu.png"  >
+              <div class="cmdname"><a name="cm_ContextMenu">cm_ContextMenu</a></div>
+              <div class="shrtctkey">Shift+F10</div></td>
+            <td class="cmdhintcell">显示文件和文件夹的上下文菜单。<br>在 Windows 中，Double Commander将显示系统上下文菜单（如在 Windows 资源管理器中），而在其他操作系统中，Double Commander会创建自己的上下文菜单，包含典型操作。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">justactionmenu</td>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">菜单将包括默认系统上下文菜单和在Double Commander中定义的与文件扩展名相关的操作（默认）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">菜单将仅包括在Double Commander中定义的与文件扩展名相关的操作（默认系统上下文菜单将不显示）</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Open" alt="cm_Open" src="../../pixmaps/dctheme/32x32/actions/cm_open.png"  >
+              <div class="cmdname"><a name="cm_Open">cm_Open</a></div>
+              <div class="shrtctkey">Enter</div></td>
+            <td class="cmdhintcell">在光标下打开文件或程序。<br>基于文件关联配置的相关应用可能会被使用等。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShellExecute" alt="cm_ShellExecute" src="../../pixmaps/dctheme/32x32/actions/cm_shellexecute.png"  >
+              <div class="cmdname"><a name="cm_ShellExecute">cm_ShellExecute</a></div>
+              <div class="shrtctkey">Ctrl+Alt+Enter</div></td>
+            <td class="cmdhintcell">将从系统文件关联中为所选文件调用一个程序。<br>可以为该调用提供一个单一参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SymLink" alt="cm_SymLink" src="../../pixmaps/dctheme/32x32/actions/cm_symlink.png"  >
+              <div class="cmdname"><a name="cm_SymLink">cm_SymLink</a></div></td>
+            <td class="cmdhintcell">创建 <a href="help.html#cm_SymLink">符号链接</a> 到文件/目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_HardLink" alt="cm_HardLink" src="../../pixmaps/dctheme/32x32/actions/cm_hardlink.png"  >
+              <div class="cmdname"><a name="cm_HardLink">cm_HardLink</a></div></td>
+            <td class="cmdhintcell">创建 <a href="help.html#cm_HardLink">硬链接</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FileSpliter" alt="cm_FileSpliter" src="../../pixmaps/dctheme/32x32/actions/cm_filespliter.png"  >
+              <div class="cmdname"><a name="cm_FileSpliter">cm_FileSpliter</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_FileSpliter">拆分</a> 文件对话框。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FileLinker" alt="cm_FileLinker" src="../../pixmaps/dctheme/32x32/actions/cm_filelinker.png"  >
+              <div class="cmdname"><a name="cm_FileLinker">cm_FileLinker</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_FileLinker">合并</a>多个分割的文件以形成一个单一的文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CheckSumCalc" alt="cm_CheckSumCalc" src="../../pixmaps/dctheme/32x32/actions/cm_checksumcalc.png"  >
+              <div class="cmdname"><a name="cm_CheckSumCalc">cm_CheckSumCalc</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_CheckSumCalc">计算</a> 文件校验和 (MD5, SHA1 等)。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CheckSumVerify" alt="cm_CheckSumVerify" src="../../pixmaps/dctheme/32x32/actions/cm_checksumverify.png"  >
+              <div class="cmdname"><a name="cm_CheckSumVerify">cm_CheckSumVerify</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_CheckSumVerify">验证</a> MD5、SHA1 等校验和。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catconfiguration">2.5. 配置</a></h2>
+        <p>Double Commander的访问选项和配置。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "配置"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Options" alt="cm_Options" src="../../pixmaps/dctheme/32x32/actions/cm_options.png"  >
+              <div class="cmdname"><a name="cm_Options">cm_Options</a></div></td>
+            <td class="cmdhintcell">打开<a href="help.html#cm_Options">配置</a>对话框。<br>命令支持一个参数以跳转到特定的配置部分。<br>这里是<a href="cm_options.html">一个链接</a>，用于可能的参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigToolbars" alt="cm_ConfigToolbars" src="../../pixmaps/dctheme/32x32/actions/cm_configtoolbars.png"  >
+              <div class="cmdname"><a name="cm_ConfigToolbars">cm_ConfigToolbars</a></div></td>
+            <td class="cmdhintcell">访问工具栏的配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigDirHotList" alt="cm_ConfigDirHotList" src="../../pixmaps/dctheme/32x32/actions/cm_configdirhotlist.png"  >
+              <div class="cmdname"><a name="cm_ConfigDirHotList">cm_ConfigDirHotList</a></div>
+              <div class="shrtctkey">Ctrl+Shift+D</div></td>
+            <td class="cmdhintcell">访问常用文件夹列表的配置。<br>它相当于 cm_WorkWithDirectoryHotlist 命令，带有以下参数：<br>action=config source=%Ds</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_WorkWithDirectoryHotlist" alt="cm_WorkWithDirectoryHotlist" src="../../pixmaps/dctheme/32x32/actions/cm_workwithdirectoryhotlist.png"  >
+              <div class="cmdname"><a name="cm_WorkWithDirectoryHotlist">cm_WorkWithDirectoryHotlist</a></div></td>
+            <td class="cmdhintcell">访问“常用文件夹列表”配置窗口。<br>通过这些参数，您可以控制将对热名单执行哪些操作。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="8">action</td>
+                  <td class="innerdescvaluecell">add</td>
+                  <td class="innerdescdesccell">添加条目（目标将根据配置中的选项添加）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">addsrconly</td>
+                  <td class="innerdescdesccell">将仅添加一个源条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">addboth</td>
+                  <td class="innerdescdesccell">将添加一个条目和目标</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">config</td>
+                  <td class="innerdescdesccell">配置一个条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">show</td>
+                  <td class="innerdescdesccell">简单地显示配置窗口</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">addsel</td>
+                  <td class="innerdescdesccell">添加当前选定的目录<br>（其他参数被忽略）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">directconfig</td>
+                  <td class="innerdescdesccell">配置指定的第“n”条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">同样是“添加”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">source</td>
+                  <td class="innerdescvaluecell">source_path</td>
+                  <td class="innerdescdesccell">将目录添加/配置为“源”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">活动面板所在的目录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">target</td>
+                  <td class="innerdescvaluecell">target_path	</td>
+                  <td class="innerdescdesccell">将目录添加/配置为“目标”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">目录中不活动面板所在的位置</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">index</td>
+                  <td class="innerdescvaluecell">0-999</td>
+                  <td class="innerdescdesccell">如果操作=directconfig，则从热列表中获取第“n”条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">索引 0 将被使用</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_WorkWithDirectoryHotlist action=addboth”<br>这将把当前活动和非活动框架的目录分别作为源和目标添加到目录热列表中。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FileAssoc" alt="cm_FileAssoc" src="../../pixmaps/dctheme/32x32/actions/cm_fileassoc.png"  >
+              <div class="cmdname"><a name="cm_FileAssoc">cm_FileAssoc</a></div></td>
+            <td class="cmdhintcell">打开文件关联 <a href="configuration.html#ConfigAssociations">配置</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigFolderTabs" alt="cm_ConfigFolderTabs" src="../../pixmaps/dctheme/32x32/actions/cm_configfoldertabs.png"  >
+              <div class="cmdname"><a name="cm_ConfigFolderTabs">cm_ConfigFolderTabs</a></div></td>
+            <td class="cmdhintcell">访问与文件夹标签相关的设置配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigFavoriteTabs" alt="cm_ConfigFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_configfavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_ConfigFavoriteTabs">cm_ConfigFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">访问收藏标签的配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigTreeViewMenus" alt="cm_ConfigTreeViewMenus" src="../../pixmaps/dctheme/32x32/actions/cm_configtreeviewmenus.png"  >
+              <div class="cmdname"><a name="cm_ConfigTreeViewMenus">cm_ConfigTreeViewMenus</a></div></td>
+            <td class="cmdhintcell">访问树视图菜单的配置。这是我们可以配置默认使用树视图菜单选择样式的命令的地方。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigTreeViewMenusColors" alt="cm_ConfigTreeViewMenusColors" src="../../pixmaps/dctheme/32x32/actions/cm_configtreeviewmenuscolors.png"  >
+              <div class="longcmdname"><a name="cm_ConfigTreeViewMenusColors">cm_ConfigTreeViewMenusColors</a></div></td>
+            <td class="cmdhintcell">访问与树视图菜单部分界面相关的颜色配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigSearches" alt="cm_ConfigSearches" src="../../pixmaps/dctheme/32x32/actions/cm_configsearches.png"  >
+              <div class="cmdname"><a name="cm_ConfigSearches">cm_ConfigSearches</a></div></td>
+            <td class="cmdhintcell">访问文件搜索的一般选项配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigHotKeys" alt="cm_ConfigHotKeys" src="../../pixmaps/dctheme/32x32/actions/cm_confighotkeys.png"  >
+              <div class="cmdname"><a name="cm_ConfigHotKeys">cm_ConfigHotKeys</a></div></td>
+            <td class="cmdhintcell">访问热键的配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigSavePos" alt="cm_ConfigSavePos" src="../../pixmaps/dctheme/32x32/actions/cm_configsavepos.png"  >
+              <div class="cmdname"><a name="cm_ConfigSavePos">cm_ConfigSavePos</a></div></td>
+            <td class="cmdhintcell">将保存 DC 主窗口的当前状态和位置。<br></td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigSaveSettings" alt="cm_ConfigSaveSettings" src="../../pixmaps/dctheme/32x32/actions/cm_configsavesettings.png"  >
+              <div class="cmdname"><a name="cm_ConfigSaveSettings">cm_ConfigSaveSettings</a></div></td>
+            <td class="cmdhintcell">将保存所有当前设置和历史记录，就像您关闭应用程序并恢复一样。<br><i>这可能会很有用，如果您在长时间会话中使用了 DC，并且您想保存当前上下文，以防系统崩溃，并且您不想在重新启动 DC 时丢失当前历史记录。</i></td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigArchivers" alt="cm_ConfigArchivers" src="../../pixmaps/dctheme/32x32/actions/cm_configarchivers.png"  >
+              <div class="cmdname"><a name="cm_ConfigArchivers">cm_ConfigArchivers</a></div></td>
+            <td class="cmdhintcell">将启动 <a href="multiarc.html">外部压缩程序</a> 的配置页面。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigTooltips" alt="cm_ConfigTooltips" src="../../pixmaps/dctheme/32x32/actions/cm_configtooltips.png"  >
+              <div class="cmdname"><a name="cm_ConfigTooltips">cm_ConfigTooltips</a></div></td>
+            <td class="cmdhintcell">将为工具提示启动配置页面。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ConfigPlugins" alt="cm_ConfigPlugins" src="../../pixmaps/dctheme/32x32/actions/cm_configplugins.png"  >
+              <div class="cmdname"><a name="cm_ConfigPlugins">cm_ConfigPlugins</a></div></td>
+            <td class="cmdhintcell">访问插件的配置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_AddPlugin" alt="cm_AddPlugin" src="../../pixmaps/dctheme/32x32/actions/cm_addplugin.png"  >
+              <div class="cmdname"><a name="cm_AddPlugin">cm_AddPlugin</a></div></td>
+            <td class="cmdhintcell">此命令使添加插件变得简单，支持两种方式：<br>选择一个插件文件，Double Commander将自动检测其类型（WCX、WDX、WFX、WLX 或 DSX），打开所需的设置部分并将其添加到列表中。<br>选择包含插件和特殊文件 <tt>pluginst.inf</tt> 的归档文件（插件文件和 <tt>pluginst.inf</tt> 必须位于归档文件的根目录中）：
+归档的内容将被提取到适当的目录，插件将被添加到设置中，Double Commander将打开相应的设置部分。如果设置存储在用户配置文件中，Double Commander将使用用户目录中的“plugins”文件夹：<ul>
+                <li>Windows XP: <i>C:\Documents and Settings\&lt;UserName&gt;\Local Settings\doublecmd\plugins</i></li>
+                <li>Windows Vista/7+: <i>C:\Users\&lt;UserName&gt;\AppData\Local\doublecmd\plugins</i></li>
+                <li>Unix-like 操作系统: <i>/home/&lt;UserName&gt;/.local/share/doublecmd/plugins</i></li>
+              </ul>在便携版中，Double Commander将使用程序目录中的“插件”文件夹。<br>
+              <br>注意：第一种添加插件的方法需要先将文件放置在合适的位置，但是在这种情况下，如果插件无法加载（例如，如果操作系统不包含必要的库），Double Commander将报告错误。<br>
+              <br>文件名可以作为参数传递。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catnetwork">2.6. 网络</a></h2>
+        <p>与计算机网络直接相关。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "网络"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_NetworkConnect" alt="cm_NetworkConnect" src="../../pixmaps/dctheme/32x32/actions/cm_networkconnect.png"  >
+              <div class="cmdname"><a name="cm_NetworkConnect">cm_NetworkConnect</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_net">网络连接</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_NetworkDisconnect" alt="cm_NetworkDisconnect" src="../../pixmaps/dctheme/32x32/actions/cm_networkdisconnect.png"  >
+              <div class="cmdname"><a name="cm_NetworkDisconnect">cm_NetworkDisconnect</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_net">网络断开</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyNetNamesToClip" alt="cm_CopyNetNamesToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copynetnamestoclip.png"  >
+              <div class="cmdname"><a name="cm_CopyNetNamesToClip">cm_CopyNetNamesToClip</a></div></td>
+            <td class="cmdhintcell">仅限 Windows：复制带有 UNC 路径的名称。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catmiscellaneous">2.7. 杂项</a></h2>
+        <p>不可避免的类别，带有我们不知道该将其放置在哪个类别的命令！<br>已尽力避免在此类别中放置过多命令。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "杂项"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CalculateSpace" alt="cm_CalculateSpace" src="../../pixmaps/dctheme/32x32/actions/cm_calculatespace.png"  >
+              <div class="cmdname"><a name="cm_CalculateSpace">cm_CalculateSpace</a></div>
+              <div class="shrtctkey">Ctrl+L</div></td>
+            <td class="cmdhintcell">计算<a href="help.html#cm_CalculateSpace">占用</a>的活动面板中所选项目的空间。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Benchmark" alt="cm_Benchmark" src="../../pixmaps/dctheme/32x32/actions/cm_benchmark.png"  >
+              <div class="cmdname"><a name="cm_Benchmark">cm_Benchmark</a></div></td>
+            <td class="cmdhintcell">启动一个简单的基准测试，运行支持的哈希函数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RunTerm" alt="cm_RunTerm" src="../../pixmaps/dctheme/32x32/actions/cm_runterm.png"  >
+              <div class="cmdname"><a name="cm_RunTerm">cm_RunTerm</a></div>
+              <div class="shrtctkey">F9</div></td>
+            <td class="cmdhintcell">开始一个 <a href="help.html#cm_RunTerm">终端</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ExecuteScript" alt="cm_ExecuteScript" src="../../pixmaps/dctheme/32x32/actions/cm_executescript.png"  >
+              <div class="cmdname"><a name="cm_ExecuteScript">cm_ExecuteScript</a></div></td>
+            <td class="cmdhintcell">执行 Lua 脚本文件（需要安装 Lua .DLL），详细信息请见 <a href="lua.html">这里</a>。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell"><i>{first}</i></td>
+                  <td class="innerdescvaluecell">file name</td>
+                  <td class="innerdescdesccell">Lua 脚本文件的路径</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>{param1}</i></td>
+                  <td class="innerdescvaluecell">command line parameter #1</td>
+                  <td class="innerdescdesccell" rowspan="3">作为命令行参数传递给 Lua 脚本</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>{param2}</i></td>
+                  <td class="innerdescvaluecell">command line parameter #2</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>{paramX}</i></td>
+                  <td class="innerdescvaluecell">command line parameter #X</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LoadList" alt="cm_LoadList" src="../../pixmaps/dctheme/32x32/actions/cm_loadlist.png"  >
+              <div class="cmdname"><a name="cm_LoadList">cm_LoadList</a></div></td>
+            <td class="cmdhintcell">从指定的文本文件加载文件/文件夹列表（纯文本文件，包含完整文件名，每行一个）。使用无 BOM 的 UTF-8 编码。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">filename</td>
+                  <td class="innerdescvaluecell">file name</td>
+                  <td class="innerdescdesccell">文件列表的完整路径</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="6">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">将列表加载到左侧面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">将列表加载到右侧面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">将列表加载到活动面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">将列表加载到非活动面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">将列表加载到活动面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">将列表加载到活动面板中</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catmark">2.8. 标记</a></h2>
+        <p>选择将进行文件操作的项目。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "标记"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkPlus" alt="cm_MarkPlus" src="../../pixmaps/dctheme/32x32/actions/cm_markplus.png"  >
+              <div class="cmdname"><a name="cm_MarkPlus">cm_MarkPlus</a></div>
+              <div class="shrtctkey">数字 +</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_MarkPlus">选择</a> 在活动面板中使用掩码（提供或不提供）根据以下参数选择项目：<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">mask</td>
+                  <td class="innerdescvaluecell"><i>&lt;any string&gt;</i></td>
+                  <td class="innerdescdesccell">要使用的过滤器</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">将提示用户输入过滤器</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">casesensitive</td>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">过滤将不区分大小写</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">过滤将区分大小写</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">区分大小写将是当前文件视图中最后使用的选项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">ignoreaccents</td>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">过滤将通过评估重音字符的精确匹配来完成</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">项目和掩码将被比较，忽略它们的重音和用不同字母替换的连字</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">忽略或不忽略重音将像上次为该文件视图指定的那样</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">windowsinterpretation</td>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">过滤将像 DC 遗留系统一样进行</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">过滤将像 Windows 一样进行</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">使用 DC 遗留过滤或 Windows 将像上次为该文件视图指定的那样</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="7">attr</td>
+                  <td class="innerdescvaluecell">d-</td>
+                  <td class="innerdescdesccell">过滤将忽略目录，仅处理文件</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">d+</td>
+                  <td class="innerdescdesccell">过滤将忽略文件，仅保留目录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">h-</td>
+                  <td class="innerdescdesccell">过滤将忽略隐藏文件（Windows）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">ux+</td>
+                  <td class="innerdescdesccell">过滤将只接受具有属性所有者可执行的条目（Linux）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">uw+|gw+|ow+</td>
+                  <td class="innerdescdesccell">过滤将会处理用户、组或其他任何人可写的文件（Linux）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">过滤将根据“文件视图”中的配置进行，部分“标记/取消标记条目”，选项“默认属性掩码值”。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"></td>
+                  <td class="innerdescdesccell">注意：这意味着“attr=”没有右侧值。<br>过滤所有内容，无论配置的“默认属性掩码”是什么</td>
+                </tr>
+              </tbody></table>
+              <br>
+              <b>注意 1：</b>因此，如果命令在没有任何参数的情况下使用，用户将被提示输入其过滤器，其他选项将与当前会话中上次为每个文件视图指定的选项相同。<br>
+              <b>注意 2：</b> 当使用类似 Windows 的过滤器而不是 DC 遗留时，未带扩展名的文件将通过过滤器 <i>*.*</i> 被选中。<br>
+              <b>注意 3：</b> 在指定“mask”参数时，请注意您也可以通过在其名称前加上符号“&gt;”来使用预定义的选择类型，例如“<i>mask=&gt;Pascal files</i>”。<br>
+              <b>注意 4：</b> 使用过滤参数 "<i>ignoreaccents=TRUE</i>" 时，像 "<i>œ</i>" 这样的连字字符将被评估为序列 "<i>oe</i>"。因此，例如 "<i>cœur</i>" 将匹配 "<i>coeur</i>"。<br>
+              <b>注意 5：</b> 使用像“casesensitive”这样的参数不会影响后续使用不带参数的 cm_MarkPlus，这将使用上次提示用户时的默认相同参数。<br>
+              <b>注意 6：</b> 关于“attr”可能的参数值，请参见“查找文件”帮助文件中的“<a href="findfiles.html#attributes">搜索具有特定属性的文件</a>”部分。指定与属性相关的过滤器的方法是相同的。<br>
+              <b>示例 1：</b> "cm_MarkPlus mask=*.pas;*.dfm;*.dpr;*.inc casesensitive=false" 这将选择所有匹配给定过滤器掩码的文件（基本上是常见的 Delphi 源文件扩展名），并忽略字母的大小写。<br>
+              <b>示例 2：</b> "cm_MarkPlus mask=*ecole*.docx ignoreaccents=true" 这将选择所有符合给定过滤器掩码的文件（基本上是包含单词“ecole”的 Microsoft Word 文档），忽略重音。这意味着它将选择包含“école”和“ecole”的文件，因为重音被忽略。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkMinus" alt="cm_MarkMinus" src="../../pixmaps/dctheme/32x32/actions/cm_markminus.png"  >
+              <div class="cmdname"><a name="cm_MarkMinus">cm_MarkMinus</a></div>
+              <div class="shrtctkey">数字 -</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_MarkMinus">取消选择</a> 活动面板中与掩码匹配的项目（无论是否提供），根据与 <a href="#cm_MarkPlus">cm_MarkPlus</a> 命令相同的参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkMarkAll" alt="cm_MarkMarkAll" src="../../pixmaps/dctheme/32x32/actions/cm_markmarkall.png"  >
+              <div class="cmdname"><a name="cm_MarkMarkAll">cm_MarkMarkAll</a></div>
+              <div class="shrtctkey">Ctrl+A, Ctrl+数字 +</div></td>
+            <td class="cmdhintcell">将基本上根据后面的属性过滤器选择<a href="help.html#cm_MarkMarkAll">所有</a>活动面板中的条目。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="7">&nbsp;&nbsp;attr&nbsp;&nbsp;</td>
+                  <td class="innerdescvaluecell">d-</td>
+                  <td class="innerdescdesccell">过滤所有不是目录的条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">d+</td>
+                  <td class="innerdescdesccell">过滤所有条目中是目录的项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">h-</td>
+                  <td class="innerdescdesccell">过滤所有没有隐藏属性的条目</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">ux+</td>
+                  <td class="innerdescdesccell">过滤所有具有属性所有者可执行的条目（Linux）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">uw+|gw+|ow+</td>
+                  <td class="innerdescdesccell">过滤所有可由用户、组或其他任何人写入的条目（Linux）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">将选择与“文件视图”中配置的内容匹配的所有内容，“标记/取消标记条目”部分中的“默认属性掩码值”选项。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"></td>
+                  <td class="innerdescdesccell">注意：这意味着“attr=”没有右侧值。<br>过滤所有内容，无论配置的“默认属性掩码”是什么</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkUnmarkAll" alt="cm_MarkUnmarkAll" src="../../pixmaps/dctheme/32x32/actions/cm_markunmarkall.png"  >
+              <div class="cmdname"><a name="cm_MarkUnmarkAll">cm_MarkUnmarkAll</a></div>
+              <div class="shrtctkey">Ctrl+数字 -</div></td>
+            <td class="cmdhintcell">将根据<a href="#cm_MarkMarkAll">cm_MarkMarkAll</a>命令表中描述的相同过滤器取消选择活动面板的<a href="help.html#cm_MarkUnmarkAll">所有</a>条目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkInvert" alt="cm_MarkInvert" src="../../pixmaps/dctheme/32x32/actions/cm_markinvert.png"  >
+              <div class="cmdname"><a name="cm_MarkInvert">cm_MarkInvert</a></div>
+              <div class="shrtctkey">数字 *</div></td>
+            <td class="cmdhintcell">将<a href="help.html#cm_MarkInvert">反转</a>与<a href="#cm_MarkMarkAll">cm_MarkMarkAll</a>命令中描述的相同过滤器匹配的所有条目的选定状态。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkCurrentPath" alt="cm_MarkCurrentPath" src="../../pixmaps/dctheme/32x32/actions/cm_markcurrentpath.png"  >
+              <div class="cmdname"><a name="cm_MarkCurrentPath">cm_MarkCurrentPath</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">标记</a>与活动面板中光标下的项目具有相同路径的文件。<br>
+              <b>注意：</b>乍一看可能似乎没用，但在至少两种情况下可能会用到：<br>
+              <div style="margin: 0 0 0 15;">在您填充了来自不同级别目录的搜索结果面板后<br>在您调用了 <a href="#cm_FlatView">cm_FlatView</a> 内部命令之后。</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_UnmarkCurrentPath" alt="cm_UnmarkCurrentPath" src="../../pixmaps/dctheme/32x32/actions/cm_unmarkcurrentpath.png"  >
+              <div class="cmdname"><a name="cm_UnmarkCurrentPath">cm_UnmarkCurrentPath</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">取消标记</a> 与活动面板中光标下的项目具有相同路径的文件。<br>请参阅<a href="#cm_MarkCurrentPath">cm_MarkCurrentPath</a>的说明，以了解此命令的可能用途。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkCurrentName" alt="cm_MarkCurrentName" src="../../pixmaps/dctheme/32x32/actions/cm_markcurrentname.png"  >
+              <div class="cmdname"><a name="cm_MarkCurrentName">cm_MarkCurrentName</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">标记</a>与活动面板光标下的项目同名的文件，忽略扩展名。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_UnmarkCurrentName" alt="cm_UnmarkCurrentName" src="../../pixmaps/dctheme/32x32/actions/cm_unmarkcurrentname.png"  >
+              <div class="cmdname"><a name="cm_UnmarkCurrentName">cm_UnmarkCurrentName</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">取消标记</a>与活动面板光标下的项目同名的文件，忽略扩展名。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkCurrentExtension" alt="cm_MarkCurrentExtension" src="../../pixmaps/dctheme/32x32/actions/cm_markcurrentextension.png"  >
+              <div class="cmdname"><a name="cm_MarkCurrentExtension">cm_MarkCurrentExtension</a></div>
+              <div class="shrtctkey">Shift+数字 +</div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">标记</a>与活动面板中光标下的项目具有相同扩展名的文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_UnmarkCurrentExtension" alt="cm_UnmarkCurrentExtension" src="../../pixmaps/dctheme/32x32/actions/cm_unmarkcurrentextension.png"  >
+              <div class="cmdname"><a name="cm_UnmarkCurrentExtension">cm_UnmarkCurrentExtension</a></div>
+              <div class="shrtctkey">Shift+Num -</div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">取消标记</a> 与活动面板光标下的项目具有相同扩展名的文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MarkCurrentNameExt" alt="cm_MarkCurrentNameExt" src="../../pixmaps/dctheme/32x32/actions/cm_markcurrentnameext.png"  >
+              <div class="cmdname"><a name="cm_MarkCurrentNameExt">cm_MarkCurrentNameExt</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">标记</a>与活动面板中光标下的项目具有相同文件名和扩展名的文件。<br>请参阅<a href="#cm_MarkCurrentPath">cm_MarkCurrentPath</a>的说明，以了解此命令的可能用途。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_UnmarkCurrentNameExt" alt="cm_UnmarkCurrentNameExt" src="../../pixmaps/dctheme/32x32/actions/cm_unmarkcurrentnameext.png"  >
+              <div class="cmdname"><a name="cm_UnmarkCurrentNameExt">cm_UnmarkCurrentNameExt</a></div></td>
+            <td class="cmdhintcell"><a href="help.html#mnu_select">取消标记</a> 与活动面板中光标下的项目具有相同文件名和扩展名的文件。<br>请参阅<a href="#cm_MarkCurrentPath">cm_MarkCurrentPath</a>的说明，以了解此命令的可能用途。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CompareDirectories" alt="cm_CompareDirectories" src="../../pixmaps/dctheme/32x32/actions/cm_comparedirectories.png"  >
+              <div class="cmdname"><a name="cm_CompareDirectories">cm_CompareDirectories</a></div></td>
+            <td class="cmdhintcell">将选择在活动面板和非活动面板中不在对方面板中的项目。具有相同名称的文件将根据修改日期进行比较，之后将选择较新的文件。<br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">文件</td>
+                  <td class="innerdescvaluecell">开/关</td>
+                  <td class="innerdescdesccell">选择文件</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">目录</td>
+                  <td class="innerdescvaluecell">开/关</td>
+                  <td class="innerdescdesccell">选择目录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">仅选择文件</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SaveSelection" alt="cm_SaveSelection" src="../../pixmaps/dctheme/32x32/actions/cm_saveselection.png"  >
+              <div class="cmdname"><a name="cm_SaveSelection">cm_SaveSelection</a></div></td>
+            <td class="cmdhintcell">与"<a href="#cm_RestoreSelection">cm_RestoreSelection</a>"一起使用。<br>cm_SaveSelection 命令将把当前选定的项目保存在内部缓冲区中。<br>然后稍后，可以使用命令 <a href="#cm_RestoreSelection">cm_RestoreSelection</a> 再次重新选择之前选择的相同项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RestoreSelection" alt="cm_RestoreSelection" src="../../pixmaps/dctheme/32x32/actions/cm_restoreselection.png"  >
+              <div class="cmdname"><a name="cm_RestoreSelection">cm_RestoreSelection</a></div></td>
+            <td class="cmdhintcell">查看之前的 <a href="#cm_SaveSelection">cm_SaveSelection</a> 命令。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SaveSelectionToFile" alt="cm_SaveSelectionToFile" src="../../pixmaps/dctheme/32x32/actions/cm_saveselectiontofile.png"  >
+              <div class="cmdname"><a name="cm_SaveSelectionToFile">cm_SaveSelectionToFile</a></div></td>
+            <td class="cmdhintcell">将当前选择保存到文件。<br>您可以将输出文件名指定为第一个参数。<br>如果没有提供参数，Double Commander将提示用户输入一个。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LoadSelectionFromFile" alt="cm_LoadSelectionFromFile" src="../../pixmaps/dctheme/32x32/actions/cm_loadselectionfromfile.png"  >
+              <div class="cmdname"><a name="cm_LoadSelectionFromFile">cm_LoadSelectionFromFile</a></div></td>
+            <td class="cmdhintcell">将读取提供文件的内容，以从文件中选择项目。<br>该文件可以作为内部命令的第一个参数提供。<br>如果没有提供文件，应用程序将提示您输入一个。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LoadSelectionFromClip" alt="cm_LoadSelectionFromClip" src="../../pixmaps/dctheme/32x32/actions/cm_loadselectionfromclip.png"  >
+              <div class="cmdname"><a name="cm_LoadSelectionFromClip">cm_LoadSelectionFromClip</a></div></td>
+            <td class="cmdhintcell">将根据剪贴板的内容选择活动面板的项目。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SaveFileDetailsToFile" alt="cm_SaveFileDetailsToFile" src="../../pixmaps/dctheme/32x32/actions/cm_savefiledetailstofile.png"  >
+              <div class="cmdname"><a name="cm_SaveFileDetailsToFile">cm_SaveFileDetailsToFile</a></div></td>
+            <td class="cmdhintcell">将所选项目的所有显示列保存到文件中。<br>您可以将输出文件名指定为第一个参数。<br>如果没有提供参数，Double Commander将提示用户输入一个。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catclipboard">2.9. 剪贴板</a></h2>
+        <p>与系统剪贴板和选定项目之间交互的操作。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "剪贴板"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CutToClipboard" alt="cm_CutToClipboard" src="../../pixmaps/dctheme/32x32/actions/cm_cuttoclipboard.png"  >
+              <div class="cmdname"><a name="cm_CutToClipboard">cm_CutToClipboard</a></div>
+              <div class="shrtctkey">Ctrl+X</div></td>
+            <td class="cmdhintcell">将选定的文本、文件或目录剪切到剪贴板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyToClipboard" alt="cm_CopyToClipboard" src="../../pixmaps/dctheme/32x32/actions/cm_copytoclipboard.png"  >
+              <div class="cmdname"><a name="cm_CopyToClipboard">cm_CopyToClipboard</a></div>
+              <div class="shrtctkey">Ctrl+C</div></td>
+            <td class="cmdhintcell">将选定的文本、文件或目录复制到剪贴板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_PasteFromClipboard" alt="cm_PasteFromClipboard" src="../../pixmaps/dctheme/32x32/actions/cm_pastefromclipboard.png"  >
+              <div class="cmdname"><a name="cm_PasteFromClipboard">cm_PasteFromClipboard</a></div>
+              <div class="shrtctkey">Ctrl+V</div></td>
+            <td class="cmdhintcell">从剪贴板粘贴数据。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyNamesToClip" alt="cm_CopyNamesToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copynamestoclip.png"  >
+              <div class="cmdname"><a name="cm_CopyNamesToClip">cm_CopyNamesToClip</a></div>
+              <div class="shrtctkey">Ctrl+Shift+X</div></td>
+            <td class="cmdhintcell">将项目 <a href="help.html#cm_CopyNamesToClip">名称</a> 复制到剪贴板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyFullNamesToClip" alt="cm_CopyFullNamesToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copyfullnamestoclip.png"  >
+              <div class="cmdname"><a name="cm_CopyFullNamesToClip">cm_CopyFullNamesToClip</a></div>
+              <div class="shrtctkey">Ctrl+Shift+C</div></td>
+            <td class="cmdhintcell">复制项目 <a href="help.html#cm_CopyFullNamesToClip">全名</a> 到剪贴板。<br>可以使用一个参数，我们可以指定首选的目录分隔符：<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">separator</td>
+                  <td class="innerdescvaluecell"><i>目录分隔符</i></td>
+                  <td class="innerdescdesccell">使用“/”或“\”（不带引号）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">使用系统值：在 Unix/Linux 系统中，它将是“/”，而在 Windows 中，它将是“\”</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyPathOfFilesToClip" alt="cm_CopyPathOfFilesToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copypathoffilestoclip.png"  >
+              <div class="cmdname"><a name="cm_CopyPathOfFilesToClip">cm_CopyPathOfFilesToClip</a></div></td>
+            <td class="cmdhintcell">将复制当前选定项目的完整路径，包括结尾的目录分隔符。<br>一个参数可用，我们可以指定首选的目录分隔符，参见<a href="#cm_CopyFullNamesToClip">cm_CopyFullNamesToClip</a>的描述。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyPathNoSepOfFilesToClip" alt="cm_CopyPathNoSepOfFilesToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copypathnosepoffilestoclip.png"  >
+              <div class="longcmdname"><a name="cm_CopyPathNoSepOfFilesToClip">cm_CopyPathNoSepOfFilesToClip</a></div></td>
+            <td class="cmdhintcell">将复制当前选定项的完整路径，排除末尾的目录分隔符。<br>一个参数可用，我们可以指定首选的目录分隔符，参见<a href="#cm_CopyFullNamesToClip">cm_CopyFullNamesToClip</a>的描述。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyFileDetailsToClip" alt="cm_CopyFileDetailsToClip" src="../../pixmaps/dctheme/32x32/actions/cm_copyfiledetailstoclip.png"  >
+              <div class="cmdname"><a name="cm_CopyFileDetailsToClip">cm_CopyFileDetailsToClip</a></div></td>
+            <td class="cmdhintcell">将所选项目的文件信息复制到剪贴板。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catnavigation">2.10. 导航</a></h2>
+        <p>从一个文件夹切换到另一个文件夹，以根据位置访问各种项目。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "导航"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_DirHistory" alt="cm_DirHistory" src="../../pixmaps/dctheme/32x32/actions/cm_dirhistory.png"  >
+              <div class="cmdname"><a name="cm_DirHistory">cm_DirHistory</a></div>
+              <div class="shrtctkey">Ctrl+H</div></td>
+            <td class="cmdhintcell">调用 <a href="help.html#cm_DirHistory">目录历史</a> 菜单。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">menutype</td>
+                  <td class="innerdescvaluecell">popup</td>
+                  <td class="innerdescdesccell">历史中的目录将显示在弹出菜单中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">treeview</td>
+                  <td class="innerdescdesccell">历史中的目录将以树状视图菜单显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定是通过弹出菜单进行的</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">position</td>
+                  <td class="innerdescvaluecell">panel</td>
+                  <td class="innerdescdesccell">菜单将从活动面板的左上角显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">cursor</td>
+                  <td class="innerdescdesccell">菜单将在当前鼠标光标位置显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定为活动面板的左上角</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">从活动面板的左上角显示的弹出菜单</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_DirHotList" alt="cm_DirHotList" src="../../pixmaps/dctheme/32x32/actions/cm_dirhotlist.png"  >
+              <div class="cmdname"><a name="cm_DirHotList">cm_DirHotList</a></div>
+              <div class="shrtctkey">Ctrl+D</div></td>
+            <td class="cmdhintcell">目录 <a href="help.html#cm_DirHotList">hotlist</a>。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">menutype</td>
+                  <td class="innerdescvaluecell">popup</td>
+                  <td class="innerdescdesccell">热门目录将显示在弹出菜单中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">treeview</td>
+                  <td class="innerdescdesccell">热目录将以树状视图菜单显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定是通过弹出菜单进行的</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">position</td>
+                  <td class="innerdescvaluecell">panel</td>
+                  <td class="innerdescdesccell">菜单将从活动面板的左上角显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">cursor</td>
+                  <td class="innerdescdesccell">菜单将在当前鼠标光标位置显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定为活动面板的左上角</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">从活动面板的左上角显示的弹出菜单</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SyncChangeDir" alt="cm_SyncChangeDir" src="../../pixmaps/dctheme/32x32/actions/cm_syncchangedir.png"  >
+              <div class="cmdname"><a name="cm_SyncChangeDir">cm_SyncChangeDir</a></div></td>
+            <td class="cmdhintcell">两个面板中的同步目录更改。<br>当再次调用此命令时，同步导航将被禁用，或者如果没有匹配的文件夹名称，则会自动禁用。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ChangeDirToParent" alt="cm_ChangeDirToParent" src="../../pixmaps/dctheme/32x32/actions/cm_changedirtoparent.png"  >
+              <div class="cmdname"><a name="cm_ChangeDirToParent">cm_ChangeDirToParent</a></div>
+              <div class="shrtctkey">Ctrl+PgUp, 退格键</div></td>
+            <td class="cmdhintcell">去当前显示目录的父目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ChangeDirToHome" alt="cm_ChangeDirToHome" src="../../pixmaps/dctheme/32x32/actions/cm_changedirtohome.png"  >
+              <div class="cmdname"><a name="cm_ChangeDirToHome">cm_ChangeDirToHome</a></div>
+              <div class="shrtctkey">Ctrl+Shift+Home</div></td>
+            <td class="cmdhintcell">转到用户的主目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ChangeDirToRoot" alt="cm_ChangeDirToRoot" src="../../pixmaps/dctheme/32x32/actions/cm_changedirtoroot.png"  >
+              <div class="cmdname"><a name="cm_ChangeDirToRoot">cm_ChangeDirToRoot</a></div>
+              <div class="shrtctkey">Ctrl+\</div></td>
+            <td class="cmdhintcell">去根目录（在 Unix 和 GNU/Linux 中为“/”）或当前磁盘的根目录（Windows）。<br>另请参阅 <tt>"\"</tt> 按钮的描述<a href="help.html#iface_drive_btn">在这里</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_TargetEqualSource" alt="cm_TargetEqualSource" src="../../pixmaps/dctheme/32x32/actions/cm_targetequalsource.png"  >
+              <div class="cmdname"><a name="cm_TargetEqualSource">cm_TargetEqualSource</a></div>
+              <div class="shrtctkey">Alt+Z</div></td>
+            <td class="cmdhintcell">在相对面板中打开活动面板的目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_TransferLeft" alt="cm_TransferLeft" src="../../pixmaps/dctheme/32x32/actions/cm_transferleft.png"  >
+              <div class="cmdname"><a name="cm_TransferLeft">cm_TransferLeft</a></div>
+              <div class="shrtctkey">Ctrl+ ←</div></td>
+            <td class="cmdhintcell">在左侧面板中打开光标下的目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_TransferRight" alt="cm_TransferRight" src="../../pixmaps/dctheme/32x32/actions/cm_transferright.png"  >
+              <div class="cmdname"><a name="cm_TransferRight">cm_TransferRight</a></div>
+              <div class="shrtctkey">Ctrl+ →</div></td>
+            <td class="cmdhintcell">在右侧面板中打开光标下的目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LeftEqualRight" alt="cm_LeftEqualRight" src="../../pixmaps/dctheme/32x32/actions/cm_leftequalright.png"  >
+              <div class="cmdname"><a name="cm_LeftEqualRight">cm_LeftEqualRight</a></div></td>
+            <td class="cmdhintcell">在左侧面板显示与右侧面板相同的目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RightEqualLeft" alt="cm_RightEqualLeft" src="../../pixmaps/dctheme/32x32/actions/cm_rightequalleft.png"  >
+              <div class="cmdname"><a name="cm_RightEqualLeft">cm_RightEqualLeft</a></div></td>
+            <td class="cmdhintcell">在右侧面板显示与左侧面板相同的目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Exchange" alt="cm_Exchange" src="../../pixmaps/dctheme/32x32/actions/cm_exchange.png"  >
+              <div class="cmdname"><a name="cm_Exchange">cm_Exchange</a></div>
+              <div class="shrtctkey">Ctrl+U</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_Exchange">交换</a> 文件面板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_EditPath" alt="cm_EditPath" src="../../pixmaps/dctheme/32x32/actions/cm_editpath.png"  >
+              <div class="cmdname"><a name="cm_EditPath">cm_EditPath</a></div></td>
+            <td class="cmdhintcell">用户可以直接输入他想在选定面板中查看的目录。另请参见 <kbd>F2</kbd> 和 <kbd>Shift+F6</kbd> <a href="shortcuts.html#main_window">这里</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ChangeDir" alt="cm_ChangeDir" src="../../pixmaps/dctheme/32x32/actions/cm_changedir.png"  >
+              <div class="cmdname"><a name="cm_ChangeDir">cm_ChangeDir</a></div></td>
+            <td class="cmdhintcell">将活动/非活动/左/右面板切换到指定目录。<br>请注意，您可以指定多个参数，因此只需一个命令，您就可以设置源路径和目标路径。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">activepath</td>
+                  <td class="innerdescvaluecell"><i>指定路径</i></td>
+                  <td class="innerdescdesccell">将活动面板切换到<i>specified_path</i></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">inactivepath</td>
+                  <td class="innerdescvaluecell"><i>指定路径</i></td>
+                  <td class="innerdescdesccell">将非活动面板切换到<i>specified_path</i></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">leftpath</td>
+                  <td class="innerdescvaluecell"><i>指定路径</i></td>
+                  <td class="innerdescdesccell">将左侧面板切换到<i>specified_path</i></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">rightpath</td>
+                  <td class="innerdescvaluecell"><i>指定路径</i></td>
+                  <td class="innerdescdesccell">将右侧面板切换到<i>specified_path</i></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="3">为了向后兼容，您也可以仅提供一个单一路径作为参数，DC 将切换活动面板到该路径。</td>
+                </tr>
+              </tbody></table>
+              <br>示例：<br>
+              <i>cm_ChangeDir activepath=%$桌面% inactivepath=E:\Medias\Paul Houde</i><br>这将使活动面板显示当前用户桌面文件夹的内容，而在非活动面板中，您将看到“Paul Houde”的内容。<br><br>
+              <i>cm_ChangeDir leftpath=C:\工作 rightpath=E:\欧拉</i><br>无论当前活动面板在哪里，左侧面板将显示“工作”文件夹的内容，右侧面板将显示“欧拉”的内容。<br><br>
+              <i>cm_ChangeDir \\TERA-06\OPENSHARE1\MEDIAS\PICTURES\2015</i><br>活动面板将切换以显示提到的网络路径的内容。<br><br>
+              <i>cm_ChangeDir wfx://FTP</i><br>提到的 WFX 插件将在活动面板中打开。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_QuickSearch" alt="cm_QuickSearch" src="../../pixmaps/dctheme/32x32/actions/cm_quicksearch.png"  >
+              <div class="cmdname"><a name="cm_QuickSearch">cm_QuickSearch</a></div>
+              <div class="shrtctkey">Ctrl+S</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_QuickSearch">快速搜索</a> 在目录中。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">search</td>
+                  <td class="innerdescvaluecell">on/off/cycle</td>
+                  <td class="innerdescdesccell">确定底部快速搜索框的状态：<br>- 当它“开启”时，指定的搜索参数将被应用，并且快速搜索框会显示在底部<br>- 当它“关闭”时，快速搜索被移除，搜索框被隐藏<br>- 当它是“循环”时，是指在连续多次调用命令以转到下一个匹配项时使用</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">direction</td>
+                  <td class="innerdescvaluecell">first/last/next</td>
+                  <td class="innerdescdesccell">确定快速搜索与搜索条件匹配的项目的方向：<br>- 当它是“第一个”时，指从顶部找到的第一个项目<br>- 当它是“最后”的时候，指最后一项<br>- 当它是“下一个”时，指的是在搜索时当前项之后的下一个项。请注意，如果在当前选定项之后没有找到任何项，它可能会回绕到之前的项。<br>*注意：当“search=cycle”时，此选项无关紧要。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">matchbeginning</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换<i>匹配开始</i>选项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">matchending</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换 <i>匹配结束</i> 选项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">casesensitive</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换大小写敏感性</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">files</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换文件过滤器</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">directories</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换过滤目录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2">filesdirectories</td>
+                  <td class="innerdescdesccell">在仅过滤文件、仅过滤目录或两者之间切换</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">text</td>
+                  <td class="innerdescvaluecell"><i>&lt; 任何字符串&gt;</i></td>
+                  <td class="innerdescdesccell">将<i>任何字符串</i>设置为新的搜索字符串</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_QuickFilter" alt="cm_QuickFilter" src="../../pixmaps/dctheme/32x32/actions/cm_quickfilter.png"  >
+              <div class="cmdname"><a name="cm_QuickFilter">cm_QuickFilter</a></div>
+              <div class="shrtctkey">Ctrl+F</div></td>
+            <td class="cmdhintcell">它允许<a href="help.html#cm_QuickSearch">过滤文件列表</a>以仅显示所需的文件/目录。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">filter</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">- 当它“开启”时，指定的过滤器被应用，并且可配置的过滤器框架显示在底部<br>- 当它“关闭”时，过滤被移除，过滤框被隐藏<br>- 当它是“切换”时，它将在两个先前状态之间切换</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">matchbeginning</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换 <i>匹配开始</i> 选项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">matchending</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换<i>匹配结束</i>选项</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">casesensitive</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换大小写敏感性</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">files</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换文件过滤器</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">directories</td>
+                  <td class="innerdescvaluecell">on/off/toggle</td>
+                  <td class="innerdescdesccell">设置或切换过滤目录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2">filesdirectories</td>
+                  <td class="innerdescdesccell">在仅过滤文件、仅过滤目录或两者之间切换</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">text</td>
+                  <td class="innerdescvaluecell"><i>&lt; 任何字符串&gt;</i></td>
+                  <td class="innerdescdesccell">将<i>任何字符串</i>设置为新的过滤器</td>
+                </tr>
+              </tbody></table>
+              <br>例如，设置一个工具按钮，使用以下参数将允许每次按下按钮时切换过滤器的应用，以仅显示“txt”文件或不显示<br>
+              <div style="margin: 0 0 0 15;">
+                text=txt<br>
+                filter=toggle<br>
+                files=on<br>
+                directories=on<br>
+                matchbeginning=off<br>
+                matchending=on</div>
+              <br>当没有指定任何参数时，将假定激活过滤器，并且其他选项将与之前的过滤器相同，<b>除了</b>文本框中准备好的焦点文本，以便您可以输入所需的文本来设置过滤器。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToFirstEntry" alt="cm_GoToFirstEntry" src="../../pixmaps/dctheme/32x32/actions/cm_gotofirstentry.png"  >
+              <div class="cmdname"><a name="cm_GoToFirstEntry">cm_GoToFirstEntry</a></div></td>
+            <td class="cmdhintcell">将光标放在列表中的第一个文件夹或文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToLastEntry" alt="cm_GoToLastEntry" src="../../pixmaps/dctheme/32x32/actions/cm_gotolastentry.png"  >
+              <div class="cmdname"><a name="cm_GoToLastEntry">cm_GoToLastEntry</a></div></td>
+            <td class="cmdhintcell">将光标放在列表中的最后一个文件夹或文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToNextEntry" alt="cm_GoToNextEntry" src="../../pixmaps/dctheme/32x32/actions/cm_gotonextentry.png"  >
+              <div class="cmdname"><a name="cm_GoToNextEntry">cm_GoToNextEntry</a></div></td>
+            <td class="cmdhintcell">将光标放在下一个文件夹或文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToPrevEntry" alt="cm_GoToPrevEntry" src="../../pixmaps/dctheme/32x32/actions/cm_gotopreventry.png"  >
+              <div class="cmdname"><a name="cm_GoToPrevEntry">cm_GoToPrevEntry</a></div></td>
+            <td class="cmdhintcell">将光标放在上一个文件夹或文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToFirstFile" alt="cm_GoToFirstFile" src="../../pixmaps/dctheme/32x32/actions/cm_gotofirstfile.png"  >
+              <div class="cmdname"><a name="cm_GoToFirstFile">cm_GoToFirstFile</a></div></td>
+            <td class="cmdhintcell">将光标放在列表中的第一个文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_GoToLastFile" alt="cm_GoToLastFile" src="../../pixmaps/dctheme/32x32/actions/cm_gotolastfile.png"  >
+              <div class="cmdname"><a name="cm_GoToLastFile">cm_GoToLastFile</a></div></td>
+            <td class="cmdhintcell">将光标放在列表中的最后一个文件上。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ViewHistory" alt="cm_ViewHistory" src="../../pixmaps/dctheme/32x32/actions/cm_viewhistory.png"  >
+              <div class="cmdname"><a name="cm_ViewHistory">cm_ViewHistory</a></div></td>
+            <td class="cmdhintcell">将在光标位置弹出最后访问的目录。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">menutype</td>
+                  <td class="innerdescvaluecell">popup</td>
+                  <td class="innerdescdesccell">历史中的目录将显示在弹出菜单中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">treeview</td>
+                  <td class="innerdescdesccell">历史中的目录将以树状视图菜单显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定是通过弹出菜单进行的</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">position</td>
+                  <td class="innerdescvaluecell">panel</td>
+                  <td class="innerdescdesccell">菜单将从活动面板的左上角显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">cursor</td>
+                  <td class="innerdescdesccell">菜单将在当前鼠标光标位置显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定为从鼠标光标位置开始</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">在当前鼠标光标位置显示的弹出菜单</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ViewHistoryNext" alt="cm_ViewHistoryNext" src="../../pixmaps/dctheme/32x32/actions/cm_viewhistorynext.png"  >
+              <div class="cmdname"><a name="cm_ViewHistoryNext">cm_ViewHistoryNext</a></div>
+              <div class="shrtctkey">Alt+ →</div></td>
+            <td class="cmdhintcell">根据最后访问的目录列表，将活动面板设置为当前面板之前访问的下一个面板（如果有的话）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ViewHistoryPrev" alt="cm_ViewHistoryPrev" src="../../pixmaps/dctheme/32x32/actions/cm_viewhistoryprev.png"  >
+              <div class="cmdname"><a name="cm_ViewHistoryPrev">cm_ViewHistoryPrev</a></div>
+              <div class="shrtctkey">Alt+ ←</div></td>
+            <td class="cmdhintcell">根据最后访问的目录列表，将活动面板设置为当前目录之前访问的最后一个目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OpenDriveByIndex" alt="cm_OpenDriveByIndex" src="../../pixmaps/dctheme/32x32/actions/cm_opendrivebyindex.png"  >
+              <div class="cmdname"><a name="cm_OpenDriveByIndex">cm_OpenDriveByIndex</a></div></td>
+            <td class="cmdhintcell">在指定面板的当前选项卡中，将显示指定驱动器的内容。<br>如果没有指定面板，它将位于当前活动面板中。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">index</td>
+                  <td class="innerdescvaluecell">1</td>
+                  <td class="innerdescdesccell">将使用<b>1</b>号驱动器列表</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">2</td>
+                  <td class="innerdescdesccell">将使用<b>2</b>号驱动器列表</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">3</td>
+                  <td class="innerdescdesccell">将使用<b>3</b>号驱动器列表</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>n</i></td>
+                  <td class="innerdescdesccell">将使用 <i><b>n</b></i> 列表的第 n 个驱动器</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">所选驱动器将在<b>左侧面板</b>中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">所选驱动器将在 <b>右侧面板</b> 中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">所选驱动器将在<b>非活动面板</b>中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">所选驱动器将在<b>当前活动面板</b>中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">指定至少 <b>索引</b> 是强制性的。</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_OpenDriveByIndex side=left index=2”将使面板聚焦在左侧并显示驱动器 E:的内容，假设我们当前的驱动器列表中有 C:、E:、S:和 X:。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FocusSwap" alt="cm_FocusSwap" src="../../pixmaps/dctheme/32x32/actions/cm_focusswap.png"  >
+              <div class="cmdname"><a name="cm_FocusSwap">cm_FocusSwap</a></div></td>
+            <td class="cmdhintcell">在左侧和右侧面板之间切换焦点。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">将重点放在左侧面板上</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">将重点放在右侧面板上</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">将焦点设置在当前选定面板的对面面板上</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="cathelp">2.11. 帮助</a></h2>
+        <p>访问Double Commander的集成帮助文件。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "帮助"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_HelpIndex" alt="cm_HelpIndex" src="../../pixmaps/dctheme/32x32/actions/cm_helpindex.png"  >
+              <div class="cmdname"><a name="cm_HelpIndex">cm_HelpIndex</a></div>
+              <div class="shrtctkey">F1</div></td>
+            <td class="cmdhintcell">打开 Double Commander <a href="index.html">帮助</a> 索引页面。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Keyboard" alt="cm_Keyboard" src="../../pixmaps/dctheme/32x32/actions/cm_keyboard.png"  >
+              <div class="cmdname"><a name="cm_Keyboard">cm_Keyboard</a></div></td>
+            <td class="cmdhintcell">打开带有Double Commander默认键盘快捷键的 <a href="shortcuts.html">帮助页面</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_VisitHomePage" alt="cm_VisitHomePage" src="../../pixmaps/dctheme/32x32/actions/cm_visithomepage.png"  >
+              <div class="cmdname"><a name="cm_VisitHomePage">cm_VisitHomePage</a></div></td>
+            <td class="cmdhintcell">去Double Commander的主页。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_About" alt="cm_About" src="../../pixmaps/dctheme/32x32/actions/cm_about.png"  >
+              <div class="cmdname"><a name="cm_About">cm_About cm</a></div></td>
+            <td class="cmdhintcell">显示程序“关于”信息。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catwindow">2.12. 窗口</a></h2>
+        <p>与Double Commander窗口及其外观和行为相关的命令，像其他任何计算机应用程序一样。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "窗口"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_HorizontalFilePanels" alt="cm_HorizontalFilePanels" src="../../pixmaps/dctheme/32x32/actions/cm_horizontalfilepanels.png"  >
+              <div class="cmdname"><a name="cm_HorizontalFilePanels">cm_HorizontalFilePanels</a></div>
+              <div class="shrtctkey">Ctrl+Shift+H</div></td>
+            <td class="cmdhintcell">将设置两个垂直面板之间的排列，位于左/右，或两个水平面板之间的排列，位于上/下。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">mode</td>
+                  <td class="innerdescvaluecell"><i>(nothing)</i>/<br>legacy</td>
+                  <td class="innerdescdesccell">在垂直/水平之间切换</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">vertical</td>
+                  <td class="innerdescdesccell">垂直面板（默认）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">horizontal</td>
+                  <td class="innerdescdesccell">横向面板</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_HorizontalFilePanels mode=horizontal”将强制两个面板以水平排列，一个在另一个上方。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_PanelsSplitterPerPos" alt="cm_PanelsSplitterPerPos" src="../../pixmaps/dctheme/32x32/actions/cm_panelssplitterperpos.png"  >
+              <div class="cmdname"><a name="cm_PanelsSplitterPerPos">cm_PanelsSplitterPerPos</a></div></td>
+            <td class="cmdhintcell">设置面板宽度，例如 50% - 相等大小。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell">splitpct</td>
+                  <td class="innerdescvaluecell">0-100</td>
+                  <td class="innerdescdesccell">分配给左侧面板的整体宽度百分比<br>（或在启用横向模式时的顶部面板）</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">百分比设置为 50-50</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_PanelsSplitterPerPos splitpct=80”，在垂直面板中，将左侧面板的宽度设置为可用空间的 80%。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShowMainMenu" alt="cm_ShowMainMenu" src="../../pixmaps/dctheme/32x32/actions/cm_showmainmenu.png"  >
+              <div class="cmdname"><a name="cm_ShowMainMenu">cm_ShowMainMenu</a></div></td>
+            <td class="cmdhintcell">确定我们是否看到主菜单栏。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">menu</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">主菜单显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">主菜单<b>未</b>显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">treeview</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">应请求，主菜单项将以树形视图菜单的形式显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">虚拟的，将被简单忽略</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">切换主菜单的可见性</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_ShowMainMenu menu=off”将隐藏主菜单。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShowButtonMenu" alt="cm_ShowButtonMenu" src="../../pixmaps/dctheme/32x32/actions/cm_showbuttonmenu.png"  >
+              <div class="cmdname"><a name="cm_ShowButtonMenu">cm_ShowButtonMenu</a></div></td>
+            <td class="cmdhintcell">确定我们是否看到工具栏。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">toolbar</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">工具栏已显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">工具栏<b>未</b>显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">treeview</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">应请求，工具栏菜单项将以树形视图菜单的形式显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">虚拟的，将被简单忽略</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">切换工具栏的可见性</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OperationsViewer" alt="cm_OperationsViewer" src="../../pixmaps/dctheme/32x32/actions/cm_operationsviewer.png"  >
+              <div class="cmdname"><a name="cm_OperationsViewer">cm_OperationsViewer</a></div>
+              <div class="shrtctkey">Alt+V</div></td>
+            <td class="cmdhintcell">显示一个窗口，当前正在进行的文件操作过程（如果有的话）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OpenBar" alt="cm_OpenBar" src="../../pixmaps/dctheme/32x32/actions/cm_openbar.png"  >
+              <div class="cmdname"><a name="cm_OpenBar">cm_OpenBar</a></div></td>
+            <td class="cmdhintcell">命令不再实现。<br>由于工具栏的配置是通过一个简单多功能的专用配置窗口完成的，您可能想要参考<a href="#cm_ConfigToolbars">cm_ConfigToolbars</a>命令。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Minimize" alt="cm_Minimize" src="../../pixmaps/dctheme/32x32/actions/cm_minimize.png"  >
+              <div class="cmdname"><a name="cm_Minimize">cm_Minimize</a></div></td>
+            <td class="cmdhintcell">最小化Double Commander窗口。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Exit" alt="cm_Exit" src="../../pixmaps/dctheme/32x32/actions/cm_exit.png"  >
+              <div class="cmdname"><a name="cm_Exit">cm_Exit</a></div>
+              <div class="shrtctkey">Alt+X</div></td>
+            <td class="cmdhintcell">关闭Double Commander。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_TreeView" alt="cm_TreeView" src="../../pixmaps/dctheme/32x32/actions/cm_treeview.png"  >
+              <div class="cmdname"><a name="cm_TreeView">cm_TreeView</a></div>
+              <div class="shrtctkey">Ctrl+Shift+F8</div></td>
+            <td class="cmdhintcell">树视图面板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FocusTreeView" alt="cm_FocusTreeView" src="../../pixmaps/dctheme/32x32/actions/cm_focustreeview.png"  >
+              <div class="cmdname"><a name="cm_FocusTreeView">cm_FocusTreeView</a></div>
+              <div class="shrtctkey">Shift+Tab</div></td>
+            <td class="cmdhintcell">在当前文件列表和树视图（如果启用）之间切换焦点。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catcommandline">2.13. 命令行</a></h2>
+        <p>与命令行交互以查看过去的命令并帮助调用新的命令。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "命令行"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_FocusCmdLine" alt="cm_FocusCmdLine" src="../../pixmaps/dctheme/32x32/actions/cm_focuscmdline.png"  >
+              <div class="cmdname"><a name="cm_FocusCmdLine">cm_FocusCmdLine</a></div>
+              <div class="shrtctkey">Shift+F2</div></td>
+            <td class="cmdhintcell">将焦点切换到命令行。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShowCmdLineHistory" alt="cm_ShowCmdLineHistory" src="../../pixmaps/dctheme/32x32/actions/cm_showcmdlinehistory.png"  >
+              <div class="cmdname"><a name="cm_ShowCmdLineHistory">cm_ShowCmdLineHistory</a></div>
+              <div class="shrtctkey">Alt+F8，Ctrl+ ↓</div></td>
+            <td class="cmdhintcell">显示在<a href="help.html#iface_path">命令行</a>中使用的所有命令的历史记录。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">menutype</td>
+                  <td class="innerdescvaluecell">combobox</td>
+                  <td class="innerdescdesccell">命令行的组合框将被展开，以便您可以从命令行历史中选择命令</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">treeview</td>
+                  <td class="innerdescdesccell">将在命令行的组合框上方打开树状视图菜单</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假设是通过组合框进行的</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CmdLineNext" alt="cm_CmdLineNext" src="../../pixmaps/dctheme/32x32/actions/cm_cmdlinenext.png"  >
+              <div class="cmdname"><a name="cm_CmdLineNext">cm_CmdLineNext</a></div></td>
+            <td class="cmdhintcell">将在当前命令行之前输入的下一个命令行中激活（如果有的话）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CmdLinePrev" alt="cm_CmdLinePrev" src="../../pixmaps/dctheme/32x32/actions/cm_cmdlineprev.png"  >
+              <div class="cmdname"><a name="cm_CmdLinePrev">cm_CmdLinePrev</a></div></td>
+            <td class="cmdhintcell">将在当前命令行之后输入的下一个命令行中激活（如果有的话）。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_AddPathToCmdLine" alt="cm_AddPathToCmdLine" src="../../pixmaps/dctheme/32x32/actions/cm_addpathtocmdline.png"  >
+              <div class="cmdname"><a name="cm_AddPathToCmdLine">cm_AddPathToCmdLine</a></div>
+              <div class="shrtctkey">Ctrl+P</div></td>
+            <td class="cmdhintcell">在命令行中放置当前路径。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">mode</td>
+                  <td class="innerdescvaluecell">smartquote</td>
+                  <td class="innerdescdesccell">将添加的文本放在引号中，仅在必要时（例如，如果其中有空格），如果没有空格则保持原样</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">forcequote</td>
+                  <td class="innerdescdesccell">将系统地引用将被添加的内容</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">neverquote</td>
+                  <td class="innerdescdesccell">将系统地永远不会引用将被添加的内容</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">prompt</td>
+                  <td class="innerdescdesccell">将提示用户是否希望引用他添加的文本，默认选择设置为“mode=smartquote”</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定为“mode=smartquote”</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_AddFilenameToCmdLine" alt="cm_AddFilenameToCmdLine" src="../../pixmaps/dctheme/32x32/actions/cm_addfilenametocmdline.png"  >
+              <div class="cmdname"><a name="cm_AddFilenameToCmdLine">cm_AddFilenameToCmdLine</a></div>
+              <div class="shrtctkey">Ctrl+Enter</div></td>
+            <td class="cmdhintcell">将当前选定项的文件名放入命令行中。<br><b>注意：</b> 命令还接受与 <a href="#cm_AddPathToCmdLine">cm_AddPathToCmdLine</a> 相同的参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_AddPathAndFilenameToCmdLine" alt="cm_AddPathAndFilenameToCmdLine" src="../../pixmaps/dctheme/32x32/actions/cm_addpathandfilenametocmdline.png"  >
+              <div class="longcmdname"><a name="cm_AddPathAndFilenameToCmdLine">cm_AddPathAndFilenameToCmdLine</a></div>
+              <div class="shrtctkey">Ctrl+Shift+Enter</div></td>
+            <td class="cmdhintcell">将所选项目的当前路径和文件名放入命令行中。<br><b>注意：</b> 命令还接受与 <a href="#cm_AddPathToCmdLine">cm_AddPathToCmdLine</a> 相同的参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ToggleFullscreenConsole" alt="cm_ToggleFullscreenConsole" src="../../pixmaps/dctheme/32x32/actions/cm_togglefullscreenconsole.png"  >
+              <div class="cmdname"><a name="cm_ToggleFullscreenConsole">cm_ToggleFullscreenConsole</a></div>
+              <div class="shrtctkey">Ctrl+O</div></td>
+            <td class="cmdhintcell">切换全屏模式控制台窗口。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="cattools">2.14. 工具</a></h2>
+        <p>需要超过点击的操作。<br>这些操作通常会显示另一个窗口，以便Double Commander执行一些更复杂的任务。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "工具"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MultiRename" alt="cm_MultiRename" src="../../pixmaps/dctheme/32x32/actions/cm_multirename.png"  >
+              <div class="cmdname"><a name="cm_MultiRename">cm_MultiRename</a></div>
+              <div class="shrtctkey">Ctrl+M</div></td>
+            <td class="cmdhintcell">打开 <a href="multirename.html">批量重命名工具</a>。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="1">preset</td>
+                  <td class="innerdescvaluecell">预设名称</td>
+                  <td class="innerdescdesccell">提供的预设名称将被加载</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">加载最后使用的设置或为<a href="multirename.html#presetatlaunch">启动时预设</a>配置的内容</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Search" alt="cm_Search" src="../../pixmaps/dctheme/32x32/actions/cm_search.png"  >
+              <div class="cmdname"><a name="cm_Search">cm_Search</a></div>
+              <div class="shrtctkey">Alt+F7</div></td>
+            <td class="cmdhintcell">打开<a href="help.html#cm_Search">搜索</a>对话框，使用默认参数或从“默认搜索模板”选项中使用保存的模板（请参见文件操作 &gt; 文件搜索）。<br>命令还支持一个参数，用于打开带有保存模板的搜索对话框，使用模板名称，不加引号。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_AddNewSearch" alt="cm_AddNewSearch" src="../../pixmaps/dctheme/32x32/actions/cm_addnewsearch.png"  >
+              <div class="cmdname"><a name="cm_AddNewSearch">cm_AddNewSearch</a></div>
+              <div class="shrtctkey">Ctrl+Shift+F7</div></td>
+            <td class="cmdhintcell">创建并打开一个新的<a href="help.html#cm_Search">搜索</a>对话窗口实例。调用此命令进行搜索将保留我们在会话中之前进行的搜索。它还将允许在长时间搜索进行时启动一个新的搜索实例以搜索其他内容。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ViewSearches" alt="cm_ViewSearches" src="../../pixmaps/dctheme/32x32/actions/cm_viewsearches.png"  >
+              <div class="cmdname"><a name="cm_ViewSearches">cm_ViewSearches</a></div></td>
+            <td class="cmdhintcell">如果我们已经启动了几个带有 <a href="#cm_AddNewSearch">cm_AddNewSearch</a> 的搜索实例，这个命令将允许我们查看它们的摘要，并能够切换回其中一个。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_DeleteSearches" alt="cm_DeleteSearches" src="../../pixmaps/dctheme/32x32/actions/cm_deletesearches.png"  >
+              <div class="cmdname"><a name="cm_DeleteSearches">cm_DeleteSearches</a></div></td>
+            <td class="cmdhintcell">如果我们已经启动了几个带有 <a href="#cm_AddNewSearch">cm_AddNewSearch</a> 的搜索实例，这个命令将允许我们一次性关闭并从内存中移除它们。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SyncDirs" alt="cm_SyncDirs" src="../../pixmaps/dctheme/32x32/actions/cm_syncdirs.png"  >
+              <div class="cmdname"><a name="cm_SyncDirs">cm_SyncDirs</a></div></td>
+            <td class="cmdhintcell">将调用<a href="syncdirs.html">目录同步工具</a>扫描左右面板文件夹，以最终查看内容差异并使其相等。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CompareContents" alt="cm_CompareContents" src="../../pixmaps/dctheme/32x32/actions/cm_comparecontents.png"  >
+              <div class="cmdname"><a name="cm_CompareContents">cm_CompareContents</a></div></td>
+            <td class="cmdhintcell">打开 <a href="help.html#cm_CompareContents">按内容比较</a> 对话框。<br>如果使用外部差异程序，则可以使用“dir”参数（不带引号）：在这种情况下，左侧和右侧文件面板的当前目录将传递给该程序。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_DebugShowCommandParameters" alt="cm_DebugShowCommandParameters" src="../../pixmaps/dctheme/32x32/actions/cm_debugshowcommandparameters.png"  >
+              <div class="longcmdname"><a name="cm_DebugShowCommandParameters">cm_DebugShowCommandParameters</a></div></td>
+            <td class="cmdhintcell">将简单地显示一条消息，内容为作为参数传递的信息。<br>这可能有助于验证您传递给命令的参数。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_DoAnyCmCommand" alt="cm_DoAnyCmCommand" src="../../pixmaps/dctheme/32x32/actions/cm_doanycmcommand.png"  >
+              <div class="cmdname"><a name="cm_DoAnyCmCommand">cm_DoAnyCmCommand</a></div>
+              <div class="shrtctkey">Shift+F12</div></td>
+            <td class="cmdhintcell">将显示一个内部命令选择窗口，用户可以选择任何可能的内部命令并执行它。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catview">2.15. 视图</a></h2>
+        <p>与文件的可见性相关的命令，例如系统文件等。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "视图"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_Refresh" alt="cm_Refresh" src="../../pixmaps/dctheme/32x32/actions/cm_refresh.png"  >
+              <div class="cmdname"><a name="cm_Refresh">cm_Refresh</a></div>
+              <div class="shrtctkey">Ctrl+R</div></td>
+            <td class="cmdhintcell"><a href="help.html#cm_Refresh">刷新</a> 面板。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShowSysFiles" alt="cm_ShowSysFiles" src="../../pixmaps/dctheme/32x32/actions/cm_showsysfiles.png"  >
+              <div class="cmdname"><a name="cm_ShowSysFiles">cm_ShowSysFiles</a></div>
+              <div class="shrtctkey">Ctrl+。</div></td>
+            <td class="cmdhintcell">显示隐藏和系统<a href="help.html#cm_ShowSysFiles">文件</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SwitchIgnoreList" alt="cm_SwitchIgnoreList" src="../../pixmaps/dctheme/32x32/actions/cm_switchignorelist.png"  >
+              <div class="cmdname"><a name="cm_SwitchIgnoreList">cm_SwitchIgnoreList</a></div></td>
+            <td class="cmdhintcell">根据参数启用或禁用"<a href="configuration.html#ConfigIgnore">忽略列表</a>"。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">ignorelist</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">忽略列表已启用</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">忽略列表<b>未</b>启用</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">切换忽略列表的状态</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_SwitchIgnoreList ignorelist=on”，忽略列表已启用，因此在忽略列表中的项目将不会在面板中显示。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="cattabs">2.16. 标签</a></h2>
+        <p>通过创建新标签与标签进行交互，浏览它们等。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "标签"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_NewTab" alt="cm_NewTab" src="../../pixmaps/dctheme/32x32/actions/cm_newtab.png"  >
+              <div class="cmdname"><a name="cm_NewTab">cm_NewTab</a></div>
+              <div class="shrtctkey">Ctrl+T</div></td>
+            <td class="cmdhintcell">为打开的目录创建一个 <a href="help.html#cm_NewTab">新标签</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_OpenDirInNewTab" alt="cm_OpenDirInNewTab" src="../../pixmaps/dctheme/32x32/actions/cm_opendirinnewtab.png"  >
+              <div class="cmdname"><a name="cm_OpenDirInNewTab">cm_OpenDirInNewTab</a></div>
+              <div class="shrtctkey">Ctrl+ ↑</div></td>
+            <td class="cmdhintcell">在光标下打开目录到 <a href="help.html#cm_OpenDirInNewTab">新标签</a>，但不要切换到它。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_NextTab" alt="cm_NextTab" src="../../pixmaps/dctheme/32x32/actions/cm_nexttab.png"  >
+              <div class="cmdname"><a name="cm_NextTab">cm_NextTab</a></div>
+              <div class="shrtctkey">Ctrl+Tab</div></td>
+            <td class="cmdhintcell">更改为 <a href="help.html#cm_NextTab">下一个标签</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_PrevTab" alt="cm_PrevTab" src="../../pixmaps/dctheme/32x32/actions/cm_prevtab.png"  >
+              <div class="cmdname"><a name="cm_PrevTab">cm_PrevTab</a></div>
+              <div class="shrtctkey">Ctrl+Shift+Tab</div></td>
+            <td class="cmdhintcell">更改为 <a href="help.html#cm_PrevTab">上一个标签</a>。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MoveTabLeft" alt="cm_MoveTabLeft" src="../../pixmaps/dctheme/32x32/actions/cm_movetableft.png"  >
+              <div class="cmdname"><a name="cm_MoveTabLeft">cm_MoveTabLeft</a></div></td>
+            <td class="cmdhintcell">将当前标签页向左移动。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_MoveTabRight" alt="cm_MoveTabRight" src="../../pixmaps/dctheme/32x32/actions/cm_movetabright.png"  >
+              <div class="cmdname"><a name="cm_MoveTabRight">cm_MoveTabRight</a></div></td>
+            <td class="cmdhintcell">将当前标签页移动到右侧。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_RenameTab" alt="cm_RenameTab" src="../../pixmaps/dctheme/32x32/actions/cm_renametab.png"  >
+              <div class="cmdname"><a name="cm_RenameTab">cm_RenameTab</a></div></td>
+            <td class="cmdhintcell">提示用户重命名活动面板的当前标签。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CloseTab" alt="cm_CloseTab" src="../../pixmaps/dctheme/32x32/actions/cm_closetab.png"  >
+              <div class="cmdname"><a name="cm_CloseTab">cm_CloseTab</a></div>
+              <div class="shrtctkey">Ctrl+W</div></td>
+            <td class="cmdhintcell">关闭活动面板的当前标签页。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CloseAllTabs" alt="cm_CloseAllTabs" src="../../pixmaps/dctheme/32x32/actions/cm_closealltabs.png"  >
+              <div class="cmdname"><a name="cm_CloseAllTabs">cm_CloseAllTabs</a></div></td>
+            <td class="cmdhintcell">关闭所有面板的标签，排除当前活动的标签，按照以下参数：<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">操作关闭<b>左侧面板</b>中的标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">操作关闭<b>右侧面板</b>中的标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">操作关闭<b>活动面板</b>中的标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">操作关闭<b>非活动面板</b>中的标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">操作在 <b>两个面板</b> 中关闭标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">dolocked</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">操作还会关闭 <b>锁定的标签</b></td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">忽略 <b>锁定的标签</b></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">confirmlocked</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，用户必须确认关闭锁定的标签页，无论配置选项“确认关闭锁定的标签页”如何</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，则在不询问确认的情况下关闭锁定的标签页，无论配置选项“确认关闭锁定的标签页”如何</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(not specified)</i></td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，则根据配置选项“确认关闭锁定标签页”询问用户是否确认关闭锁定的标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">关闭活动面板上所有未锁定的标签页，排除当前活动标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="3">为了向后兼容，您也可以仅提供一个单词作为单个参数，例如“LeftTabs”和“RightTabs”，以指定应用命令的面板。</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CloseDuplicateTabs" alt="cm_CloseDuplicateTabs" src="../../pixmaps/dctheme/32x32/actions/cm_closeduplicatetabs.png"  >
+              <div class="cmdname"><a name="cm_CloseDuplicateTabs">cm_CloseDuplicateTabs</a></div></td>
+            <td class="cmdhintcell">关闭指向相同目录的标签页，以便在操作结束时，每个目录只保留一个标签页。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">操作关闭<b>左侧面板</b>中的重复标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">操作关闭<b>右侧面板</b>中的重复标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">操作关闭 <b>活动面板</b> 中的重复标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactive</td>
+                  <td class="innerdescdesccell">操作关闭<b>非活动面板</b>中的重复标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">操作关闭<b>两个面板</b>中的重复标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">dolocked</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">操作关闭也重复了 <b>锁定的标签</b></td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">忽略重复的 <b>锁定标签</b></td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">confirmlocked</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，用户必须确认关闭重复的锁定标签，无论配置选项“确认关闭锁定标签”如何</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，则在不询问确认的情况下关闭重复的锁定标签，无论配置选项“确认关闭锁定标签”如何</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(not specified)</i></td>
+                  <td class="innerdescdesccell">如果“dolocked”为真，则根据配置选项“确认关闭锁定标签页”询问用户是否确认关闭重复的锁定标签页</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">关闭活动面板上所有未锁定的重复标签页</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_CopyAllTabsToOpposite" alt="cm_CopyAllTabsToOpposite" src="../../pixmaps/dctheme/32x32/actions/cm_copyalltabstoopposite.png"  >
+              <div class="cmdname"><a name="cm_CopyAllTabsToOpposite">cm_CopyAllTabsToOpposite</a></div></td>
+            <td class="cmdhintcell">所有指定侧的标签也会添加到对面。默认情况下，如果没有参数，它会将活动面板的标签复制到非活动面板。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">将从 <b>左侧面板</b> 复制标签到右侧面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">将从 <b>右侧面板</b> 复制标签到左侧面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">将从 <b>活动面板</b> 复制标签到非活动面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">将从 <b>非活动面板</b> 复制标签到活动面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">将选项卡从 <b>两个面板</b> 复制到相对的面板</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">将从 <b>活动面板</b> 复制标签到非活动面板</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LoadTabs" alt="cm_LoadTabs" src="../../pixmaps/dctheme/32x32/actions/cm_loadtabs.png"  >
+              <div class="cmdname"><a name="cm_LoadTabs">cm_LoadTabs</a></div></td>
+            <td class="cmdhintcell">打开一个文件，预计包含标签名称及其关联目录，以应用于面板。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">filename</td>
+                  <td class="innerdescvaluecell"><i>filename.tab</i></td>
+                  <td class="innerdescdesccell">用于加载标签的文件</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(not specified)</i></td>
+                  <td class="innerdescdesccell">请求的文件将提示用户指示从哪个 .tab 文件加载标签。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="6">loadleftto</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的标签将位于<b>左侧</b>面板中。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的标签将出现在<b>右侧</b>面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的标签将位于<b>活动</b>面板的左侧面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的标签将位于<b>非活动</b>面板的左侧。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的选项卡将出现在<b>两个</b>面板中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">none</td>
+                  <td class="innerdescdesccell">保存在.tab 文件中的选项卡将被<b>忽略</b>。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="6">loadrightto</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">保存在右侧面板中的选项卡将会在<b>左侧</b>面板中以.tab 文件的形式出现。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">保存在右侧面板中的选项卡将位于<b>右侧</b>面板中的.tab 文件中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">保存在右侧面板中的选项卡将位于<b>活动</b>面板中的.tab 文件中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">保存在右侧面板中的选项卡将位于<b>非活动</b>面板中的.tab 文件中。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">保存在右侧面板中的选项卡将会在 <b>两个</b> 面板中以 .tab 文件的形式出现</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">none</td>
+                  <td class="innerdescdesccell">右侧面板中保存在.tab 文件中的标签将被<b>忽略</b>。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="6">keep</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">左侧面板中的<b>标签</b>将被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">右侧面板中的<b>标签</b>将被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">在<b>活动</b>面板中存在的选项卡将被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">在<b>非活动</b>面板中存在的选项卡将被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">在<b>两个</b>面板中存在的标签将被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">none</td>
+                  <td class="innerdescdesccell"><b>当前的</b>标签将不会被保留</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="3">为了向后兼容，您也可以仅提供一个文件名作为单个参数，DC 将“原样”加载该.tab 文件，因此左侧和右侧标签将分别恢复到左侧和右侧面板。</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SaveTabs" alt="cm_SaveTabs" src="../../pixmaps/dctheme/32x32/actions/cm_savetabs.png"  >
+              <div class="cmdname"><a name="cm_SaveTabs">cm_SaveTabs</a></div></td>
+            <td class="cmdhintcell">将当前标签名称及其关联目录保存到一个 .tab 文件中，包括左侧和右侧，最终可以通过之前描述的命令加载回。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">filename</td>
+                  <td class="innerdescvaluecell"><i>filename.tab</i></td>
+                  <td class="innerdescdesccell">用于保存标签的文件</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(not specified)</i></td>
+                  <td class="innerdescdesccell">请求的文件将提示用户指示将选项卡保存到哪个 .tab 文件。</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">savedirhistory</td>
+                  <td class="innerdescvaluecell">1/true/on/yes</td>
+                  <td class="innerdescdesccell">将为每个标签保存最后目录的历史记录</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">0/false/off/no</td>
+                  <td class="innerdescdesccell">最后的目录历史将不会被保存</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="3">为了向后兼容，您也可以仅提供一个文件名作为单个参数，DC 将保存到该.tab 文件中。</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetTabOptionNormal" alt="cm_SetTabOptionNormal" src="../../pixmaps/dctheme/32x32/actions/cm_settaboptionnormal.png"  >
+              <div class="cmdname"><a name="cm_SetTabOptionNormal">cm_SetTabOptionNormal</a></div></td>
+            <td class="cmdhintcell">当前标签状态恢复正常。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetTabOptionPathLocked" alt="cm_SetTabOptionPathLocked" src="../../pixmaps/dctheme/32x32/actions/cm_settaboptionpathlocked.png"  >
+              <div class="cmdname"><a name="cm_SetTabOptionPathLocked">cm_SetTabOptionPathLocked</a></div></td>
+            <td class="cmdhintcell">当前标签已“锁定”，用户无法更改目录。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetTabOptionPathResets" alt="cm_SetTabOptionPathResets" src="../../pixmaps/dctheme/32x32/actions/cm_settaboptionpathresets.png"  >
+              <div class="cmdname"><a name="cm_SetTabOptionPathResets">cm_SetTabOptionPathResets</a></div></td>
+            <td class="cmdhintcell">当前标签为“锁定但允许更改目录”，用户可以在面板内更改目录，但如果用户更改标签然后再返回该标签，它将返回到原始目录，即“锁定但允许更改目录”的位置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetTabOptionDirsInNewTab" alt="cm_SetTabOptionDirsInNewTab" src="../../pixmaps/dctheme/32x32/actions/cm_settaboptiondirsinnewtab.png"  >
+              <div class="longcmdname"><a name="cm_SetTabOptionDirsInNewTab">cm_SetTabOptionDirsInNewTab</a></div></td>
+            <td class="cmdhintcell">当前选项卡被“在新选项卡中锁定目录更改”，用户可以在面板内更改目录，但当用户进入新目录时，该目录将会在新选项卡中打开。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetAllTabsOptionNormal" alt="cm_SetAllTabsOptionNormal" src="../../pixmaps/dctheme/32x32/actions/cm_setalltabsoptionnormal.png"  >
+              <div class="cmdname"><a name="cm_SetAllTabsOptionNormal">cm_SetAllTabsOptionNormal</a></div></td>
+            <td class="cmdhintcell">将所有标签设置回“正常”。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">影响<b>左侧面板</b>中的选项卡</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">影响<b>右侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">影响 <b>活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">影响 <b>非活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">影响 <b>两个面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">仅影响活动面板的选项卡</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetAllTabsOptionPathLocked" alt="cm_SetAllTabsOptionPathLocked" src="../../pixmaps/dctheme/32x32/actions/cm_setalltabsoptionpathlocked.png"  >
+              <div class="cmdname"><a name="cm_SetAllTabsOptionPathLocked">cm_SetAllTabsOptionPathLocked</a></div></td>
+            <td class="cmdhintcell">所有标签都设置为“锁定”，用户无法更改目录。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">影响<b>左侧面板</b>中的选项卡</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">影响<b>右侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">影响 <b>活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">影响 <b>非活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">影响<b>两个面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">仅影响活动面板的选项卡</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetAllTabsOptionPathResets" alt="cm_SetAllTabsOptionPathResets" src="../../pixmaps/dctheme/32x32/actions/cm_setalltabsoptionpathresets.png"  >
+              <div class="cmdname"><a name="cm_SetAllTabsOptionPathResets">cm_SetAllTabsOptionPathResets</a></div></td>
+            <td class="cmdhintcell">所有标签都设置为“锁定但允许更改目录”，用户可以在面板内更改目录，但如果用户更改标签然后再返回到该标签，它将返回到原始锁定的目录。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">影响<b>左侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">影响<b>右侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">影响 <b>活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">影响 <b>非活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">影响 <b>两个面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">仅影响活动面板的选项卡</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SetAllTabsOptionDirsInNewTab" alt="cm_SetAllTabsOptionDirsInNewTab" src="../../pixmaps/dctheme/32x32/actions/cm_setalltabsoptiondirsinnewtab.png"  >
+              <div class="cmdname"><a name="cm_SetAllTabsOptionDirsInNewTab">cm_SetAllTabsOptionDirsInNewTab</a></div></td>
+            <td class="cmdhintcell">所有标签页都设置为“在新标签中锁定目录更改”，用户可以在面板内更改目录，但当用户进入新目录时，该目录将会在新标签中打开。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">影响<b>左侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">影响<b>右侧面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">active</td>
+                  <td class="innerdescdesccell">影响 <b>活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">影响 <b>非活动面板</b> 中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">both</td>
+                  <td class="innerdescdesccell">影响<b>两个面板</b>中的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">仅影响活动面板的选项卡</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_LoadFavoriteTabs" alt="cm_LoadFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_loadfavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_LoadFavoriteTabs">cm_LoadFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">提示用户选择一个之前保存的设置。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="2">setup</td>
+                  <td class="innerdescvaluecell"><i>name</i></td>
+                  <td class="innerdescdesccell">将加载设置 <i>name</i></td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">不更改当前选项卡，但如果有任何选定的设置，将取消选择当前设置</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">menutype</td>
+                  <td class="innerdescvaluecell">popup</td>
+                  <td class="innerdescdesccell">最喜欢的标签将显示在弹出菜单中</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">treeview</td>
+                  <td class="innerdescdesccell">最喜欢的标签将以树状视图菜单显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定是通过弹出菜单进行的</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="3">position</td>
+                  <td class="innerdescvaluecell">panel</td>
+                  <td class="innerdescdesccell">菜单将从活动面板的左上角显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">cursor</td>
+                  <td class="innerdescdesccell">菜单将在当前鼠标光标位置显示</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">默认假定为活动面板的左上角</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">从活动面板的左上角显示的弹出菜单</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_SaveFavoriteTabs" alt="cm_SaveFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_savefavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_SaveFavoriteTabs">cm_SaveFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">将当前打开的标签页保存在“收藏标签”中。稍后，用户可以通过 cm_LoadFavoriteTabs 命令重新加载这些保存的设置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ReloadFavoriteTabs" alt="cm_ReloadFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_reloadfavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_ReloadFavoriteTabs">cm_ReloadFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">重新加载上次加载的收藏标签页设置。因此，如果在浏览每个标签页后添加了其他标签页等，我们想要恢复上次加载的收藏标签页的“原样”设置，这就是要调用的命令。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ResaveFavoriteTabs" alt="cm_ResaveFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_resavefavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_ResaveFavoriteTabs">cm_ResaveFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">将当前标签配置重新保存为最后加载的收藏标签条目。如果您意识到在某个配置中缺少一个标签，这将非常有用。在加载您的收藏标签后，您添加了所需的缺失标签，然后调用 cm_ResaveFavoriteTabs 内部命令。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_PreviousFavoriteTabs" alt="cm_PreviousFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_previousfavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_PreviousFavoriteTabs">cm_PreviousFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">将加载我们列表中最后一个加载的收藏标签设置之前的设置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_NextFavoriteTabs" alt="cm_NextFavoriteTabs" src="../../pixmaps/dctheme/32x32/actions/cm_nextfavoritetabs.png"  >
+              <div class="cmdname"><a name="cm_NextFavoriteTabs">cm_NextFavoriteTabs</a></div></td>
+            <td class="cmdhintcell">将加载我们列表中最后一个加载的收藏标签设置之后的设置。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ActivateTabByIndex" alt="cm_ActivateTabByIndex" src="../../pixmaps/dctheme/32x32/actions/cm_activatetabbyindex.png"  >
+              <div class="cmdname"><a name="cm_ActivateTabByIndex">cm_ActivateTabByIndex</a></div></td>
+            <td class="cmdhintcell">将激活指定面板中的指定选项卡，并切换到该选项卡。<br>如果没有指定面板，将使用活动面板中的选项卡。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="5">index</td>
+                  <td class="innerdescvaluecell">1</td>
+                  <td class="innerdescdesccell">将激活 <b>1</b> 选项卡</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">2</td>
+                  <td class="innerdescdesccell">将激活 <b>2</b> 选项卡</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">3</td>
+                  <td class="innerdescdesccell">将激活 <b>3</b> 号标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>n</i></td>
+                  <td class="innerdescdesccell">将激活 <i><b>n</b></i> 选项卡</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">-1</td>
+                  <td class="innerdescdesccell">将激活 <b>最后</b> 标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">将切换到并使用<b>左侧面板</b>的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">将切换到并使用<b>右侧面板</b>的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">将切换到并使用<b>非活动面板</b>的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">激活的标签将位于<b>当前活动面板</b>上</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing)</i></td>
+                  <td class="innerdescdesccell">指定至少 <b>索引</b> 是强制性的。</td>
+                </tr>
+              </tbody></table>
+              <br>示例：“cm_ActivateTabByIndex side=right index=1”将激活右侧面板中的第一个标签，并将焦点切换到它上面。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ShowTabsList" alt="cm_ShowTabsList" src="../../pixmaps/dctheme/32x32/actions/cm_showtabslist.png"  >
+              <div class="cmdname"><a name="cm_ShowTabsList">cm_ShowTabsList</a></div>
+              <div class="shrtctkey">Ctrl+Shift+A</div></td>
+            <td class="cmdhintcell">显示一个菜单，列出所有打开的标签页。<br>
+              <br>
+              <table class="innercmddesc">
+                <tbody><tr class="rowinnerdesc">
+                  <th class="innerdescheader">参数</th>
+                  <th class="innerdescheader">值</th>
+                  <th class="innerdescheader">描述</th>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" rowspan="4">side</td>
+                  <td class="innerdescvaluecell">left</td>
+                  <td class="innerdescdesccell">左侧面板的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">right</td>
+                  <td class="innerdescdesccell">右侧面板的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell">inactvie</td>
+                  <td class="innerdescdesccell">非活动面板的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescvaluecell"><i>(absent)</i></td>
+                  <td class="innerdescdesccell">活动面板的标签</td>
+                </tr>
+                <tr>
+                  <td class="innerdescparamcell" colspan="2"><i>(nothing, default)</i></td>
+                  <td class="innerdescdesccell">活动面板的标签</td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="catlogs">2.17. 日志</a></h2>
+        <p>与 DC 日志文件相关的操作。</p>
+        <table class="cmddesc">
+          <tbody><tr class="rowcategorytitle"><th colspan="2">类别 "日志"</th></tr>
+          <tr class="rowsubtitle"><th class="namecolumn">名称</th><th class="cmdcolumndesc">描述</th></tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ViewLogFile" alt="cm_ViewLogFile" src="../../pixmaps/dctheme/32x32/actions/cm_viewlogfile.png"  >
+              <div class="cmdname"><a name="cm_ViewLogFile">cm_ViewLogFile</a></div></td>
+            <td class="cmdhintcell">打开当前操作的日志文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ClearLogFile" alt="cm_ClearLogFile" src="../../pixmaps/dctheme/32x32/actions/cm_clearlogfile.png"  >
+              <div class="cmdname"><a name="cm_ClearLogFile">cm_ClearLogFile</a></div></td>
+            <td class="cmdhintcell">将删除当前的操作日志文件。</td>
+          </tr>
+          <tr>
+            <td class="cmdcell"><img class="IntCmdImage" title="cm_ClearLogWindow" alt="cm_ClearLogWindow" src="../../pixmaps/dctheme/32x32/actions/cm_clearlogwindow.png"  >
+              <div class="cmdname"><a name="cm_ClearLogWindow">cm_ClearLogWindow</a></div></td>
+            <td class="cmdhintcell">将清除日志窗口内容。</td>
+          </tr>
+        </tbody></table>
+        <p class="navback"><a href="#topofpage">（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <br>
+        <p><small>最初由 Rustem（dok_rust@bk.ru）创建</small></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer"><div class="nav"><a href="index.html" title="Index">索引</a> | <a href="variables.html" title="Previous page">上一页</a> | <a href="regexp.html" title="Next page">下一页</a></div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional"  ></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!"  ></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>

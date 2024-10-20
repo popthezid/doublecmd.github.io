@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+	<title>DC - Pre-installed plugins</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <a name="topofpage"></a>
+    <div class="header"><a href="index.html"><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374"></a>
+      <div id="global-nav" class="nav"><a href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="configxml.html" title="Previous page">上一页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></div>
+
+    <div class="dchelpage">
+      <div>
+        <h1>2.18. 预安装插件</h1>
+      </div>
+
+      <div>
+        <h2 >内容</h2>
+        <dl>
+          <dt>1. 打包插件 (WCX)</dt>
+                    <dd>
+            <dl>
+              <dt>1.1. <a href="#base64.wcx">Base64</a></dt>
+              <dt>1.2. <a href="#cpio.wcx">CPIO</a></dt>
+              <dt>1.3. <a href="#deb.wcx">DEB</a></dt>
+              <dt>1.4. <a href="#rpm.wcx">RPM</a></dt>
+              <dt>1.5. <a href="#sevenzip.wcx">7Zip</a></dt>
+              <dt>1.6. <a href="#unrar.wcx">UnRAR</a></dt>
+              <dt>1.7. <a href="#zip.wcx">Zip</a></dt>
+            </dl>
+          </dd>
+          <dt>2. 内容插件 (WDX)</dt>
+          <dd>
+            <dl>
+              <dt>2.1. <a href="#bexif">内置 Exif 插件</a></dt>
+              <dt>2.2. <a href="#audioinfo.wdx">音频信息</a></dt>
+              <dt>2.3. <a href="#deb_wdx.wdx">DEB</a></dt>
+              <dt>2.4. <a href="#rpm_wdx.wdx">RPM</a></dt>
+              <dt>2.5. <a href="#lscripts">Lua 脚本</a></dt>
+            </dl>
+          </dd>
+          <dt>3. 文件系统插件 (WFX)</dt>
+          <dd>
+            <dl>
+              <dt>3.1. <a href="#ftp.wfx">FTP协议</a></dt>
+              <dt>3.2. <a href="#samba.wfx">Samba协议</a></dt>
+            </dl>
+          </dd>
+          <dt>4. Lister 插件 (WLX)</dt>
+          <dd>
+            <dl>
+              <dt>4.1. <a href="#macpreview.wlx">Mac预览</a></dt>
+              <dt>4.2. <a href="#preview.wlx">资源管理器预览</a></dt>
+              <dt>4.3. <a href="#richview.wlx">富文本格式</a></dt>
+              <dt>4.4. <a href="#wlxmplayer.wlx">WlxMplayer</a></dt>
+              <dt>4.5. <a href="#wmp.wlx">Windows 媒体播放器</a></dt>
+            </dl>
+          </dd>
+          <dt>5. 搜索插件 (DSX)</dt>
+          <dd>
+            <dl>
+              <dt>5.1. <a href="#dsxlocate.dsx">DSXLocate</a></dt>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+
+      <div>
+        <h2><a name="wcx" >1. 打包插件 (WCX)</a></h2>
+        <br>
+
+        <p><span class="bold"><a name="base64.wcx" >Base64</a></span></p>
+        <p>Base64 插件提供了根据 Base64 方案对文件进行编码和解码的能力，这是使用可打印的 ASCII 字符编码二进制数据的标准之一。</p>
+        <br>
+
+        <p><span class="bold"><a name="cpio.wcx" >CPIO</a></span></p>
+        <p>用于解压缩 CPIO 归档的打包插件。</p>
+        <br>
+
+        <p><span class="bold"><a name="deb.wcx" >DEB</a></span></p>
+        <p>用于解压 dpkg 包管理系统（Debian 及其衍生版）包文件的 Packer 插件。</p>
+        <p>Linux 和其他类 Unix 操作系统（在 Windows 中，Double Commander 使用 <a href="#sevenzip.wcx">7Zip</a> 插件来支持此格式）。</p>
+        <br>
+
+        <p><span class="bold"><a name="rpm.wcx" >RPM</a></span></p>
+        <p>用于解包 Red Hat 软件包管理系统（Red Hat Linux、SUSE Linux 等）包文件的 Packer 插件。</p>
+        <br>
+
+        <p><span class="bold"><a name="sevenzip.wcx" >7Zip</a></span></p>
+        <p>用于处理 .7z、.arj、.cab、.cpio、.cramfs、.deb、.dmg、.fat、.hfs、.iso、.lha、.lzh、.ntfs、.squashfs、.taz、.vhd、.wim、.xar 和 .z 文件的 Packer 插件。我们还可以添加其他 7-Zip 支持的文件类型。</p>
+        <p>注意：某些格式为只读，意味着仅可进行内容查看、解压和测试。</p>
+        <p >仅限 Windows。</p>
+        <br>
+
+        <p><span class="bold"><a name="unrar.wcx" >解压缩 RAR 文件</a></span></p>
+        <p>解压 RAR 档案的打包插件。</p>
+        <p>要使用此插件，我们需要<a href="https://www.rarlab.com/">UnRAR</a>库，插件将使用 <tt>unrar.dll</tt> （Windows）， <tt>libunrar.dylib</tt> （macOS）， <tt>libunrar.so</tt> 或 <tt>libunrar.so.5</tt> （Linux 及其他类 Unix 操作系统）。</p>
+        <p>Windows 版的 Double Commander 和 Linux 的便携版本包含必要的库，在其他情况下，我们可以使用操作系统中获取库的常用方法（例如，在 Debian/Ubuntu 中使用包 <tt>libunrar5</tt> 或在 Arch Linux 中使用 <tt>libunrar</tt> ）。否则，我们可以尝试在<a href="https://www.rarlab.com/rar_add.htm">这个</a>页面上找到合适的变体（文件必须复制到系统目录或 Double Commander 可执行文件所在的目录）。</p>
+        <p>该插件还支持将文件打包成 RAR 压缩文件，为此，我们需要在插件设置中指定 <tt>WinRAR.exe</tt> 的路径（仅限 Windows）或 <tt>rar</tt> 命令行工具。</p>
+        <br>
+
+        <p><span class="bold"><a name="zip.wcx" >Zip</a></span></p>
+        <p>用于处理 .bz2、.gz、.jar、.lzma、.tar、.tbz、.tgz、.tlz、.txz、.tzst、.xz、.zip、.zipx 和 .zst 压缩档案的 Packer 插件。该插件还可以打开基于 ZIP 的文件（如 EPUB、Office Open XML、OpenDocument 格式、CRX、XPI 等）。</p>
+        <p>需要额外的压缩库：</p>
+        <ul>
+          <li><p>bzip2: <tt>bz2.dll</tt>  （Windows）， <tt>libbz2.dylib</tt>  （macOS）， <tt>libbz2.so.1</tt>  （Linux 和其他类 Unix 操作系统）。</p></li>
+          <li><p>XZ: <tt>liblzma.dll</tt>  （Windows）， <tt>liblzma.dylib</tt>  （macOS）， <tt>liblzma.so.5</tt>  （Linux 和其他类 Unix 操作系统）。</p></li>
+          <li><p>Zstandard: <tt>libzstd.dll</tt>  （Windows）， <tt>libzstd.dylib</tt>  （macOS）， <tt>libzstd.so.1</tt>  （Linux 和其他类 Unix 操作系统）。</p></li>
+        </ul>
+        <p>Double Commander for Windows 的发行版包含所有必要的库，这些库通常在 Linux 的桌面/工作站中默认安装。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="wdx" >2. 内容插件 (WDX)</a></h2>
+        <br>
+
+        <p><span class="bold"><a name="bexif" >内置 Exif 插件</a></span></p>
+        <p>该程序内置了 Exif 内容插件，可以获取一些可以存储在 JPEG 文件元数据中的数据：日期、像素尺寸、图像方向和相机信息。</p>
+        <p >仅支持 JPEG 图像。</p>
+        <br>
+
+        <p><span class="bold"><a name="audioinfo.wdx" >音频信息</a></span></p>
+        <p>该内容插件显示有关音频文件的信息，包括技术信息（时长、比特率、通道数等）和元数据（标题、艺术家等）。</p>
+        <p>支持以下类型的元数据：ID3v1（1.0，1.1），ID3v2（2.2，2.3，2.4），APE（1.0，2.0），Vorbis 注释。</p>
+        <br>
+
+        <p><span class="bold"><a name="deb_wdx.wdx" >DEB</a></span></p>
+        <p>此内容插件显示有关 dpkg 包管理系统（Debian 及其基于的发行版）的包文件信息：包名称、版本、描述、依赖关系等。</p>
+        <br>
+
+        <p><span class="bold"><a name="rpm_wdx.wdx" >RPM</a></span></p>
+        <p>此内容插件显示有关红帽软件包管理系统（红帽 Linux、SUSE Linux 等）的软件包文件的信息：软件包名称、版本、描述等。</p>
+        <br>
+
+        <p><span class="bold"><a name="lscripts" >Lua 脚本</a></span></p>
+        <p> <tt>plugins/wdx/scripts</tt> 目录包含几个用 Lua 编写的内容插件示例（有关详细信息，请参见 <a href="lua.html">Lua 脚本</a> 帮助页面）。</p>
+        <p>这些插件没有在程序设置中添加。</p>
+        <ul>
+          <li><p> <tt>descriptionwdx.lua</tt> &nbsp;– 从 <tt>descript.ion</tt> 读取文件描述。</p></li>
+          <li><p> <tt>fulltextodtwdx.lua</tt> – 在 OpenDocument 文本文件（ODT）中查找文本。需要 <tt>odt2txt</tt> 。</p></li>
+          <li><p> <tt>simplewdx.lua</tt> &nbsp;– 带有多个字段的简单示例。</p></li>
+          <li><p> <tt>textlinewdx.lua</tt> – 逐行返回纯文本文件（.txt, .ini）的前五行，从第一行到第五行。</p></li>
+        </ul>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="wfx" >3. 文件系统插件 (WFX)</a></h2>
+        <br>
+
+        <p><span class="bold"><a name="ftp.wfx" >FTP协议</a></span></p>
+        <p>这是一个文件系统插件，用于处理以下网络协议：FTP、FTPS、FTPES、SFTP 和 SSH+SCP。该插件还支持与代理服务器（HTTP、SOCKS 4 或 SOCKS 5）一起使用。</p>
+        <p>需要额外的库：</p>
+        <p>1) SSL 和 TLS 协议</p>
+        <ul>
+          <li><p><a href="https://www.openssl.org/">OpenSSL</a> 加密库 (3.1, 3.0, 1.1.1, 1.1.0, 1.0.2, 1.0.1)：FTP 插件将使用 <tt>ssleay32.dll</tt> 和 <tt>libeay32.dll</tt> （Windows）， <tt>libssl.dylib</tt> 和 <tt>libcrypto.dylib</tt> （macOS）或 <tt>libssl.so</tt> 和 <tt>libcrypto.so</tt> （Linux 和其他类 Unix 操作系统），其中 "N" 是版本号。库名称通常包含版本号，插件包含常见名称的列表，所需文件将自动在系统中找到。<br>
+          编译好的 Windows 版 OpenSSL 二进制文件可以在 <a href="https://wiki.openssl.org/index.php/Binaries">这里</a> 找到，在其他情况下，我们可以使用操作系统的包管理器（例如，在 Debian/Ubuntu 中使用包 <tt>libssl3</tt> 或 <tt>libssl1.1</tt> ，在 Arch Linux 中使用 <tt>openssl</tt> ，在 macOS（Homebrew）中使用 <tt>openssl</tt> ）。</p></li>
+          <li><p>或者，在 Linux 中，插件可以使用<a href="https://www.gnutls.org/" target="_blank">GnuTLS</a>库（ <tt>libgnutls.so.N</tt> ，其中“N”是版本号）。</p></li>
+        </ul>
+        <p>2) SSH 协议</p>
+        <p><a href="https://libssh2.org/">libssh</a> 库：FTP 插件将使用 <tt>libssh2.dll</tt> （Windows）、 <tt>libssh2.dylib</tt> （macOS）或 <tt>libssh2.so.1</tt> （Linux 和其他类 Unix 操作系统）。</p>
+        <p>Double Commander for Windows 的发行版包含此库，在其他情况下，我们可以使用操作系统中的常规方法获取库（例如，在 Debian/Ubuntu 中的包 <tt>libssh2-1</tt> ，在 Arch Linux 中的 <tt>libssh2</tt> ，在 macOS（Homebrew）中的 <tt>libssh2</tt> ）。</p>
+        <p>插件允许使用 SSH 认证代理（例如，来自 OpenSSH 工具套件的 ssh-agent，来自 PuTTY 的 Pageant）。</p>
+        <br>
+
+        <p><span class="bold"><a name="samba.wfx" >Samba协议</a></span></p>
+        <p>这是一个用于处理网络目录（SMB/CIFS）的文件系统插件。</p>
+        <p >仅限 Linux。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="wlx" >4. Lister 插件 (WLX)</a></h2>
+        <br>
+
+        <p><span class="bold"><a name="macpreview.wlx" >Mac预览</a></span></p>
+        <p>通用（办公文档格式、图像、视频和音频文件等）插件使用 <a href="https://en.wikipedia.org/wiki/Quick_Look">快速查看</a>，如同在 Finder 中一样。</p>
+        <p >仅限 macOS。</p>
+        <br>
+
+        <p><span class="bold"><a name="preview.wlx" >资源管理器预览</a></span></p>
+        <p>用于显示丰富预览的插件。IPreviewHandler 接口支持多种格式（取决于操作系统的版本和安装的应用程序），默认情况下，仅将 HTML 文件添加到检测字符串中。</p>
+        <p>注意：预览处理程序可能无法显示文件中包含的所有信息。</p>
+        <p >仅限 Windows。</p>
+        <br>
+
+        <p><span class="bold"><a name="richview.wlx" >富文本格式</a></span></p>
+        <p>查看 RTF 文件的插件。</p>
+        <p >仅限 Windows。</p>
+        <br>
+
+        <p><span class="bold"><a name="wlxmplayer.wlx" >WlxMplayer</a></span></p>
+        <p>查看视频文件的插件。需要 <tt>mplayer</tt> 。</p>
+        <p >仅限 Linux。</p>
+        <br>
+
+        <p><span class="bold"><a name="wmp.wlx" >Windows 媒体播放器</a></span></p>
+        <p>播放音频和视频文件的插件。此插件使用 IWMPPlayer4 接口（ActiveX），需要 Windows Media Player 9 或更高版本。</p>
+        <p >仅限 Windows。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+      </div>
+
+      <div>
+        <h2><a name="dsx" >5. 搜索插件 (DSX)</a></h2>
+        <br>
+
+        <p><span class="bold"><a name="dsxlocate.dsx" >DSX 定位</a></span></p>
+        <p>此插件使用 <tt>locate</tt> 及其文件数据库进行搜索。我们可以通过文件名、部分文件名或通过通配符进行搜索（符号“*”表示匹配任意数量的字符）。</p>
+        <p>Linux 和其他类 Unix 操作系统。</p>
+        <p class="navback"><a href="#topofpage" >（回到顶部）</a></p>
+        <br>
+      </div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a href="configxml.html" title="Previous page">上一页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></div>
+    <div class="checker">
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank"><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88"></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank"><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31"></a>
+    </div>
+    <br>
+  </body>
+</html>

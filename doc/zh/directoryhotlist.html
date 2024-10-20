@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <title>DC - Directory Hotlist</title>
+    <link rel="stylesheet" type="text/css" href="doublecmd.css">
+    <link rel="shortcut icon" href="../../pixmaps/common/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body >
+    <a name="topofpage" ></a>
+    <div class="header" ><a href="index.html" ><img src="../../pixmaps/common/dclogo2017.png" alt="Double Commander" height="48" width="374" ></a>
+      <div id="global-nav" class="nav"><a  href="https://doublecmd.sourceforge.io/" title="Double Commander Home Page">主页</a> | <a  href="https://github.com/doublecmd/doublecmd/wiki" title="Double Commander Wiki">维基</a></div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a  href="viewer.html" title="Previous page">上一页</a> | <a  href="multiarc.html" title="Next page">下一页</a></div></div>
+
+    <div class="dchelpage" >
+      <div >
+        <h1>2.9. 常用文件夹列表</h1>
+      </div>
+
+      <div >
+        <h2>内容</h2>
+        <dl>
+          <dt>1. <a  href="#intro">介绍</a></dt>
+          <dd>
+            <dl>
+              <dt>1.1. <a  href="#definition">定义</a></dt>
+              <dt>1.2. <a  href="#overview">概述</a></dt>
+            </dl>
+          </dd>
+
+          <dt>2. <a  href="#usage">常用文件夹列表使用</a></dt>
+          <dd>
+            <dl>
+              <dt>2.1. <a  href="#access">如何访问常用文件夹列表</a></dt>
+              <dt>2.2. <a  href="#otheraccess">另一种访问列表的方法</a></dt>
+              <dt>2.3. <a  href="#configure">如何配置常用文件夹列表</a></dt>
+              <dt>2.4. <a  href="#otherconfigure">访问列表配置的其他方法</a></dt>
+              <dt>2.5. <a  href="#addentry">如何将目录添加到常用文件夹列表</a></dt>
+              <dt>2.6. <a  href="#personalize">个性化常用文件夹列表中新添加的条目</a></dt>
+              <dt>2.7. <a  href="#settarget">同时设置目标</a></dt>
+              <dt>2.8. <a  href="#definesort">定义目录更改后的排序顺序</a></dt>
+              <dt>2.9. <a  href="#helperpath">路径和目标定义的助手</a></dt>
+              <dt>2.10. <a  href="#changeorder">更改条目的顺序</a></dt>
+              <dt>2.11. <a  href="#cutandpaste">使用“剪切”和“粘贴”重新排列顺序</a></dt>
+              <dt>2.12. <a  href="#organizetree">以树形视图组织条目</a></dt>
+              <dt>2.13. <a  href="#addseperator">添加分隔符以条理化</a></dt>
+              <dt>2.14. <a  href="#sorting">排序条目</a></dt>
+            </dl>
+          </dd>
+
+          <dt>3. <a  href="#expert">"专家"功能</a></dt>
+          <dd>
+            <dl>
+              <dt>3.1. <a  href="#backup">从备份中备份和恢复</a></dt>
+              <dt>3.2. <a  href="#exportimportsimple">导出/导入常用文件夹列表（或其部分）</a></dt>
+              <dt>3.3. <a  href="#exportimporttc">从Total Commander 导出/导入</a></dt>
+              <dt>3.4. <a  href="#scanpresence">扫描常用文件夹列表以查找缺失的目录</a></dt>
+              <dt>3.5. <a  href="#addingmanyatthetime">同时将多个目录添加到列表</a></dt>
+              <dt>3.6. <a  href="#notthetarget">即使目标已配置，非活动框架上也没有开关</a></dt>
+              <dt>3.7. <a  href="#directconfig">直接从弹出菜单配置条目</a></dt>
+              <dt>3.8. <a  href="#showpopup">在弹出菜单中显示完整路径</a></dt>
+              <dt>3.9. <a  href="#smartenv">仅保留类似目录的环境变量</a></dt>
+            </dl>
+          </dd>
+
+          <dt>4. <a  href="#otherfunctions">其他功能</a></dt>
+        </dl>
+      </div>
+
+      <div >
+        <h2 ><a name="intro">&nbsp;1. 引言</a></h2>
+        <p>常用文件夹列表简介</p>
+      </div>
+
+      <div >
+        <h2 ><a name="definition">&nbsp;1.1. 定义</a></h2>
+        <p>常用文件夹列表是您最常使用的目录的可用列表。</p>
+        <p>它在磁盘上不创建任何内容，只是一个快捷方式列表，用于快速访问 “最常用的” 目录。</p>
+        <p>通过使用它们跳转到一个目录，你就不会像猴子一样在树的不同分支间不断跳跃。</p>
+        <p>此外，对于那些重要的目录，您不想忘记，最好有一个区域，其中包含指向它们的快捷方式。</p>
+        <p>即使你不经常使用它们，当你需要它们时，你也会节省时间，因为你不必去寻找它们。</p>
+        <p>Double Commander允许指定本地文件系统中的目录、网络路径或 WFX 插件（如“wfx://插件名称”）。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="overview">&nbsp;1.2. 概述</a></h2>
+        <p>从主面板，您可以看到常用文件夹列表作为弹出菜单。</p>
+        <p>点击其中一个条目，它会立即将您带到相关的定义目录。</p>
+        <p>您无需在文件夹之间浏览即可到达该目标。</p>
+        <p class="figure" ><img class="largeimage" title="Overview" alt="Overview" src="images/imgDC/dirhotoverview.png" width="792" height="218" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="usage">2. 常用文件夹列表使用</a></h2>
+        <p>以下是与热名单相关的常见操作</p>
+      </div>
+
+      <div >
+        <h2 ><a name="access">2.1. 如何访问常用文件夹列表</a></h2>
+        <p>从菜单栏中选择“<b >命令</b>”，然后选择“<b >常用文件夹列表</b>”。 它看起来像一个弹出菜单，您点击项目后，它会带您到您设置的条目所定义的目录。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="otheraccess">2.2. 访问常用文件夹列表的另一种方法</a></h2>
+        <ul >
+          <li ><p>您可以点击活动文件面板右上角带星星的按钮。</p></li>
+          <li ><p>您可以添加一个与内部命令 <a  href="cmds.html#cm_DirHotList">cm_DirHotList</a> 相关联的工具栏按钮。</p></li>
+          <li ><p>您可以<a  href="configuration.html#ConfigHotKeys">设置一个热键</a>用于 <tt>cm_DirHotList</tt> 命令（默认是 <kbd >Ctrl+D</kbd> ）。</p></li>
+          <li ><p>您可以在活动标签的当前目录栏上双击或使用中间鼠标键。</p></li>
+        </ul>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="configure">2.3. 如何配置常用文件夹列表</a></h2>
+        <p>从菜单栏中，您可以选择 "<b >配置</b>" 然后选择 "<b >常用文件夹列表</b>"。</p>
+        <p>您看到的树将显示与您在主面板的弹出常用文件夹列表中看到的内容相同。</p>
+        <p>但您看到的不是弹出菜单的形式，而是一个树形结构，包含许多功能用于编辑、移动等，正如您在此帮助文档中看到的那样。</p>
+        <p class="figure" ><img class="largeimage" title="Configuration" alt="Configuration" src="images/imgDC/dirhotconfigure.png" width="886" height="598" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="otherconfigure">2.4. 访问常用文件夹列表配置的其他方式</a></h2>
+        <ul >
+          <li ><p>在常用文件夹列表弹出菜单的底部，总是有一个菜单快捷方式可以带您到常用文件夹列表配置屏幕。</p></li>
+          <li ><p>您可以添加一个带有内部命令的工具按钮 <a  href="cmds.html#cm_ConfigDirHotList">cm_ConfigDirHotList</a>。</p></li>
+        </ul>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="addentry">2.5. 如何将目录添加到常用文件夹列表</a></h2>
+        <p>最简单的方法是这样的：</p>
+        <ul >
+          <li>在活动面板中，输入您想要添加的目录。</li>
+          <li>2. 然后显示常用文件夹列表（例如，通过访问菜单“<b >命令</b>” &gt; “<b >常用文件夹列表</b>”）。</li>
+          <li>3. 点击 "<b >添加当前目录：your_dir_name</b>"。</li>
+          <li>4. 一旦您完成此操作，它会显示常用文件夹列表配置屏幕，确认目录已被添加。</li>
+          <li>5. 将重点放在它上，以帮助你看出它是哪一个。</li>
+        </ul>
+        <p class="figure" ><img class="largeimage" title="Add an entry" alt="Add an entry" src="images/imgDC/dirhotaddentry.png" width="764" height="344" ></p>
+        <p>稍后，我们将看到还有许多其他方法可以将条目添加到常用文件夹列表中。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="personalize">2.6. 个性化常用文件夹列表中新增的条目</a></h2>
+        <p>默认情况下，当将目录添加到常用文件夹列表时，条目名称将是最后一个目录的名称。</p>
+        <p>但是如果你想的话，可以重命名它。只需选择字段 "<b >名称</b>"，然后输入一个容易记住的参考名称。</p>
+        <p>在这个例子中，文件夹的名称是“doc”，但条目的名称是“文档”</p>
+        <p>这也是您在常用文件夹列表弹出菜单中看到的方式。</p>
+        <p class="figure" ><img class="largeimage" title="Customization" alt="Customization" src="images/imgDC/dirhotpersonalize.png" width="764" height="464" ></p>
+        <p>在名称中，符号“&amp;”具有特殊含义，我们可以用键盘快速选择一个目录，只需在其中一个字母前添加一个“&amp;”符号。要按原样使用此符号，我们必须将其加倍（“&amp;&amp;”）。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="settarget">2.7. 设定目标也一样</a></h2>
+        <p>不仅您可以添加要切换到的目录，还可以选择“<b >目标目录</b>”，该目录将在主窗口的非活动面板中显示。</p>
+        <p>因此，对于在一段时间内需要将内容从目录“A”复制到目录“B”的常见重复操作，无论您之前在哪个文件夹中，您只需从常用文件夹列表菜单项中选择它，它将把两侧设置为定义的目录，准备进行操作。</p>
+        <p>要定义在选择常用文件夹列表条目时的目标目录，只需设置字段“<b >目标</b>”。</p>
+        <p>以下示例显示了“目录 A”，以“目录 B”作为目标，如此处所建议的。</p>
+        <p class="figure" ><img class="largeimage" title="Set the target" alt="Set the target" src="images/imgDC/dirhotsettarget.png" width="802" height="308" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="definesort">2.8. 在目录更改后定义排序顺序</a></h2>
+        <p>在"<b>路径(P)</b>"和"<b>目标(T)</b>"字段的末尾，您有一个下拉框。</p>
+        <p>使用此下拉框可以在选择常用文件夹列表条目时预先确定面板的排序顺序。</p>
+        <p>所以如果你将其设置为"<b >日期 9-0</b>"，当你使用常用文件夹列表时，它不仅会将活动路径移动到定义的路径，而且无论面板之前是如何排序的，它都会按逆时间顺序进行排序。</p>
+        <p>如果您不想通过常用文件夹列表选择新路径来更改任何内容，请将此字段设置为“无”。</p>
+        <p class="figure" ><img class="largeimage" title="Define directory sort" alt="Define directory sort" src="images/imgDC/dirhotdefinesort.png" width="428" height="201" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="helperpath">2.9. 帮助路径和目标定义</a></h2>
+        <p>当然，您可以使用绝对路径，它在这台机器上运行良好。</p>
+        <p>但假设你有一个带有许多其他工具的Double Commander在你的瑞士军刀 USB 闪存驱动器上。</p>
+        <p>您可能希望为可移植安装使用相对路径。</p>
+        <p>我指的是相对于Double Commander路径的意思，例如。</p>
+        <p>所以你可能有这个路径 "<b >E:\PortableApps\Notepad++Portable\Data\Config\</b>"，它工作得很好。</p>
+        <p>但您也可以将其相对于当前的“Double Commander”路径，并使用这个“<b >%commander_path%\..\..\Notepad++Portable\Data\Config\</b>”。</p>
+        <p>为了帮助您确定输入什么（换句话说，使用多少个“..\"！），在“<b >路径</b>”和“<b >目标</b>”字段的右侧，您有一个小按钮 <img  height="16" width="16" src="images/imgDC/bhelper.png" alt="Some functions to select appropriate path" title="Some functions to select appropriate path"> ，它会弹出一个菜单，提供各种相关的小工具来编辑和安排路径，以您希望的方式。</p>
+        <p>但这只是那个按钮可能用途之一。</p>
+        <p>这里是您在那儿会找到的完整摘要：</p>
+        <ul >
+          <li><b>使用Double Commander特殊路径</b> – 直接指向可执行路径、配置路径等。</li>
+          <li><b>使用 Windows 特殊文件夹 (TC)</b> – 仅限 Windows：包含一个 <a  href="variables.html#envvariables">伪环境变量</a> 的列表。<br>
+            注意：此列表对应于 Total Commander 支持的变量列表，并且也用于从 Total Commander 导入和导出常用文件夹列表（见 <a  href="#exportimporttc">下方</a>）和 <a  href="toolbar.html">工具栏</a>。</li>
+          <li><b>使用其他 Windows 特殊文件夹</b> – 额外的伪环境变量。</li>
+          <li><b>使用环境变量</b>&nbsp;– 当然，有些值在这里并不真正有效和有用，但对于那些可能有用的值，我们来使用它们！</li>
+          <li><b>使用常用文件夹路径</b>&nbsp;– 这纯粹是多功能性：您可以从常用文件夹列表中添加常用文件夹列表...！</li>
+          <li><b>相对设置...</b> – 对于上述每个选项都是一样的，但不是直接添加路径，而是将当前写入的路径相对于您选择的路径进行设置。</li>
+          <li><b>将路径转换为绝对路径</b>&nbsp;– 反之，当你有一个相对路径时，它将转换为绝对路径。</li>
+          <li><b>从活动框架添加路径</b> – 将要添加的路径将直接来自主面板，来自活动框架。</li>
+          <li><b>从非活动框架添加路径</b>&nbsp;– 与上述相同，但如前所述，来自非活动框架。</li>
+          <li><b>浏览并使用选定的路径</b> – 将打开一个目录浏览器，您可以简单地选择所需的目录。</li>
+        </ul>
+        <p class="figure" ><img class="largeimage" title="Helper for path" alt="Helper for path" src="images/imgDC/dirhothelperpath.png" width="558" height="362" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="changeorder">2.10. 更改条目的顺序</a></h2>
+        <p>随着时间的推移，常用文件夹列表可能会变得更长且无序。</p>
+        <p>您可以通过拖放所选条目到一个对您更有意义的新位置来简单地重新排列顺序。</p>
+        <p>通过使用键盘上的 <kbd >Ctrl</kbd> 键，您可以同时选择并移动多个项目。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="cutandpaste">2.11. 使用“剪切”和“粘贴”来重新排列顺序</a></h2>
+        <p>如果您有一个非常长的目录列表，拖放方法可能不适用，因为源和目标之间的距离太远。</p>
+        <p>如果是这样，您可以选择要移动的条目，然后点击“杂项”按钮以调用弹出菜单并选择“<b >剪切所选条目</b>”。</p>
+        <p>然后您滚动列表以查看要放置所选条目的目标位置。</p>
+        <p>然后您再次点击“杂项”按钮，选择“<b >粘贴已剪切的内容</b>”以粘贴您首先选择的条目。</p>
+        <p>通过使用 <kbd >Ctrl</kbd> 键，您可以同时选择多个条目进行剪切和粘贴。</p>
+        <p class="figure" ><img class="largeimage" title="Cut-and-paste" alt="Cut-and-paste" src="images/imgDC/dirhotcutandpaste.png" width="874" height="568" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="organizetree">2.12. 以树形结构组织条目</a></h2>
+        <p>如果你是常用文件夹列表的粉丝，就像这些文字的作者一样，单一的常用文件夹列表是远远不够的！</p>
+        <p>所以，Double Commander来救援了。您可以在常用文件夹列表中创建和组织子菜单。</p>
+        <p>不仅如此，您可能在另一个子菜单中还有子菜单。</p>
+        <p>这意味着您可以真正为自己配置一个组织良好的常用文件夹列表。</p>
+        <p>要添加子菜单，请使用“<b >插入</b>”（添加到当前位置）或“<b >添加</b>”（添加到下方）按钮。您还可以使用<a  href="shortcuts.html#dirhotlist">快捷键</a>。</p>
+        <p>它将创建一个名为“子菜单名称”的子菜单，其中包含一个名为“常用文件夹名称”的条目。</p>
+        <p>显然，通过下面的字段，您可以为子菜单赋予一个重要的名称。</p>
+        <p>从那里，您可以添加新条目，将其他条目移动到该新子菜单中。</p>
+        <p>请注意，您可以移动或剪切粘贴子菜单，这样在重新排列您的常用文件夹列表时会让您的生活更简单。</p>
+        <p class="figure" ><img class="largeimage" title="Organize tree" alt="Organize tree" src="images/imgDC/dirhotorganizetree.png" width="240" height="248" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="addseperator">2.13. 添加分隔符以条理化</a></h2>
+        <p>有很多条目一个接一个是不错的，但通过添加一些分隔符来创建类别可能会为您的列表带来秩序。</p>
+        <p>要添加分隔符，请使用“<b >插入</b>”（添加到当前位置）或“<b >添加</b>”按钮（添加到下方）。您还可以使用<a  href="shortcuts.html#dirhotlist">快捷键</a>。</p>
+        <p>在配置常用文件夹列表树中，它会显示一条带点的线，但一旦进入带有常用文件夹列表弹出窗口的主面板，您将看到一个漂亮的菜单分隔符。</p>
+        <p class="figure" ><img class="largeimage" title="Add separator" alt="Add separator" src="images/imgDC/dirhotaddseperator.png" width="704" height="451" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="sorting">2.14. 排序条目</a></h2>
+        <p>如上所述，通过拖放和剪切粘贴，您可以按照自己的意愿重新排列常用文件夹列表条目。</p>
+        <p>但如果您同意使用字母顺序的名称，您可以使用包含的排序功能。</p>
+        <p>这个排序的想法很简单：将当前选择放在您想要排序的位置，然后通过按下“<b >排序...</b>”按钮选择您想要的排序功能，这将弹出一个菜单。</p>
+        <p>这五个可选项为您在此问题上提供了所有可能的自由度</p>
+        <ul >
+          <li><b>仅单个项目组</b> – 将对当前选定项目旁边的区域进行排序。这里的“区域”是指在两个分隔符之间的条目，即菜单的开始或结束。</li>
+          <li><b>仅当前选定项的级别</b> – 不仅是当前选择所在的区域，还有同一分支上的兄弟项。它将进行排序，但会尊重条目区域，因此来自某个组的项不会跨越您可能设置的分隔符。</li>
+          <li><b>所选子菜单的内容，没有子级</b> – 将对您可能选择的子菜单的直接“子项”进行排序，但不会进入其中可能存在的其他子菜单进行排序。</li>
+          <li><b>所选子菜单及所有子级的内容</b> – 与前面提到的相同，但这次还将对该分支内的所有子菜单进行排序。</li>
+          <li><b>一切，从 A 到 Z！</b> – 啊哈！这是这些文字作者的最爱：正如名字所暗示的，它将简单地对所有事物进行排序，但仍然尊重每个事物的领域，因此不会将项目从一个分支移动到另一个分支。</li>
+        </ul>
+        <p>如前所述，任何类型都不会移动物品以跨越分隔符。</p>
+        <p>为了确保您理解在排序时不跨越分隔符的含义，请参见以下示例。</p>
+        <p>“根”文件夹在排序后将始终位于其他文件夹之上，因为那里有一个分隔符。</p>
+        <p>分隔符在这个问题上非常有用。</p>
+        <p>不仅使事情更加清晰，而且在排序时作为分隔符也很有用！</p>
+        <p class="figure" ><img class="largeimage" title="Sorting entries" alt="Sorting entries" src="images/imgDC/dirhotsorting.png" width="478" height="297" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="expert">&nbsp;3. “专家”功能</a></h2>
+        <p>以下是与常用文件夹列表相关的较少频繁的操作，但仍然值得了解。</p>
+      </div>
+
+      <div >
+        <h2 ><a name="backup">3.1. 从备份中备份和恢复</a></h2>
+        <p>随着您的常用文件夹列表中目录快捷方式的数量增加，您可能想要备份它，以防发生意外而丢失这些宝贵的链接。</p>
+        <p>要做到这一点，在配置屏幕的右侧有一个名为"<b >备份</b>"的按钮。点击它，然后在菜单中选择"<b >保存当前常用文件夹列表的备份</b>"。</p>
+        <p>它将把当前列表保存到一个文件中，该文件位于Double Commander定义的配置目录中的“备份”文件夹中。文件名将包含当前的日期和时间。请注意文件的扩展名是“.hotlist”。</p>
+        <p>要恢复，请在同一菜单中选择“<b >恢复常用文件夹列表的备份</b>”。在出现的文件请求器中，选择您要恢复的备份。</p>
+        <p>当您恢复备份时，它将首先删除当前的常用文件夹列表，然后添加备份文件中的条目。</p>
+        <p>如果您只想从备份文件中恢复某些条目，您可以执行 "<b >导入</b>" 并指向备份文件。然后，Double Commander会提示您指明要从备份文件中恢复哪些条目。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="exportimportsimple">3.2. 导出/导入常用文件夹列表（或其部分）</a></h2>
+        <p>如果您有超过一台计算机，或者如果您有同事访问与您相同的服务器，您可能希望能够导出您的常用文件夹列表或其部分内容，这样在另一台计算机上您就可以拥有相同的目录快捷方式，而无需逐个输入。</p>
+        <p>要做到这一点，首先点击按钮 "<b >导出</b>"，然后选择 "<b >...到常用文件夹列表文件 (.hotlist)</b>"。</p>
+        <p>它将提示您输入要创建的导出文件的文件名和文件位置。</p>
+        <p>然后您将被要求选择要导出的内容。</p>
+        <p>您可以导出整个树形结构，也可以逐个选择条目。</p>
+        <p>您可以通过选择子菜单名称来选择整个子菜单，而无需选择其中的条目。</p>
+        <p>请在点击选择您想导出的不同条目时使用键盘上的 <kbd >Ctrl</kbd> 键。</p>
+        <br >
+        <p>然后，在另一台计算机上，您将点击“<b >导入</b>”按钮，然后选择菜单项“<b >从常用文件夹列表文件 (.hotlist) 导入</b>”。</p>
+        <p>从文件请求者中，指向要导入的文件。</p>
+        <p>与导出类似，您可以导入整个内容，但也可以选择您想要导入的特定条目。</p>
+        <p>您导入的条目将被添加到您的条目末尾。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="exportimporttc">3.3. 从 Total Commander 导出/导入</a></h2>
+        <p>Double Commander还可以从 Total Commander 导入/导出常用文件夹列表。</p>
+        <p>假设您想从 Total Commander 导入一些条目，以下是操作步骤。</p>
+        <p>从常用文件夹列表配置屏幕，点击 "<b >导入...</b>" 按钮并选择 "<b >...来自 TC 的 "wincmd.ini"</b>"。</p>
+        <p>然后在文件请求器中选择您的 Total Commander 的 "wincmd.ini" 文件的位置。</p>
+        <p>如果您不知道那个文件在哪里，在 Total Commander 中，点击 "<b >帮助</b>" 菜单，然后点击 "<b >关于 Total Commander...</b>"。</p>
+        <p>.INI 文件的位置将会写在那里。</p>
+        <p>然后将出现一个树形结构，显示从 Total Commander .ini 文件中读取的目录条目。</p>
+        <p>从那棵树上，您可以导入所有条目，或者根据需要逐个选择。</p>
+        <p>请在点击选择您想要导入的不同条目时使用键盘上的 <kbd >Ctrl</kbd> 键。</p>
+        <p>您导入的条目将被添加到您的条目末尾。</p>
+        <p class="figure" ><img class="largeimage" title="Import from TC" alt="Import from TC" src="images/imgDC/dirhotimportfromtc.png" width="736" height="582" ></p>
+        <p>然后，作为反向操作，您可以将所有或部分的 Double Commander 常用文件夹列表导出到 Total Commander 的热列表中。</p>
+        <p>要做到这一点，请点击“<b >导出...</b>”按钮，并选择两种可能的导出方式之一到 Total Commander。</p>
+        <p>如果您知道自己在做什么并接受替换 Total Commander 的常用文件夹列表的所有条目，您可以选择 "<b >到 TC 的 "wincmd.ini"（删除现有内容）</b>"。</p>
+        <p>再一次，在这里，您可以选择是否要导出整个内容，或者只选择您想要导出的部分。</p>
+        <p>请在点击选择您想导出的不同条目时使用键盘上的 <kbd >Ctrl</kbd> 键。</p>
+        <p>也许你在这样做的时候应该关闭 Total Commander，然后再重新打开 Total Commander，看看你得到了什么。</p>
+        <p>Total Commander 并不像 Double Commander 那样为您提供简单的方法来结构化和轻松排序常用文件夹列表中的条目。</p>
+        <p>所以您可以将 Total Commander 的常用文件夹列表导入到 Double Commander，然后重新排列、排序、结构化等，然后再导出回 Total Commander！</p>
+        <br>
+        <p ><b>*注意：已进行努力和测试，以确保应用程序不会损坏 Total Commander 配置 .INI 文件。</b></p>
+        <p ><b>但在导出之前备份一些条目无疑是一个好习惯，并且是被鼓励的。</b></p>
+        <p ><b>显然，你这样做是自担风险！</b></p>
+        <p ><b>...发现一个像Double Commander这样好软件的风险！</b></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="scanpresence">3.4. 扫描常用文件夹列表以查找缺失的目录</a></h2>
+        <p>随着时间的推移，您的常用文件夹列表中可能会出现指向不再存在的目录的条目。</p>
+        <p>要找到这些条目，在常用文件夹列表配置屏幕中，点击标记为“<b >杂项</b>”的按钮。</p>
+        <p>然后选择"<b >扫描所有常用文件夹列表的路径以验证实际存在的路径</b>"。</p>
+        <p>这将使应用程序能够扫描所有快捷方式指向的目录。</p>
+        <p>如果缺少某个项目，条目左侧将显示一个缺失图标。</p>
+        <p>子菜单分支中如果有至少一个缺失的条目，将显示一个特殊图标，表示有条目缺失。</p>
+        <p class="figure" ><img class="largeimage" title="Scan for actual presence or not" alt="Scan for actual presence or not" src="images/imgDC/dirhotscanexist.png" width="540" height="476" ></p>
+
+        <p>因此，您可以选择删除那些指向已不存在目录的条目，或者保留它们。</p>
+        <p>为什么要保留它们？很简单。在一个使用Double Commander的上下文中，从一个计算机到另一个计算机的 USB 闪存驱动器上，可能会有一些在前一个计算机上存在但在当前计算机上不存在的目录，这完全是正常的。</p>
+        <p>但是如果是这样，"<b >扫描所有常用文件夹列表的路径以验证实际存在的路径</b>"功能将如何帮助你？</p>
+        <p>这样做的原因是，它还会从主面板的常用文件夹列表弹出菜单中删除这些条目。</p>
+        <p>这些指向不存在文件夹的条目将不会显示！</p>
+        <p>它们不会从常用文件夹列表内部列表中永久删除。</p>
+        <p>它们将在会话中不会从弹出菜单中显示。</p>
+        <p>查看上一个例子的结果。</p>
+        <p class="figure" ><img class="largeimage" title="A clean popup menu" alt="A clean popup menu" src="images/imgDC/dirhotcleanedmenu.png" width="514" height="508" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="addingmanyatthetime">3.5. 同时向常用文件夹列表添加多个目录</a></h2>
+        <p>在为新情况设置常用文件夹列表时，您可能希望一次性添加多个目录到常用文件夹列表中。</p>
+        <p>你可以通过两种方式做到这一点。</p>
+        <p ><b>第一种方法：直接从主框架中选择</b></p>
+        <p>这很简单：您只需选择要添加的目录，调用常用文件夹列表弹出菜单，然后在菜单的末尾选择“<b >添加 x 个选定目录</b>”。</p>
+        <p>目录将被添加到配置的附加位置。</p>
+        <p>如果您配置为通过“<b >智能</b>”方法添加，那么看到它们放置得如此好真是太好了！</p>
+        <p class="figure" ><img class="largeimage" title="Add more than one at once" alt="Add more than one at once" src="images/imgDC/dirhotaddmanyatonce.png" width="880" height="500" ></p>
+
+        <p ><b>第二种方法：与第一种方法类似，但同时显示常用文件夹列表配置窗口和主面板</b></p>
+        <p>这也很简单：您首先调用常用文件夹列表配置窗口。</p>
+        <p>然后您将选择放置在您希望添加新目录的位置。</p>
+        <p>您然后按下 "<b >插入</b>"（添加到当前位置）或 "<b >添加</b>"（添加到下面）按钮，然后点击 "<b >当前选定或活动框架的活动目录</b>"。</p>
+        <p>您将看到它们被添加或插入，并准备好按照您的意愿进行排序、重命名和排列。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="notthetarget">3.6. 即使目标已配置，非活动帧上也没有开关</a></h2>
+        <p>那个几乎是一个隐藏功能。</p>
+        <p>如在<a  href="#settarget">本页第 2.7 点</a>中所述，您可能已配置常用文件夹列表条目，以便在非活动框架中切换到指定的目标目录。</p>
+        <p>但有时，可能希望不切换目标文件夹，而只切换主活动框架。</p>
+        <p>您可以通过这个小技巧来避免这个问题：在点击常用文件夹列表弹出菜单中的快捷方式时，按住键盘上的 <kbd >Ctrl</kbd> 键。</p>
+        <p>如果在点击快捷方式时按住 <kbd >Ctrl</kbd> 键，则只有活动框架会切换，目标不会。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="directconfig">3.7. 从弹出菜单直接配置条目</a></h2>
+        <p>那个也是一个几乎隐藏的功能。</p>
+        <p>当您在浏览常用文件夹列表弹出菜单时，您可能会看到一个您希望更正的错字，或者某些内容的组织方式不符合您的期望。</p>
+        <p>当然，您可以点击下方进入配置，在树中搜索它的位置，然后继续进行您的修正。</p>
+        <p>但有一个小窍门可以做得更好、更快、更简单。</p>
+        <p>在常用文件夹列表弹出菜单中，点击您希望直接进入配置窗口以按您的喜好进行配置的菜单项时，请按下键盘上的 <kbd >Shift</kbd> 键。</p>
+        <p>如果在您点击快捷方式的瞬间按住 <kbd >Shift</kbd> 键，DC 将带您进入配置屏幕，您可以根据自己的需要编辑选项。</p>
+        <p>你不需要在列表中搜索它！</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="showpopup">3.8. 在弹出菜单中显示完整路径</a></h2>
+        <p>在常用文件夹列表配置屏幕中，有一个复选框叫做"<b >在弹出窗口中显示[路径也]</b>"。</p>
+        <p>此选项被勾选时，将指示Double Commander在弹出条目中直接显示快捷方式指向的完整路径。</p>
+        <p>所以你不仅会看到你给的常用文件夹列表名称，还会显示如果你点击它将跳转到的完整路径。</p>
+        <p>这可能会很烦人，因为它在屏幕上增加了很多文字，我们可能会厌倦看到这些。</p>
+        <p>但在某些情况下，特别是涉及到 Windows 定义的目录和指向目录的环境变量时。</p>
+        <p>很高兴能直接了解每个指向的路径和方向。</p>
+        <p class="figure" ><img class="largeimage" title="Show full path" alt="Show full path" src="images/imgDC/dirhotshowfullpath.png" width="620" height="574" ></p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="smartenv">3.9. 仅保留看起来像目录的环境变量</a></h2>
+        <p>在常用文件夹列表弹出菜单的“特殊目录”部分，您会看到可以使用环境变量。</p>
+        <p>并不是所有的变量实际上都是一个目录。</p>
+        <p>在常用文件夹列表配置中，您可以勾选选项“<b >仅显示有效的 %env_var%</b>”。</p>
+        <p>当选中此选项时，DC 将尝试从菜单中消除看起来像有效路径的环境变量，至少是在其开头部分。</p>
+        <p>它不会必要地搜索和验证路径是否实际存在，以免没有真正的需要而减慢速度，但会迅速排除明显不相关的路径。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+      </div>
+
+      <div >
+        <h2 ><a name="otherfunctions">&nbsp;4. 其他功能</a></h2>
+        <p>可能还有一些其他的小功能和可能性与 Double Commander 常用文件夹列表功能相关，这些在应用程序中存在但未在此描述。</p>
+        <p>保持这样的帮助文件更新是困难的（有时甚至令人烦恼，尽管仍然是必要的）。</p>
+        <p>但你肯定会弄明白大部分内容，而这个帮助部分至少涵盖了问题的最重要点。</p>
+        <p class="navback" ><a href="#topofpage">&nbsp;（回到顶部）</a></p>
+        <br >
+      </div>
+    </div>
+    <div class="footer" ><div class="nav"><a  href="index.html" title="Index">索引</a> | <a  href="viewer.html" title="Previous page">上一页</a> | <a  href="multiarc.html" title="Next page">下一页</a></div></div>
+    <div class="checker" >
+      <a href="https://validator.w3.org/check?uri=referer" target="_blank" ><img src="https://www.w3.org/Icons/valid-html40" alt="Valid HTML 4.0 Transitional" height="31" width="88" ></a>
+      <a href="https://jigsaw.w3.org/css-validator/check/referer" target="_blank" ><img style="border:0;width:88px;height:31px" src="https://jigsaw.w3.org/css-validator/images/vcss" alt="CSS Valid!" width="88" height="31" ></a>
+    </div>
+    
+    <br>
+  
+
+</body></html>
